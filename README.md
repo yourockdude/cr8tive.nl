@@ -22,3 +22,5 @@ npm run build
 ## Content
 
 Texts and projects live in `content/` and are edited in the admin. Uploads go to `public/uploads/`.
+
+The live site is [cr8tive.nl](https://cr8tive.nl), built as a static export and deployed from GitHub Pages. Admin writes stay local until you commit `content/` and `public/uploads/` and push `main`.

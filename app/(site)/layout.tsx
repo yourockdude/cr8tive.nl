@@ -2,8 +2,6 @@ import type { Metadata } from 'next'
 import { Site } from '@/components/Site'
 import { readSite } from '@/lib/content'
 
-export const dynamic = 'force-dynamic'
-
 export async function generateMetadata(): Promise<Metadata> {
   const site = await readSite()
   return {
