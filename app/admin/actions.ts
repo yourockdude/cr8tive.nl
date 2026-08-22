@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import {
   clearSession,
@@ -18,6 +19,7 @@ import {
   writeProjects,
   writeSite,
 } from '@/lib/content'
+import { clearAttempts, recordFailure, tooManyAttempts } from '@/lib/rate-limit'
 import { isValidTimezone } from '@/lib/time'
 import type { Project, SiteContent } from '@/lib/types'
 import { saveUpload } from '@/lib/upload'
@@ -41,11 +43,20 @@ export async function loginAction(
   if (!credentialsConfigured()) {
     return { error: 'Задайте ADMIN_EMAIL, ADMIN_PASSWORD и AUTH_SECRET в .env.local' }
   }
+  const jar = await headers()
+  const client = jar.get('x-forwarded-for')?.split(',')[0]?.trim() || 'local'
+  if (tooManyAttempts(client)) {
+    return { error: 'Слишком много попыток входа. Попробуйте через десять минут' }
+  }
+
   const email = field(form, 'email')
   const password = field(form, 'password')
   if (!verifyCredentials(email, password)) {
+    recordFailure(client)
     return { error: 'Неверный email или пароль' }
   }
+
+  clearAttempts(client)
   await createSession(email)
   redirect('/admin')
 }
