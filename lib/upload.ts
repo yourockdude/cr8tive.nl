@@ -1,6 +1,6 @@
-import { mkdir, writeFile } from 'node:fs/promises'
-import path from 'node:path'
-import { slugify } from '@/lib/content'
+import { Buffer } from 'node:buffer'
+import { UPLOAD_PATH, slugify } from '@/lib/content'
+import type { FileWrite } from '@/lib/github'
 
 const types: Record<string, string> = {
   jpg: 'image/jpeg',
@@ -16,7 +16,16 @@ function fileType(file: File) {
   return types[ext] ?? ''
 }
 
-export async function saveUpload(file: File, prefix: string) {
+export type PreparedUpload = { url: string; write: FileWrite }
+
+/**
+ * Returns the write instead of performing it, so an edit that also replaces
+ * an image lands as a single commit alongside the JSON.
+ */
+export async function prepareUpload(
+  file: File,
+  prefix: string,
+): Promise<PreparedUpload | null> {
   if (!file.size) return null
   const type = fileType(file)
   if (!type) {
@@ -28,8 +37,11 @@ export async function saveUpload(file: File, prefix: string) {
 
   const ext = type === 'image/jpeg' ? 'jpg' : type.split('/')[1]
   const name = `${slugify(prefix)}-${Date.now()}.${ext}`
-  const dir = path.join(process.cwd(), 'public', 'uploads')
-  await mkdir(dir, { recursive: true })
-  await writeFile(path.join(dir, name), Buffer.from(await file.arrayBuffer()))
-  return `/uploads/${name}`
+  return {
+    url: `/media/${name}`,
+    write: {
+      path: `${UPLOAD_PATH}/${name}`,
+      content: Buffer.from(await file.arrayBuffer()),
+    },
+  }
 }
