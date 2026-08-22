@@ -682,6 +682,92 @@ body:has(.archive) .site-header {
   gap: 18px;
 }
 
+.archive-top {
+  display: flex;
+  justify-content: space-between;
+  padding: 120px var(--pad) 0;
+}
+
+.archive {
+  padding: 0 0 40px;
+}
+
+.archive-head {
+  padding: 24px var(--pad) 56px;
+}
+
+.archive-head h1 {
+  margin: 8px 0 16px;
+  font-size: clamp(56px, 9vw, 132px);
+  font-weight: 500;
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+}
+
+.archive-lede {
+  max-width: 32ch;
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.35;
+  color: #5b5b5e;
+}
+
+.archive-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px 48px;
+  padding: 0 var(--pad);
+}
+
+.archive-card:nth-child(even) {
+  margin-top: 120px;
+}
+
+.archive-frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 18px;
+}
+
+.archive-frame img {
+  object-fit: cover;
+  transform: scale(1.04);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.archive-card:hover .archive-frame img {
+  transform: scale(1.1);
+}
+
+.archive-number {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  mix-blend-mode: difference;
+  filter: invert(1);
+}
+
+.archive-meta h2 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.archive-meta div {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: #5b5b5e;
+  font-size: 15px;
+}
+
 .case {
   padding: 120px var(--pad) 80px;
   background: var(--paper);
@@ -818,14 +904,24 @@ body:has(.archive) .site-header {
 
   .intro,
   .featured,
+  .archive-grid,
   .case-grid,
   .menu-grid,
   .contact-foot {
     grid-template-columns: 1fr;
   }
 
-  .featured-card:nth-child(2) {
+  .featured-card:nth-child(2),
+  .archive-card:nth-child(even) {
     margin-top: 0;
+  }
+
+  .archive-top {
+    padding-top: 96px;
+  }
+
+  .archive-grid {
+    gap: 48px;
   }
 
   .work-row {
