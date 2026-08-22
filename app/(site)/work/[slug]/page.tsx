@@ -22,6 +22,20 @@ export async function generateMetadata({ params }: CasePageProps): Promise<Metad
   return {
     title: project.name,
     description: project.summary,
+    alternates: { canonical: `/work/${project.id}` },
+    openGraph: {
+      type: 'article',
+      title: project.name,
+      description: project.summary,
+      url: `/work/${project.id}`,
+      images: [{ url: project.image, alt: `${project.name} preview` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: project.name,
+      description: project.summary,
+      images: [project.image],
+    },
   }
 }
 

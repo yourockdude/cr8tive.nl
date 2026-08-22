@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Schibsted_Grotesk } from 'next/font/google'
+import { SITE_URL } from '@/lib/types'
 import './globals.css'
 
 const grotesk = Schibsted_Grotesk({
@@ -9,7 +10,7 @@ const grotesk = Schibsted_Grotesk({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://cr8tive.nl'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Yuri Yurchenko — Design Engineer',
     template: '%s — Yuri Yurchenko',

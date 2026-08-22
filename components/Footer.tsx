@@ -4,25 +4,28 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Magnetic } from '@/components/Magnetic'
 import { useSite } from '@/components/site-context'
+import { resolveTimezone, timezoneCity } from '@/lib/time'
 import type { SiteContent } from '@/lib/types'
 
 export function Footer({ content }: { content: SiteContent }) {
   const { setHovering } = useSite()
   const [time, setTime] = useState('')
   const title = content.footerTitle.split('\n')
+  const timezone = resolveTimezone(content.timezone)
 
   useEffect(() => {
     const format = new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'Europe/Moscow',
+      timeZone: timezone,
       hour: '2-digit',
       minute: '2-digit',
       hourCycle: 'h23',
+      timeZoneName: 'short',
     })
-    const tick = () => setTime(`${format.format(new Date())} MSK`)
+    const tick = () => setTime(format.format(new Date()))
     tick()
     const id = window.setInterval(tick, 1000)
     return () => window.clearInterval(id)
-  }, [])
+  }, [timezone])
 
   return (
     <footer className="contact" id="contact">
@@ -35,8 +38,8 @@ export function Footer({ content }: { content: SiteContent }) {
           className="contact-face"
         />
         <h2>
-          {title.map((line) => (
-            <span key={line}>
+          {title.map((line, index) => (
+            <span key={index}>
               {line}
               <br />
             </span>
@@ -69,7 +72,7 @@ export function Footer({ content }: { content: SiteContent }) {
         </div>
         <div>
           <p className="tiny">Local time</p>
-          <span suppressHydrationWarning>{time || 'MSK'}</span>
+          <span suppressHydrationWarning>{time || timezoneCity(timezone)}</span>
         </div>
         <div>
           <p className="tiny">Socials</p>

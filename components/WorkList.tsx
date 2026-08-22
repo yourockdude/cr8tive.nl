@@ -6,13 +6,16 @@ import { useRef, useState } from 'react'
 import { useSite } from '@/components/site-context'
 import type { Project } from '@/lib/types'
 
+const HOME_ROWS = 4
+
 export function WorkList({ projects }: { projects: Project[] }) {
   const { setHovering } = useSite()
   const [active, setActive] = useState<string | null>(null)
   const preview = useRef<HTMLDivElement>(null)
   const pos = useRef({ x: 0, y: 0, cx: 0, cy: 0, r: 0, cr: 0, raf: 0 })
 
-  const current = projects.find((project) => project.id === active)
+  const rows = projects.slice(0, HOME_ROWS)
+  const current = rows.find((project) => project.id === active)
 
   const startLoop = () => {
     const el = preview.current
@@ -51,7 +54,7 @@ export function WorkList({ projects }: { projects: Project[] }) {
     >
       <p className="tiny">Recent work</p>
       <div className={`work-list${active ? ' is-hot' : ''}`}>
-        {projects.map((project) => (
+        {rows.map((project) => (
           <Link
             key={project.id}
             href={`/work/${project.id}`}
@@ -78,7 +81,7 @@ export function WorkList({ projects }: { projects: Project[] }) {
       </div>
       <div className="more-wrap">
         <Link
-          href="/#work"
+          href="/work"
           className="pill"
           onMouseEnter={() => setHovering('link')}
           onMouseLeave={() => setHovering(null)}
