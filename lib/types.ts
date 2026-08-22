@@ -4,6 +4,7 @@ export type SiteContent = {
   wordmark: string
   locationLine1: string
   locationLine2: string
+  timezone: string
   introTitle: string
   introBody: string
   introCta: string
@@ -35,6 +36,8 @@ export type Project = {
   frame: string
   image: string
 }
+
+export const SITE_URL = 'https://cr8tive.nl'
 
 export const SESSION_COOKIE = 'yy_admin'
 export const SESSION_MAX_AGE = 60 * 60 * 24 * 14

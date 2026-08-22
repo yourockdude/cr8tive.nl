@@ -5,6 +5,19 @@ import { saveTextsAction } from '@/app/admin/actions'
 import { HeroPhotoField } from '@/app/admin/(console)/texts/hero-photo-field'
 import type { SiteContent } from '@/lib/types'
 
+const zones = [
+  'Europe/Amsterdam',
+  'Europe/Berlin',
+  'Europe/Lisbon',
+  'Europe/London',
+  'Europe/Moscow',
+  'Europe/Belgrade',
+  'Asia/Tbilisi',
+  'Asia/Dubai',
+  'America/New_York',
+  'America/Los_Angeles',
+]
+
 export function TextsForm({ site }: { site: SiteContent }) {
   const [state, action, pending] = useActionState(saveTextsAction, {})
 
@@ -35,6 +48,20 @@ export function TextsForm({ site }: { site: SiteContent }) {
           <input name="locationLine2" defaultValue={site.locationLine2} />
         </label>
       </div>
+      <label>
+        Часовой пояс — по нему идут часы в футере
+        <input
+          name="timezone"
+          list="timezones"
+          placeholder="Europe/Amsterdam"
+          defaultValue={site.timezone}
+        />
+        <datalist id="timezones">
+          {zones.map((zone) => (
+            <option key={zone} value={zone} />
+          ))}
+        </datalist>
+      </label>
       <label>
         Заголовок about
         <textarea name="introTitle" defaultValue={site.introTitle} />

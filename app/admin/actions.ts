@@ -11,19 +11,21 @@ import {
 } from '@/lib/auth'
 import {
   getProject,
+  normalizeLines,
   readProjects,
   readSite,
   slugify,
   writeProjects,
   writeSite,
 } from '@/lib/content'
+import { isValidTimezone } from '@/lib/time'
 import type { Project, SiteContent } from '@/lib/types'
 import { saveUpload } from '@/lib/upload'
 
 export type ActionState = { error?: string; ok?: boolean }
 
 function field(form: FormData, key: string) {
-  return String(form.get(key) ?? '').trim()
+  return normalizeLines(String(form.get(key) ?? '')).trim()
 }
 
 function revalidatePublic() {
@@ -77,6 +79,7 @@ export async function saveTextsAction(
     wordmark: field(form, 'wordmark'),
     locationLine1: field(form, 'locationLine1'),
     locationLine2: field(form, 'locationLine2'),
+    timezone: field(form, 'timezone'),
     introTitle: field(form, 'introTitle'),
     introBody: field(form, 'introBody'),
     introCta: field(form, 'introCta'),
@@ -93,6 +96,10 @@ export async function saveTextsAction(
 
   if (!next.name || !next.email) {
     return { error: 'Имя и email обязательны' }
+  }
+
+  if (next.timezone && !isValidTimezone(next.timezone)) {
+    return { error: 'Часовой пояс должен быть именем IANA, например Europe/Amsterdam' }
   }
 
   await writeSite(next)
