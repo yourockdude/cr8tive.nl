@@ -4,6 +4,7 @@
   --mute: #9c9c9c;
   --line: rgba(28, 29, 32, 0.18);
   --pad: clamp(20px, 3.2vw, 48px);
+  --accent: #455ce9;
   --sans: var(--font-sans), Arial, sans-serif;
 }
 
@@ -95,27 +96,7 @@ button {
   background: #fff;
   mix-blend-mode: difference;
   pointer-events: none;
-  display: grid;
-  place-items: center;
   transform: translate(-100px, -100px) scale(0.12);
-}
-
-.cursor span {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--ink);
-  opacity: 0;
-  mix-blend-mode: normal;
-}
-
-.cursor[data-state='view'] {
-  mix-blend-mode: normal;
-  background: #455ce9;
-}
-
-.cursor[data-state='view'] span {
-  color: #fff;
-  opacity: 1;
 }
 
 .preloader {
@@ -218,8 +199,7 @@ body:has(.archive) .site-header {
 }
 
 .burger,
-.menu-close,
-.round-btn {
+.menu-close {
   border: 0;
   border-radius: 50%;
   background: var(--ink);
@@ -445,12 +425,94 @@ body:has(.archive) .site-header {
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.round-btn {
+/* Shared button shell. The fill is an oversized circle rising from the bottom,
+   which gives the curved leading edge; the label rides up and is replaced by a
+   duplicate so the button never resizes mid-transition. */
+.action {
+  position: relative;
   display: grid;
+  place-items: center;
+  isolation: isolate;
+  overflow: hidden;
+  border: 0;
+  color: var(--action-ink);
+  background: var(--action-bg);
+  transition: color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.action-round {
+  --action-bg: var(--ink);
+  --action-ink: #fff;
+  --action-fill: var(--accent);
+  --action-fill-ink: #fff;
   width: 180px;
   height: 180px;
-  place-items: center;
+  border-radius: 50%;
   font-size: 16px;
+}
+
+.action-pill {
+  --action-bg: transparent;
+  --action-ink: var(--ink);
+  --action-fill: var(--ink);
+  --action-fill-ink: var(--paper);
+  min-height: 56px;
+  padding: 0 28px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-size: 16px;
+}
+
+.action-pill sup {
+  font-size: 11px;
+}
+
+.action-fill {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: -1;
+  width: 150%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--action-fill);
+  transform: translate(-50%, 100%);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.action:hover,
+.action:focus-visible {
+  color: var(--action-fill-ink);
+}
+
+.action:hover .action-fill,
+.action:focus-visible .action-fill {
+  transform: translate(-50%, 22%);
+}
+
+.action-body {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.action-swap {
+  display: block;
+  height: 1.15em;
+  overflow: hidden;
+}
+
+.action-line {
+  display: block;
+  height: 1.15em;
+  line-height: 1.15em;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.action:hover .action-line,
+.action:focus-visible .action-line {
+  transform: translateY(-100%);
 }
 
 .featured {
@@ -642,11 +704,23 @@ body:has(.archive) .site-header {
   letter-spacing: -0.05em;
 }
 
+/* An ink circle on the ink contact section showed only its label, so it rests
+   as paper here and still fills with the accent on hover. */
+.contact .action-round {
+  --action-bg: var(--paper);
+  --action-ink: var(--ink);
+  --action-fill: var(--accent);
+  --action-fill-ink: #fff;
+}
+
 .contact-magnet {
   position: relative;
   z-index: 2;
-  margin: -40px 0 48px auto;
+  /* .magnet-wrap is inline-flex, and auto margins do not push an inline-level
+     box. Block-level flex is what makes `margin-left: auto` right-align it. */
+  display: flex;
   width: max-content;
+  margin: -40px 0 48px auto;
 }
 
 .contact-links {
