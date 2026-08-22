@@ -2,8 +2,6 @@ import type { MetadataRoute } from 'next'
 import { readProjects } from '@/lib/content'
 import { SITE_URL } from '@/lib/types'
 
-export const dynamic = 'force-static'
-
 // The live site is a static export with `trailingSlash: true`, so every
 // canonical URL ends in a slash.
 function url(path: string) {

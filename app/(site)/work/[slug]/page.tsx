@@ -8,7 +8,9 @@ type CasePageProps = {
   params: Promise<{ slug: string }>
 }
 
-export const dynamicParams = false
+// Case studies are added through the admin, so a slug that did not exist at
+// build time still has to render.
+export const dynamicParams = true
 
 export async function generateStaticParams() {
   const projects = await readProjects()
