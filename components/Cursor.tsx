@@ -36,11 +36,10 @@ export function Cursor() {
     const tick = () => {
       cx += (x - cx) * 0.18
       cy += (y - cy) * 0.18
-      const view = hoveringRef.current === 'view'
-      const link = hoveringRef.current === 'link'
-      const scale = view ? 1 : link ? 0.55 : 0.12
+      // Two states only: resting, and shrunk over anything interactive so the
+      // element's own feedback — a button fill, a project preview — stays clear.
+      const scale = hoveringRef.current ? 0.07 : 0.12
       el.style.transform = `translate(${cx}px, ${cy}px) scale(${scale})`
-      el.dataset.state = hoveringRef.current ?? 'default'
       frame = requestAnimationFrame(tick)
     }
 
@@ -54,9 +53,5 @@ export function Cursor() {
     }
   }, [])
 
-  return (
-    <div className="cursor" ref={dot} aria-hidden>
-      <span>View</span>
-    </div>
-  )
+  return <div className="cursor" ref={dot} aria-hidden />
 }

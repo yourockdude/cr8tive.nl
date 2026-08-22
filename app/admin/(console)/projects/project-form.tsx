@@ -80,6 +80,18 @@ export function ProjectForm({ project }: { project?: Project }) {
           required={!project}
         />
       </label>
+      <label>
+        Превью проекта (необязательно)
+        <input
+          type="file"
+          name="preview"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+        />
+        <small>
+          Кадр, который всплывает за курсором в списке работ. Если не загрузить,
+          используется обложка.
+        </small>
+      </label>
       {state.error ? <p className="admin-error">{state.error}</p> : null}
       {state.ok ? <p className="admin-ok">Сохранено</p> : null}
       <button className="admin-btn" type="submit" disabled={pending}>

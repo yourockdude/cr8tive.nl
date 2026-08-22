@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { Magnetic } from '@/components/Magnetic'
+import { Action } from '@/components/Action'
 import { useSite } from '@/components/site-context'
 import { resolveTimezone, timezoneCity } from '@/lib/time'
 import type { SiteContent } from '@/lib/types'
@@ -46,16 +46,9 @@ export function Footer({ content }: { content: SiteContent }) {
           ))}
         </h2>
       </div>
-      <Magnetic className="magnet-wrap contact-magnet" strength={0.28}>
-        <a
-          className="round-btn"
-          href={`mailto:${content.email}`}
-          onMouseEnter={() => setHovering('link')}
-          onMouseLeave={() => setHovering(null)}
-        >
-          {content.footerCta}
-        </a>
-      </Magnetic>
+      <Action shape="round" href={`mailto:${content.email}`} wrapClassName="contact-magnet">
+        {content.footerCta}
+      </Action>
       <div className="contact-links">
         <a
           href={`mailto:${content.email}`}

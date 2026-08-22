@@ -5,15 +5,15 @@ import { createContext, useContext, useMemo, useState, type ReactNode } from 're
 type SiteContextValue = {
   menu: boolean
   setMenu: (value: boolean) => void
-  hovering: 'link' | 'view' | null
-  setHovering: (value: 'link' | 'view' | null) => void
+  hovering: 'link' | 'view' | 'button' | null
+  setHovering: (value: 'link' | 'view' | 'button' | null) => void
 }
 
 const SiteContext = createContext<SiteContextValue | null>(null)
 
 export function SiteProvider({ children }: { children: ReactNode }) {
   const [menu, setMenu] = useState(false)
-  const [hovering, setHovering] = useState<'link' | 'view' | null>(null)
+  const [hovering, setHovering] = useState<'link' | 'view' | 'button' | null>(null)
   const value = useMemo(
     () => ({ menu, setMenu, hovering, setHovering }),
     [menu, hovering],
