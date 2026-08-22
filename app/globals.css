@@ -689,7 +689,13 @@ body:has(.archive) .site-header {
   border-radius: 6px;
 }
 
-.work-preview-media img {
+.work-preview-frame {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.work-preview-frame img {
   object-fit: cover;
 }
 
