@@ -8,9 +8,12 @@ type CasePageProps = {
   params: Promise<{ slug: string }>
 }
 
-// Case studies are added through the admin, so a slug that did not exist at
-// build time still has to render.
-export const dynamicParams = true
+// The static export rejects `true` outright, and with no server there is
+// nothing to render an unknown slug anyway. Flip this back if the site ever
+// moves to a Node host, so a case study added through the admin resolves
+// without a redeploy. The value has to be a literal — the option is parsed
+// from the source, not evaluated.
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   const projects = await readProjects()
