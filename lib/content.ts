@@ -45,15 +45,20 @@ function numberProjects(projects: Project[]) {
  */
 async function readJson<T>(repoPath: string, fallback: T): Promise<T> {
   const config = repoConfig()
-  if (!config) return fallback
   try {
-    const raw = await readRepoFile(config, repoPath)
-    if (!raw) return fallback
-    return JSON.parse(raw.toString('utf8')) as T
+    if (config) {
+      const raw = await readRepoFile(config, repoPath)
+      if (raw) return JSON.parse(raw.toString('utf8')) as T
+    } else {
+      // No token: the admin writes the working copy, so read it back rather
+      // than the snapshot bundled at build time.
+      const raw = await readFile(path.join(process.cwd(), repoPath), 'utf8')
+      return JSON.parse(raw) as T
+    }
   } catch (error) {
     console.error(`Falling back to bundled ${repoPath}:`, error)
-    return fallback
   }
+  return fallback
 }
 
 export async function readSite(): Promise<SiteContent> {
