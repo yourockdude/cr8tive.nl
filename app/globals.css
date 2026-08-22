@@ -173,9 +173,12 @@ button {
   pointer-events: none;
 }
 
-.wordmark,
-.nav {
-  mix-blend-mode: difference;
+/* The header is fixed, so it forms its own stacking context and a
+   mix-blend-mode on its children has nothing to blend against. Pages with a
+   light background flip the header to ink instead. */
+body:has(.case) .site-header,
+body:has(.archive) .site-header {
+  color: var(--ink);
 }
 
 .site-header a,
