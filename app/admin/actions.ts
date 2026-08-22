@@ -161,6 +161,7 @@ function projectFromForm(form: FormData, current?: Project): Omit<Project, 'numb
     accent: field(form, 'accent') || '#1c1d20',
     frame: field(form, 'frame') || '#ececec',
     image: current?.image ?? '',
+    preview: current?.preview,
   }
 }
 
@@ -182,6 +183,11 @@ export async function createProjectAction(
     if (cover) {
       draft.image = cover.url
       writes.push(cover.write)
+    }
+    const preview = await upload(form, 'preview', `${draft.id}-preview`)
+    if (preview) {
+      draft.preview = preview.url
+      writes.push(preview.write)
     }
   } catch (error) {
     return { error: error instanceof Error ? error.message : 'Не удалось загрузить изображение' }
@@ -215,6 +221,11 @@ export async function updateProjectAction(
     if (cover) {
       draft.image = cover.url
       writes.push(cover.write)
+    }
+    const preview = await upload(form, 'preview', `${draft.id}-preview`)
+    if (preview) {
+      draft.preview = preview.url
+      writes.push(preview.write)
     }
   } catch (error) {
     return { error: error instanceof Error ? error.message : 'Не удалось загрузить изображение' }

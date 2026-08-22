@@ -35,6 +35,8 @@ export type Project = {
   accent: string
   frame: string
   image: string
+  /** Optional asset for the hover preview; falls back to `image`. */
+  preview?: string
 }
 
 export const SITE_URL = 'https://cr8tive.nl'

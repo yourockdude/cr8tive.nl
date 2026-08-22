@@ -169,6 +169,7 @@ body:has(.archive) .site-header {
 
 .wordmark {
   font-size: 15px;
+  font-weight: 600;
 }
 
 .nav {
@@ -209,7 +210,11 @@ body:has(.archive) .site-header {
 .burger {
   display: grid;
   place-items: center;
-  gap: 6px;
+  /* Without this the two rows stretch to the full 80px and the bars end up
+     against the rim instead of 6px apart. */
+  align-content: center;
+  /* 6.5px puts the bar tops 8px apart, matching the Figma component. */
+  gap: 6.5px;
   width: 80px;
   height: 80px;
 }
@@ -355,15 +360,19 @@ body:has(.archive) .site-header {
 }
 
 .hero-role {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
   margin: 0;
   font-size: 24px;
   line-height: 1.2;
 }
 
 .hero-arrow {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 28px;
+  flex: none;
+  width: 28px;
+  height: 28px;
 }
 
 .marquee {
@@ -973,6 +982,8 @@ body:has(.archive) .site-header {
   }
 
   .hero-role {
+    flex-direction: column-reverse;
+    align-items: flex-end;
     font-size: 16px;
   }
 

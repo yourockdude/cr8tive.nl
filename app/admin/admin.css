@@ -79,6 +79,14 @@
   font-size: 13px;
 }
 
+/* Hint under a field, e.g. what the optional project preview is used for. */
+.admin-form small {
+  margin-top: -2px;
+  color: #6b6b70;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .admin-form input,
 .admin-form textarea {
   width: 100%;

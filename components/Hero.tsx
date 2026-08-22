@@ -28,8 +28,20 @@ export function Hero({ content }: { content: SiteContent }) {
       </div>
       <div className="hero-aside hero-aside-right">
         <p className="hero-role">
-          <span className="hero-arrow">↘</span>
-          {content.role}
+          <span>{content.role}</span>
+          {/* Drawn rather than the ↘ character, which Schibsted Grotesk does
+              not carry and which falls back to a system glyph. The arrow sits
+              after the label on desktop and above it on narrow screens, which
+              column-reverse handles without reordering the markup. */}
+          <svg className="hero-arrow" viewBox="0 0 28 28" aria-hidden>
+            <path
+              d="M7 7 21 21M21 11v10H11"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="square"
+            />
+          </svg>
         </p>
       </div>
       <div className="marquee" aria-hidden>
