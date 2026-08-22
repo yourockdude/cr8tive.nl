@@ -1,0 +1,132 @@
+[
+  {
+    "id": "field",
+    "number": "01",
+    "name": "Field",
+    "year": "2026",
+    "role": "Design system, tokens, documentation",
+    "label": "Design & Development",
+    "category": "Platform",
+    "summary": "A token pipeline that turns Figma variables into production CSS without a handoff gap.",
+    "problem": "Product teams were shipping three slightly different greys, two radii, and a documentation site nobody trusted.",
+    "approach": "I mapped tokens to a typed source of truth, rebuilt the component set as code-first primitives, and documented usage as working examples.",
+    "outcome": "One system across web and native. Designers edit variables; engineers consume the same names.",
+    "stack": [
+      "Figma Variables",
+      "TypeScript",
+      "CSS custom properties",
+      "Storybook"
+    ],
+    "accent": "#4DFFA6",
+    "frame": "#d8ece0",
+    "image": "/images/work-field.png"
+  },
+  {
+    "id": "deepseek",
+    "name": "DeepSeek",
+    "year": "2026",
+    "role": "Product Designer",
+    "label": "Design & Development",
+    "category": "UX design",
+    "summary": "Переработка интерфейса мобильного приложения",
+    "problem": "Переработка интерфейса мобильного приложения",
+    "approach": "Переработка интерфейса мобильного приложения",
+    "outcome": "Переработка интерфейса мобильного приложения",
+    "stack": [
+      "Figma",
+      "Swift"
+    ],
+    "accent": "#1c1d20",
+    "frame": "#ececec",
+    "image": "/uploads/deepseek-1787401554456.png",
+    "number": "02"
+  },
+  {
+    "id": "signal",
+    "number": "03",
+    "name": "Signal",
+    "year": "2026",
+    "role": "Product design, frontend architecture",
+    "label": "Interaction & Development",
+    "category": "Infrastructure",
+    "summary": "An observability console that makes incident response feel like reading, not decoding.",
+    "problem": "On-call engineers were switching between four dashboards to answer one question: what broke, and for whom.",
+    "approach": "I designed a single timeline with density controls, then implemented the layout so charts, logs, and traces share one scroll context.",
+    "outcome": "Mean time to first useful signal dropped. The UI is quiet until something actually matters.",
+    "stack": [
+      "Next.js",
+      "Canvas charts",
+      "Keyboard-first UI",
+      "Design tokens"
+    ],
+    "accent": "#6BA8FF",
+    "frame": "#d6dbe6",
+    "image": "/images/work-signal.png"
+  },
+  {
+    "id": "north",
+    "number": "04",
+    "name": "North",
+    "year": "2025",
+    "role": "Interaction design, prototyping",
+    "label": "Design & Development",
+    "category": "Mobility",
+    "summary": "Wayfinding for a city transit network — maps you can hold, not just look at.",
+    "problem": "The existing app treated stations as pins. People needed sequences, transfers, and time, not geography.",
+    "approach": "I rebuilt the core loop around trips, not maps. The map became a supporting layer; the itinerary became the product.",
+    "outcome": "A prototype that operations and design could both use in workshops. Shipped as the new trip model.",
+    "stack": [
+      "React",
+      "Map rendering",
+      "Motion specs",
+      "Accessibility"
+    ],
+    "accent": "#FFD56A",
+    "frame": "#ece3c8",
+    "image": "/images/work-north.png"
+  },
+  {
+    "id": "ledger",
+    "number": "05",
+    "name": "Ledger",
+    "year": "2025",
+    "role": "UX, visual design, implementation",
+    "label": "Design & Development",
+    "category": "Fintech",
+    "summary": "A treasury workspace for operators who live in numbers and cannot afford decoration.",
+    "problem": "Finance tools either looked like spreadsheets from 2009 or like consumer banking with the data hidden.",
+    "approach": "Dense, tabular, but with typographic hierarchy and reversible actions. I designed and built the first production screens.",
+    "outcome": "Operators keep the density. New hires understand the page without a walkthrough.",
+    "stack": [
+      "React",
+      "Data tables",
+      "Audit trails",
+      "Form systems"
+    ],
+    "accent": "#FF6B4A",
+    "frame": "#e8e4dc",
+    "image": "/images/work-ledger.png"
+  },
+  {
+    "id": "draft",
+    "number": "06",
+    "name": "Draft",
+    "year": "2025",
+    "role": "Concept, interface, prototype",
+    "label": "Design & Development",
+    "category": "Collaboration",
+    "summary": "A spec tool where comments attach to the actual UI, not a screenshot in a thread.",
+    "problem": "Feedback lived in Figma, Slack, and tickets. Engineering never knew which version was current.",
+    "approach": "I prototyped annotated live views: the component is the document. Comments, states, and acceptance criteria sit on the same surface.",
+    "outcome": "A working prototype used internally to replace status meetings with a single source of review.",
+    "stack": [
+      "Next.js",
+      "Presence",
+      "Component APIs",
+      "Markdown"
+    ],
+    "accent": "#C9A6FF",
+    "frame": "#e6dcee",
+    "image": "/images/work-draft.png"
+  }
+]
