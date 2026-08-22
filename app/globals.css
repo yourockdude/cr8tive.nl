@@ -5,6 +5,7 @@
   --line: rgba(28, 29, 32, 0.18);
   --pad: clamp(20px, 3.2vw, 48px);
   --accent: #455ce9;
+  --hero-bg: #999d9e;
   --sans: var(--font-sans), Arial, sans-serif;
 }
 
@@ -298,7 +299,7 @@ body:has(.archive) .site-header {
   position: relative;
   min-height: 100svh;
   overflow: hidden;
-  background: #999d9e;
+  background: var(--hero-bg);
   color: #fff;
 }
 
@@ -622,12 +623,12 @@ body:has(.archive) .site-header {
     padding 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.work-list.is-hot .work-row {
-  opacity: 0.28;
+.work-list.is-hot .work-row strong {
+  color: var(--hero-bg);
 }
 
-.work-list.is-hot .work-row.is-on {
-  opacity: 1;
+.work-list.is-hot .work-row.is-on strong {
+  color: var(--ink);
 }
 
 .work-list .work-row.is-off {
@@ -643,6 +644,7 @@ body:has(.archive) .site-header {
   font-size: clamp(36px, 5.4vw, 72px);
   font-weight: 500;
   letter-spacing: -0.045em;
+  transition: color 0.35s ease;
 }
 
 .work-row span {
@@ -661,11 +663,11 @@ body:has(.archive) .site-header {
    which is what centres it on the cursor. */
 .work-preview {
   position: fixed;
-  top: -118px;
+  top: -108px;
   left: -200px;
   z-index: 40;
   width: 400px;
-  height: 236px;
+  height: 215px;
   padding: 12px;
   border-radius: 12px;
   background: var(--paper);
@@ -682,7 +684,7 @@ body:has(.archive) .site-header {
 .work-preview-media {
   position: relative;
   display: block;
-  height: 212px;
+  height: 191px;
   overflow: hidden;
   border-radius: 6px;
 }
