@@ -40,9 +40,11 @@ would 404 until the next one.
 If GitHub is unreachable the site falls back to the copy of `content/` bundled
 into the deployment — it goes stale rather than down.
 
-The home page lists the four most recent projects; the full archive is at
-`/work`. The footer clock follows the `timezone` field (an IANA name).
-`sitemap.xml` and `robots.txt` are generated from the same content. The social
+`public/index.html` is the published home page: a hand-built static page that
+owns `/` and is not driven by the admin. The previous, content-driven home page
+still builds at `/classic/` (noindex) — it lists the four most recent projects.
+The full archive is at `/work`. The footer clock follows the `timezone` field
+(an IANA name). `sitemap.xml` and `robots.txt` are generated from the same content. The social
 card is a static image at `app/(site)/opengraph-image.png` and does not follow
 admin edits — regenerate it by hand if the name or role changes.
 
