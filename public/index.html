@@ -192,6 +192,11 @@
   .about .facts div{display:flex;flex-direction:column;gap:4px}
   .about .facts b{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:500;font-size:clamp(26px,2.6vw,40px);letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums;text-wrap:balance}
   .about .facts span{color:var(--ink-2)}
+  .about .awards{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;border-top:1px solid var(--line);padding-top:20px;color:var(--ink)}
+  .about .awards li{display:inline-flex;align-items:center;gap:10px;white-space:nowrap}
+  .about .awards .lbl{color:var(--ink-3)}
+  .about .awards li:first-child{flex-basis:100%;margin-bottom:2px}
+  .about .awards i{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
   @media(max-width:860px){.about .visual,.about .copy{grid-column:1/-1}.about .visual{aspect-ratio:1;margin-bottom:40px}}
 
   /* ---------- footer ---------- */
@@ -413,11 +418,19 @@
       <h2 data-lines>The best interface is the one you stop noticing. The best product is the one you can’t.</h2>
       <p data-reveal>I’ve led design for banks, enterprise SaaS, marketplaces and AI products — inside organisations with thousands of people, and inside startups where I was the whole design team. I work where product, business and engineering overlap, and I’m most useful when the brief is still a question. I’m a design engineer: I design in Figma and in code, and I ship.</p>
       <div class="facts">
-        <div data-reveal><b>0 → 1</b><span>products taken from a sentence to a store listing</span></div>
-        <div data-reveal><b>1 → 40</b><span>teams scaled on a single design system</span></div>
-        <div data-reveal><b>Figma ↔ code</b><span>same person, both sides of the handoff</span></div>
-        <div data-reveal><b>Awwwards · FWA</b><span>recognised, if that matters to you</span></div>
+        <div data-reveal><b>100+</b><span>products shipped — from banking apps to AI assistants</span></div>
+        <div data-reveal><b>Millions</b><span>of people use products built on my design systems</span></div>
+        <div data-reveal><b>Fortune 500</b><span>clients, from Nike to J.P. Morgan</span></div>
+        <div data-reveal><b>Days, not months</b><span>from brief to a working prototype in code</span></div>
       </div>
+      <ul class="awards" data-awards aria-label="Recognition">
+        <li class="mono"><span class="lbl">Recognition</span></li>
+        <li class="mono"><i></i>Awwwards</li>
+        <li class="mono"><i></i>The FWA</li>
+        <li class="mono"><i></i>Apple Best Apps</li>
+        <li class="mono"><i></i>Red Dot Design Award</li>
+        <li class="mono"><i></i>Behance</li>
+      </ul>
     </div>
   </section>
 
@@ -437,7 +450,7 @@
 
     <div class="footer-grid mono">
       <div>Studio<ul><li><a href="#work">Work</a></li><li><a href="#caps">Services</a></li><li><a href="#about">About</a></li></ul></div>
-      <div>Elsewhere<ul><li><a href="https://www.behance.net" target="_blank" rel="noopener">Behance</a></li><li><a href="https://www.awwwards.com" target="_blank" rel="noopener">Awwwards</a></li><li><a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li></ul></div>
+      <div>Elsewhere<ul><li><a href="https://www.behance.net" target="_blank" rel="noopener">Behance</a></li><li><a href="https://www.awwwards.com" target="_blank" rel="noopener">Awwwards</a></li><li><a href="https://thefwa.com" target="_blank" rel="noopener">The FWA</a></li><li><a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li></ul></div>
       <div>Availability<ul><li><a href="mailto:hello@cr8tive.nl?subject=Lead%20%2F%20Principal%20role">Lead / Principal Design Engineer — in-house</a></li><li><a href="mailto:hello@cr8tive.nl?subject=Founding%20designer">Founding-designer engagements — fractional</a></li><li><a href="mailto:hello@cr8tive.nl?subject=Product%20audit">Product audits — two weeks, fixed scope</a></li></ul></div>
       <div>Local time<ul><li data-clock="Europe/Amsterdam" data-label="Amsterdam">Amsterdam 00:00</li><li data-clock="America/New_York" data-label="New York">New York 00:00</li><li data-clock="America/Los_Angeles" data-label="San Francisco">San Francisco 00:00</li></ul></div>
     </div>
@@ -719,6 +732,11 @@
   });
   // slow drift of the portrait against the scroll, on top of the smoother's data-speed
   if (!reduce) gsap.to(pimg, {yPercent: 6, ease: 'none', scrollTrigger: {trigger: av, start: 'top bottom', end: 'bottom top', scrub: 1.2}});
+
+
+  /* ---------- awards: quiet cascade ---------- */
+  gsap.from('[data-awards] li', {y: 12, opacity: 0, duration: .9, ease: EASE, stagger: .07,
+    scrollTrigger: {trigger: '[data-awards]', start: 'top 90%', once: true}});
 
   /* ---------- footer CTA ---------- */
   gsap.from('[data-cta] .word', {yPercent: 110, duration: 1.5, ease: EXPO, stagger: .1,
