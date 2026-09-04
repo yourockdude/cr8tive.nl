@@ -156,6 +156,16 @@
   .project:hover .fill{transform:scaleY(1);transform-origin:top}
   @media(max-width:720px){.project{grid-template-columns:1fr auto;row-gap:8px}.project .cat{grid-column:1}.project .year{grid-column:1;text-align:left}.project .arrow{grid-row:1/span 3}}
 
+  /* last row of the list: the way through to the full projects page */
+  .work-more{display:flex;align-items:center;justify-content:space-between;gap:var(--gutter);padding:30px 0;border-bottom:1px solid var(--line);color:var(--ink-2);position:relative;isolation:isolate;transition:padding .6s var(--ease),color .5s var(--ease)}
+  .work-more:hover{padding-left:24px;color:var(--ink)}
+  .work-more .txt{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:500;font-size:clamp(22px,2.6vw,38px);letter-spacing:-.035em;line-height:1}
+  .work-more .arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;flex:none;transition:background .5s var(--ease),color .5s var(--ease),transform .6s var(--ease)}
+  .work-more .arrow svg{width:16px;height:16px}
+  .work-more:hover .arrow{background:var(--ink);color:var(--bg);transform:rotate(-45deg)}
+  .work-more .fill{position:absolute;inset:0;background:var(--bg-2);transform:scaleY(0);transform-origin:bottom;transition:transform .6s var(--ease);z-index:-1}
+  .work-more:hover .fill{transform:scaleY(1);transform-origin:top}
+
   /* floating preview that follows cursor */
   .preview{position:fixed;top:0;left:0;width:clamp(200px,24vw,360px);aspect-ratio:4/5;pointer-events:none;z-index:700;opacity:0;will-change:transform}
   .preview-card{position:absolute;inset:0;border-radius:4px;overflow:hidden;opacity:0}
@@ -244,7 +254,7 @@
   <a href="#top" class="nav-logo"><span class="dot"></span>cr8tive</a>
   <nav class="nav-links">
     <a href="#clients"><span>Clients</span><span>Clients</span></a>
-    <a href="#work"><span>Work</span><span>Work</span></a>
+    <a href="/projects/"><span>Work</span><span>Work</span></a>
     <a href="#caps"><span>Services</span><span>Services</span></a>
     <a href="#about"><span>About</span><span>About</span></a>
     <a href="#contact"><span>Contact</span><span>Contact</span></a>
@@ -367,6 +377,11 @@
         <span class="fill"></span>
       </li>
     </ul>
+    <a class="work-more" href="/projects/" data-reveal>
+      <span class="txt">All projects</span>
+      <span class="arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h12M9 3l5 5-5 5"/></svg></span>
+      <span class="fill"></span>
+    </a>
   </section>
 
   <!-- CAPABILITIES -->
@@ -449,7 +464,7 @@
     </a>
 
     <div class="footer-grid mono">
-      <div>Studio<ul><li><a href="#work">Work</a></li><li><a href="#caps">Services</a></li><li><a href="#about">About</a></li></ul></div>
+      <div>Studio<ul><li><a href="/projects/">Work</a></li><li><a href="#caps">Services</a></li><li><a href="#about">About</a></li></ul></div>
       <div>Elsewhere<ul><li><a href="https://www.behance.net" target="_blank" rel="noopener">Behance</a></li><li><a href="https://www.awwwards.com" target="_blank" rel="noopener">Awwwards</a></li><li><a href="https://thefwa.com" target="_blank" rel="noopener">The FWA</a></li><li><a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li></ul></div>
       <div>Availability<ul><li><a href="mailto:hello@cr8tive.nl?subject=Lead%20%2F%20Principal%20role">Lead / Principal Design Engineer — in-house</a></li><li><a href="mailto:hello@cr8tive.nl?subject=Founding%20designer">Founding-designer engagements — fractional</a></li><li><a href="mailto:hello@cr8tive.nl?subject=Product%20audit">Product audits — two weeks, fixed scope</a></li></ul></div>
       <div>Local time<ul><li data-clock="Europe/Amsterdam" data-label="Amsterdam">Amsterdam 00:00</li><li data-clock="America/New_York" data-label="New York">New York 00:00</li><li data-clock="America/Los_Angeles" data-label="San Francisco">San Francisco 00:00</li></ul></div>
