@@ -1,0 +1,415 @@
+/* Cookie notice + privacy sheet — iOS-style glass notification, bottom right. */
+
+.glass {
+  --glass-text: rgba(255, 255, 255, 0.96);
+  --glass-dim: rgba(255, 255, 255, 0.62);
+  --glass-fill: rgba(255, 255, 255, 0.14);
+  --glass-fill-hover: rgba(255, 255, 255, 0.22);
+  --ios-green: #30d158;
+
+  position: fixed;
+  z-index: 10;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  width: min(392px, calc(100vw - 32px));
+  border-radius: 28px;
+  color: var(--glass-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.34;
+  letter-spacing: -0.01em;
+  cursor: default;
+  user-select: text;
+  -webkit-user-select: text;
+  touch-action: pan-y;
+
+  /* The glass: tinted blur, bright top edge, soft inner rim, deep shadow. */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 42%, rgba(255, 255, 255, 0.08) 100%),
+    rgba(38, 38, 42, 0.5);
+  -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.08);
+  backdrop-filter: blur(30px) saturate(1.9) brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    0 24px 64px rgba(0, 0, 0, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(28px) scale(0.94);
+  transform-origin: 100% 100%;
+  transition:
+    opacity 0.3s ease,
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0.55s;
+}
+
+.glass.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+/* ---------- Notification ---------- */
+
+.notice {
+  padding: 14px 16px 16px;
+}
+
+.notice__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--glass-dim);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.notice__icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #fff;
+  color: #0e0e0f;
+  font-family: "Albert Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.notice__time {
+  margin-left: auto;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.glass h2 {
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.glass p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.glass__link {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--glass-text);
+  font: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.glass__link:hover {
+  text-decoration-color: currentColor;
+}
+
+.glass__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.glass__btn {
+  appearance: none;
+  min-height: 40px;
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 100px;
+  background: var(--glass-fill);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  color: var(--glass-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass__btn:hover {
+  background: var(--glass-fill-hover);
+}
+
+.glass__btn:active {
+  transform: scale(0.96);
+}
+
+.glass :focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ---------- Privacy sheet ---------- */
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  width: min(440px, calc(100vw - 32px));
+  max-height: min(680px, calc(100vh - 48px));
+  max-height: min(680px, calc(100dvh - 48px));
+  overflow: hidden;
+  /* More tint than the notification: there is a lot of text to read. */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 30%, rgba(255, 255, 255, 0.06) 100%),
+    rgba(30, 30, 34, 0.72);
+}
+
+.sheet__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 12px 20px;
+}
+
+.sheet__bar h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.sheet__close {
+  appearance: none;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--glass-fill);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  color: var(--glass-text);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sheet__close:hover {
+  background: var(--glass-fill-hover);
+}
+
+.sheet__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 20px 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.sheet__body h3 {
+  margin: 18px 0 6px;
+  color: var(--glass-dim);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.sheet__body h3:first-child {
+  margin-top: 4px;
+}
+
+.sheet__body p + p {
+  margin-top: 8px;
+}
+
+.sheet__body a {
+  color: var(--glass-text);
+  text-underline-offset: 3px;
+}
+
+/* Grouped rows, like iOS Settings. */
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.rows > li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.rows > li + li {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rows__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.rows__text strong {
+  display: block;
+  font-weight: 600;
+}
+
+.rows__text span {
+  display: block;
+  color: var(--glass-dim);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.rows code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* iOS switch */
+.switch {
+  position: relative;
+  flex: none;
+  width: 51px;
+  height: 31px;
+}
+
+.switch input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.switch input:disabled {
+  cursor: not-allowed;
+}
+
+.switch i {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  background: rgba(120, 120, 128, 0.36);
+  transition: background-color 0.25s ease;
+  pointer-events: none;
+}
+
+.switch i::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.switch input:checked + i {
+  background: var(--ios-green);
+}
+
+.switch input:checked + i::after {
+  transform: translateX(20px);
+}
+
+.switch input:disabled + i {
+  opacity: 0.55;
+}
+
+.switch input:focus-visible + i {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.sheet__foot {
+  padding: 12px 16px 16px;
+}
+
+.sheet__foot .glass__actions {
+  margin-top: 0;
+}
+
+/* ---------- Permanent link to reopen the settings ---------- */
+
+.legal-link {
+  position: fixed;
+  z-index: 3;
+  right: max(20px, calc(67 * var(--ux)), env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  appearance: none;
+  border: 0;
+  padding: 6px 0;
+  background: none;
+  color: rgba(255, 255, 255, 0.5);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.legal-link:hover,
+.legal-link:focus-visible {
+  color: #fff;
+}
+
+.legal-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 520px) {
+  .glass {
+    right: 12px;
+    left: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: auto;
+    transform-origin: 50% 100%;
+  }
+
+  .sheet {
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass {
+    transform: none;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  }
+
+  .glass.is-open {
+    transition-delay: 0s;
+  }
+
+  .switch i,
+  .switch i::after {
+    transition: none;
+  }
+}

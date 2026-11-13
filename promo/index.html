@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CR8TIVE — We Make Digital</title>
+  <meta name="description" content="CR8TIVE is a design studio. We make digital: food delivery services, beauty services, drone control apps, taxi apps.">
+  <meta name="theme-color" content="#0e0e0f">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="preload" href="assets/fonts/albert-sans-800-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="consent.css">
+</head>
+<body>
+  <canvas class="gl" id="gl" aria-hidden="true"></canvas>
+
+  <header class="top">
+    <a class="logo" href="/" aria-label="CR8TIVE — home">CR8TIVE</a>
+    <button class="lang" id="lang" type="button" aria-label="Language: English. Switch language"><span class="lang__label">Eng</span></button>
+  </header>
+
+  <main class="stage">
+    <h1 class="hero" id="hero" aria-label="We Make DIGITAL">
+      <span class="word word--make" aria-hidden="true"><span id="make">We Make</span></span>
+
+      <span class="slot" id="slot" aria-hidden="true">
+        <!-- Shown only when WebGL is unavailable; with WebGL the canvas draws these. -->
+        <span class="fallback">
+          <img src="assets/projects/food.png" alt="" data-slide="0" decoding="async">
+          <img src="assets/projects/beauty.png" alt="" data-slide="1" decoding="async">
+          <img src="assets/projects/drone.png" alt="" data-slide="2" decoding="async">
+          <img src="assets/projects/taxi.png" alt="" data-slide="3" decoding="async">
+        </span>
+      </span>
+
+      <span class="word word--digital" aria-hidden="true"><span>DIGITAL</span></span>
+    </h1>
+
+    <p class="caption" id="caption" aria-live="polite">
+      <span class="is-active">FOOD DELIVERY SERVICE</span>
+      <span aria-hidden="true">BEAUTY SERVICE</span>
+      <span aria-hidden="true">DRONE CONTROL APP</span>
+      <span aria-hidden="true">TAXI APP</span>
+    </p>
+  </main>
+
+  <script src="main.js" defer></script>
+  <script src="consent.js" defer></script>
+</body>
+</html>
