@@ -218,6 +218,9 @@ body.is-dragging {
 
 .word--make {
   letter-spacing: -0.04em; /* -5.12px at 128px */
+  /* The tracking also trims the box after the last letter; give it back so
+     the gap to the image is measured from the letter itself. */
+  padding-right: 0.04em;
 }
 
 .word--digital > span {
@@ -233,8 +236,8 @@ body.is-dragging {
   flex: none;
   width: var(--slot);
   height: var(--slot);
-  /* 1118 − 1076: the gap to "DIGITAL"; the left gap takes what remains */
-  margin: 0 calc(43 * var(--u)) 0 auto;
+  /* Equal gaps: the slot sits exactly midway between the two words. */
+  margin: 0 auto;
 }
 
 /* ---------- Caption ---------- */

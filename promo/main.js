@@ -413,6 +413,7 @@
     setPill(t.pill, false);
     langButton.setAttribute('aria-label', `Language: ${t.name}. Switch language`);
     try { localStorage.setItem('cr8tive-lang', code); } catch (e) { /* private mode */ }
+    measure(); // the translated word has another width, so the slot moves
   }
 
   function switchLang() {
@@ -538,6 +539,8 @@
   portrait.addEventListener('change', measure);
   if ('ResizeObserver' in window) new ResizeObserver(measure).observe(slot);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  // The Cyrillic font loads on first use and changes the word's width.
+  if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', measure);
 
   if (glCtx) {
     Promise.all(SLIDES.map((s) => loadTexture(glCtx.gl, s.src)))
