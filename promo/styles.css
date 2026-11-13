@@ -79,10 +79,10 @@ body.is-dragging {
   z-index: 1;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.9s ease 0.15s;
+  transition: opacity 0.4s ease;
 }
 
-.has-webgl.is-ready .gl {
+.has-webgl.is-ready:not(.is-intro) .gl {
   opacity: 1;
 }
 
@@ -202,18 +202,17 @@ body.is-dragging {
   transition: transform 1.1s var(--ease-out);
 }
 
-/* Language switch: the translated word and the caption duck out, swap, return. */
-.is-ready.is-switching .word--make > span {
-  transform: translateY(-110%);
-  transition: transform 0.28s cubic-bezier(0.5, 0, 0.75, 0);
+/* Language switch: the whole centre (headline, project image, caption)
+   fades out, the texts are swapped while it is hidden, then it fades back in. */
+.stage,
+.is-settled .gl {
+  transition: opacity 0.5s ease;
 }
 
-.is-ready.is-switching .caption > span.is-active {
+.is-ready.is-switching .stage,
+.has-webgl.is-ready.is-switching .gl {
   opacity: 0;
-  transform: translateY(-0.7em);
-  filter: blur(6px);
-  transition-delay: 0s;
-  transition-duration: 0.25s;
+  transition: opacity 0.3s ease;
 }
 
 .word--make {
@@ -229,6 +228,17 @@ body.is-dragging {
 
 .is-ready .word > span {
   transform: none;
+}
+
+/* Intro: the two words start side by side in the centre, then part to make
+   room for the project reel. --intro-x / --intro-y are measured in main.js. */
+.word {
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.is-intro .word {
+  transform: translate(var(--intro-x, 0px), var(--intro-y, 0px));
+  transition: none;
 }
 
 .slot {
@@ -273,7 +283,7 @@ body.is-dragging {
   transform: translateY(-0.7em);
 }
 
-.is-ready .caption > span.is-active {
+.is-ready:not(.is-intro) .caption > span.is-active {
   opacity: 1;
   transform: none;
   filter: none;
@@ -286,6 +296,11 @@ body.is-dragging {
   position: absolute;
   inset: 0;
   display: block;
+  transition: opacity 0.4s ease;
+}
+
+.is-intro .fallback {
+  opacity: 0;
 }
 
 .has-webgl .fallback {
@@ -349,6 +364,12 @@ body.is-dragging {
 /* ---------- Reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
+  .stage,
+  .is-settled .gl,
+  .is-ready.is-switching .stage,
+  .has-webgl.is-ready.is-switching .gl,
+  .word,
+  .fallback,
   .word > span,
   .lang__label,
   .caption > span,

@@ -19,6 +19,8 @@
   const RADIUS = 360;         // drum radius, design px
   const STEP = 1.2;           // angle between neighbouring slides, radians
   const AUTOPLAY_MS = 3200;
+  const INTRO_HOLD_MS = 1100; // how long the two words stay together before parting (400 ms)
+  const INTRO_HOLD_LANG_MS = 800; // the same hold when the intro replays after a language switch
   const SPRING = 38;          // stiffness
   const DAMPING = 10;         // slightly under-damped → soft overshoot
 
@@ -36,7 +38,9 @@
 
   // ---------------------------------------------------------------- state
   const state = {
-    pos: -0.85,      // continuous slide position; integer = slide at rest
+    pos: -0.49,      // continuous slide position; integer = slide at rest
+    intro: false,    // true while the two words still sit together in the centre
+    solo: null,      // { index, target } while a roll-in draws only the current project
     target: 0,
     vel: 0,          // slides per second
     active: -1,
@@ -242,6 +246,27 @@
     root.style.setProperty('--slot-x', `${l.cx}px`);
     root.style.setProperty('--slot-y', `${l.cy}px`);
 
+    // Intro start position: both words together, centred in the headline box.
+    // offset* ignores transforms, so this is safe to recompute at any time.
+    if (state.intro) {
+      const hero = slot.parentElement;
+      const [make, digital] = hero.querySelectorAll('.word');
+      const set = (el, x, y) => {
+        el.style.setProperty('--intro-x', `${x}px`);
+        el.style.setProperty('--intro-y', `${y}px`);
+      };
+      if (l.horizontal) {
+        const top = (hero.offsetHeight - make.offsetHeight - digital.offsetHeight) / 2;
+        set(make, 0, top - make.offsetTop);
+        set(digital, 0, top + make.offsetHeight - digital.offsetTop);
+      } else {
+        const gap = parseFloat(getComputedStyle(hero).fontSize) * 0.24; // a word space
+        const left = (hero.offsetWidth - make.offsetWidth - gap - digital.offsetWidth) / 2;
+        set(make, left - make.offsetLeft, 0);
+        set(digital, left + make.offsetWidth + gap - digital.offsetLeft, 0);
+      }
+    }
+
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     const w = Math.round(window.innerWidth * dpr);
     const h = Math.round(window.innerHeight * dpr);
@@ -424,10 +449,12 @@
     setPill(I18N[next].pill, true);
     root.classList.add('is-switching');
     langTimer = setTimeout(() => {
+      // Hidden now: put the words back together, swap the texts, then fade in
+      // and replay the intro in the new language.
+      playIntro(INTRO_HOLD_LANG_MS);
       applyLang(next);
-      // Let the new text render in its "out" state before sliding it in.
       requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('is-switching')));
-    }, 280);
+    }, 320);
   }
 
   langButton.addEventListener('click', switchLang);
@@ -483,6 +510,7 @@
       let d = mod(i - state.pos + N / 2, N) - N / 2;
       const theta = d * STEP;
       if (Math.cos(theta) < 0.4) continue;
+      if (state.solo && i !== state.solo.index) continue;
 
       const s = SLIDES[i];
       gl.bindTexture(gl.TEXTURE_2D, textures[i]);
@@ -501,15 +529,16 @@
     lastTime = nowMs;
 
     // Autoplay.
-    if (!state.dragging && !reducedMotion.matches && !document.hidden &&
+    if (!state.intro && !state.dragging && !reducedMotion.matches && !document.hidden &&
         nowMs - state.lastInteraction > AUTOPLAY_MS) {
       state.target = Math.round(state.target) + 1;
       state.lastInteraction = nowMs;
     }
 
-    // Spring towards the target (sub-stepped for stability).
-    const steps = 4;
-    const h = dt / steps;
+    // Spring towards the target (sub-stepped for stability). The reel waits
+    // for the intro, so its roll-in starts as the words part.
+    const steps = state.intro ? 0 : 4;
+    const h = dt / 4;
     for (let i = 0; i < steps; i++) {
       state.vel += ((state.target - state.pos) * SPRING - state.vel * DAMPING) * h;
       state.pos += state.vel * h;
@@ -522,16 +551,45 @@
     state.mouseVel[1] += (clamp(state.mouseRaw[1] / u, -70, 70) - state.mouseVel[1]) * k;
     state.mouseRaw[0] = state.mouseRaw[1] = 0;
 
+    if (state.solo && (Math.abs(state.pos - state.target) < 0.03 || state.target !== state.solo.target)) state.solo = null;
+
     setActive(mod(Math.round(state.pos), N));
 
     if (glCtx) draw(nowMs / 1000);
   }
 
   // ---------------------------------------------------------------- boot
+  // The words sit together in the centre for `hold` ms, then part (400 ms)
+  // while the current project rolls in and the caption appears.
+  let introTimer = 0;
+  function playIntro(hold) {
+    clearTimeout(introTimer);
+    if (reducedMotion.matches) return;
+
+    const current = Math.round(state.target);
+    state.intro = true;
+    state.target = current;
+    state.pos = current - 0.49;
+    state.vel = 0;
+    state.solo = { index: mod(current, N), target: current };
+    root.classList.add('is-intro');
+    measure();
+
+    introTimer = setTimeout(() => {
+      state.intro = false;
+      state.lastInteraction = performance.now();
+      root.classList.remove('is-intro');
+    }, hold);
+  }
+
   function start() {
     measure();
+    playIntro(INTRO_HOLD_MS);
+    if (!state.intro) state.pos = state.target; // reduced motion: no roll-in
     state.lastInteraction = performance.now();
     root.classList.add('is-ready');
+    // Once the first intro has played, the canvas uses the quicker language-switch fade.
+    setTimeout(() => root.classList.add('is-settled'), (state.intro ? INTRO_HOLD_MS : 0) + 900);
     requestAnimationFrame(frame);
   }
 
