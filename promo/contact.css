@@ -176,6 +176,10 @@
   border-radius: 6px;
 }
 
+.touch.is-pointer-focused:focus-visible {
+  outline: none;
+}
+
 /* ---------- Overlay ---------- */
 
 .contact {

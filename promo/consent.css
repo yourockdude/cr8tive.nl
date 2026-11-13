@@ -353,6 +353,18 @@
 
 /* ---------- Permanent link to reopen the settings ---------- */
 
+.copyright {
+  position: fixed;
+  z-index: 3;
+  left: max(20px, calc(67 * var(--ux)), env(safe-area-inset-left));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+}
+
 .legal-link {
   position: fixed;
   z-index: 3;
@@ -384,6 +396,12 @@
 /* ---------- Portrait: the link sits centred under the composition ---------- */
 
 @media (max-aspect-ratio: 1/1) {
+  .copyright {
+    left: max(14px, env(safe-area-inset-left));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    font-size: 11px;
+  }
+
   .legal-link {
     right: auto;
     left: 50%;
@@ -391,6 +409,14 @@
     bottom: max(14px, env(safe-area-inset-bottom));
     font-size: 12px;
     white-space: nowrap;
+  }
+}
+
+@media (max-width: 360px) and (max-aspect-ratio: 1/1) {
+  .legal-link {
+    right: max(14px, env(safe-area-inset-right));
+    left: auto;
+    transform: none;
   }
 }
 

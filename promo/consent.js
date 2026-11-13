@@ -149,6 +149,10 @@
   reopen.type = 'button';
   reopen.className = 'legal-link';
 
+  const copyright = document.createElement('small');
+  copyright.className = 'copyright';
+  copyright.textContent = '© 2026 cr8tive.nl';
+
   let analyticsDraft = consent ? !!consent.analytics : false;
 
   function controllerLine(s) {
@@ -275,7 +279,7 @@
   new MutationObserver(render).observe(root, { attributes: true, attributeFilter: ['lang'] });
 
   render();
-  document.body.append(reopen, notice, sheet);
+  document.body.append(copyright, reopen, notice, sheet);
 
   if (!consent) {
     // Arrive like a notification, once the intro has played.

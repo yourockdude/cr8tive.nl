@@ -463,6 +463,12 @@
   window.addEventListener('hashchange', () => showView(viewFromHash()));
   window.addEventListener('popstate', () => showView(viewFromHash()));
 
+  document.querySelectorAll('.nav .touch').forEach((button) => {
+    button.addEventListener('pointerdown', () => button.classList.add('is-pointer-focused'));
+    button.addEventListener('keydown', () => button.classList.remove('is-pointer-focused'));
+    button.addEventListener('blur', () => button.classList.remove('is-pointer-focused'));
+  });
+
   document.getElementById('work').addEventListener('click', () => {
     if (location.hash !== '#work') location.hash = 'work';
   });
