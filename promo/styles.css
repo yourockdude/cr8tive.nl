@@ -306,7 +306,7 @@ body.is-dragging {
 .fallback img[data-slide="0"] { width: calc(371 * var(--u)); }
 .fallback img[data-slide="1"] { width: calc(323.7 * var(--u)); rotate: -4.15deg; }
 .fallback img[data-slide="2"] { width: calc(378 * var(--u)); }
-.fallback img[data-slide="3"] { width: calc(428 * var(--u)); margin-top: calc(-65 * var(--u)); }
+.fallback img[data-slide="3"] { width: calc(428 * var(--u)); }
 
 /* ---------- Portrait / phones: stack the headline, reel runs sideways ---------- */
 
