@@ -130,15 +130,15 @@
         </fieldset>
 
         <div class="group">
+          <label class="label" for="c-task">${s.task}</label>
+          <textarea id="c-task" name="task" rows="4" placeholder="${esc(s.taskPh)}">${esc(values.task)}</textarea>
+        </div>
+
+        <div class="group">
           <label class="label" for="c-budget">${s.budget}</label>
           <span class="field field--budget">
             <input id="c-budget" name="budget" type="text" inputmode="numeric" autocomplete="off" placeholder="10 000" value="${esc(values.budget)}">
           </span>
-        </div>
-
-        <div class="group">
-          <label class="label" for="c-task">${s.task}</label>
-          <textarea id="c-task" name="task" rows="4" placeholder="${esc(s.taskPh)}">${esc(values.task)}</textarea>
         </div>
 
         <fieldset class="group">
@@ -242,10 +242,11 @@
     const names = p.types.map((k) => s.types[TYPES.indexOf(k)]).join(', ') || s.none;
     const lines = [
       `${s.type}: ${names}`,
-      `${s.budget}: ${p.budgetUpTo ? values.budget + ' €' : s.none}`,
       '',
       `${s.task}:`,
       p.task || s.none,
+      '',
+      `${s.budget}: ${p.budgetUpTo ? values.budget + ' €' : s.none}`,
       '',
       `${s.contacts}:`,
       `Email: ${p.email || s.none}`,

@@ -384,21 +384,23 @@
   // "DIGITAL" stays in English everywhere; only "We Make" and the captions change.
   const I18N = {
     en: {
-      pill: 'Eng', name: 'English', make: 'We Make',
+      pill: 'Eng', name: 'English', make: 'We Make', work: 'Work', what: 'What We Do',
       captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP'],
     },
     es: {
-      pill: 'Esp', name: 'Español', make: 'Hacemos',
+      pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
       captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI'],
     },
     ru: {
-      pill: 'Рус', name: 'Русский', make: 'Делаем',
+      pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
       captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ'],
     },
   };
   const LANGS = Object.keys(I18N);
   const langButton = document.getElementById('lang');
   const makeWord = document.getElementById('make');
+  const workButton = document.getElementById('work');
+  const whatButton = document.getElementById('what');
   const hero = document.getElementById('hero');
   let lang = 'en';
   let langTimer = 0;
@@ -433,6 +435,9 @@
     lang = code;
     root.lang = code;
     makeWord.textContent = t.make;
+    // Work and What We Do are labels for now; their sections are still to come.
+    if (workButton) workButton.textContent = t.work;
+    if (whatButton) whatButton.textContent = t.what;
     hero.setAttribute('aria-label', `${t.make} DIGITAL`);
     captions.forEach((el, i) => { el.textContent = t.captions[i]; });
     setPill(t.pill, false);

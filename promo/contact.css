@@ -8,6 +8,42 @@
   gap: max(14px, calc(36 * var(--ux)));
 }
 
+.nav {
+  display: flex;
+  align-items: center;
+  gap: max(14px, calc(36 * var(--ux)));
+}
+
+/* Phones: logo and language stay on the first line, the links get their own. */
+@media (max-width: 620px) {
+  .top {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .top__right {
+    display: contents;
+  }
+
+  .lang {
+    order: 2;
+  }
+
+  .nav {
+    order: 3;
+    flex: 0 0 100%;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 340px) {
+  .nav {
+    font-size: 14px;
+  }
+}
+
 .touch {
   position: relative;
   appearance: none;
