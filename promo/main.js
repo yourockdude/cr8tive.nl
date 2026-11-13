@@ -11,7 +11,7 @@
     { src: 'assets/projects/food.png',   size: [371, 371],         dy: 0,   rot: 0 },
     { src: 'assets/projects/beauty.png', size: [323.703, 323.703], dy: 0,   rot: -4.15 },
     { src: 'assets/projects/drone.png',  size: [378, 189],         dy: 0,   rot: 0 },
-    { src: 'assets/projects/taxi.png',   size: [428, 285],         dy: 0,   rot: 0 },
+    { src: 'assets/projects/taxi.png',   size: [460, 306],         dy: 0,   rot: 0 },
   ];
   const N = SLIDES.length;
 
@@ -587,7 +587,7 @@
     const what = document.getElementById('what-view');
     what.setAttribute('aria-label', t.what);
     document.getElementById('what-lead').textContent = t.whatLead;
-    document.getElementById('what-cta').textContent = t.whatCta;
+    document.getElementById('what-cta-label').textContent = t.whatCta;
     what.querySelectorAll('.svc').forEach((row, i) => {
       row.querySelector('.svc__title').textContent = t.services[i][0];
       row.querySelector('.svc__text').textContent = t.services[i][1];
@@ -673,7 +673,7 @@
     gl.uniform1f(U.uRadius, RADIUS);
     gl.uniform1f(U.uTime, time);
 
-    if (state.view === 'what') return; // a text page: the canvas stays empty
+    if (state.view === 'what') return;
     if (state.view === 'work') { drawWork(time, still); return; }
 
     // Idle float + a little parallax towards the cursor.

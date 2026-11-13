@@ -397,26 +397,19 @@
 
 @media (max-aspect-ratio: 1/1) {
   .copyright {
-    left: max(14px, env(safe-area-inset-left));
+    left: 50%;
     bottom: max(14px, env(safe-area-inset-bottom));
     font-size: 11px;
+    transform: translateX(-50%);
   }
 
   .legal-link {
     right: auto;
     left: 50%;
     transform: translateX(-50%);
-    bottom: max(14px, env(safe-area-inset-bottom));
+    bottom: max(38px, calc(38px + env(safe-area-inset-bottom)));
     font-size: 12px;
     white-space: nowrap;
-  }
-}
-
-@media (max-width: 360px) and (max-aspect-ratio: 1/1) {
-  .legal-link {
-    right: max(14px, env(safe-area-inset-right));
-    left: auto;
-    transform: none;
   }
 }
 

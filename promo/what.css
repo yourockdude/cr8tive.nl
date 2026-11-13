@@ -1,4 +1,4 @@
-/* What We Do — a typographic page: one statement and six services. */
+/* What We Do — character-led service page. */
 
 .what {
   position: fixed;
@@ -21,7 +21,6 @@
   visibility: hidden;
   transition: opacity 0.5s ease;
   scrollbar-width: none;
-  /* Scrolled content fades out under the header and above the privacy link. */
   -webkit-mask-image: linear-gradient(to bottom, transparent max(52px, calc(128 * var(--ux))), #000 max(92px, calc(176 * var(--ux))), #000 calc(100% - 88px), transparent calc(100% - 46px));
   mask-image: linear-gradient(to bottom, transparent max(52px, calc(128 * var(--ux))), #000 max(92px, calc(176 * var(--ux))), #000 calc(100% - 88px), transparent calc(100% - 46px));
 }
@@ -50,18 +49,87 @@
 
 .what__inner {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: max(32px, calc(96 * var(--ux)));
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(32px, 4vw, 72px);
   align-items: start;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.what__visual,
+.what__services {
+  min-width: 0;
 }
 
 .what__lead {
+  max-width: 17ch;
   margin: 0;
-  font-size: clamp(34px, calc(76 * var(--ux)), 96px);
+  font-size: clamp(42px, calc(78 * var(--ux)), 68px);
   font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.04em;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
   text-wrap: balance;
+}
+
+.what__art {
+  position: relative;
+  aspect-ratio: 1.02 / 1;
+  margin-top: 12px;
+  isolation: isolate;
+}
+
+.what__art::before {
+  position: absolute;
+  z-index: -1;
+  right: -5%;
+  bottom: 0;
+  left: -5%;
+  height: 10%;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 193, 7, 0.9) 0%,
+    rgba(255, 193, 7, 0.42) 34%,
+    transparent 74%
+  );
+  content: "";
+}
+
+.what__character {
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 70%;
+  height: 94%;
+  background: url("assets/what/character.png") left bottom / contain no-repeat;
+}
+
+.what__float {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.28));
+}
+
+.what__float--shop {
+  top: 0;
+  right: 22%;
+  width: 22%;
+}
+
+.what__float--bag {
+  top: 22%;
+  right: 10%;
+  width: 22%;
+}
+
+.what__float--food {
+  right: 5%;
+  bottom: 8%;
+  width: 30%;
 }
 
 .what__list {
@@ -70,46 +138,69 @@
   list-style: none;
 }
 
-.svc {
-  padding: max(14px, calc(15 * var(--ux))) 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
+.what__services {
+  --svc-icon-size: clamp(60px, 5vw, 84px);
+  --svc-gap: clamp(16px, 1.5vw, 24px);
 }
 
-.svc:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+.svc {
+  display: grid;
+  grid-template-columns: var(--svc-icon-size) minmax(0, 1fr);
+  gap: var(--svc-gap);
+  align-items: center;
+  padding: clamp(10px, 1vw, 16px) 0;
+}
+
+.svc__icon {
+  display: block;
+  width: var(--svc-icon-size);
+  height: var(--svc-icon-size);
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.22));
+}
+
+.svc__copy {
+  min-width: 0;
 }
 
 .svc__title {
   margin: 0;
-  font-size: max(22px, calc(31 * var(--ux)));
+  font-size: clamp(20px, calc(34 * var(--ux)), 30px);
   font-weight: 800;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .svc__text {
-  max-width: 52ch;
-  margin: max(6px, calc(8 * var(--ux))) 0 0;
-  color: rgba(255, 255, 255, 0.66);
-  /* Albert Sans ships here only in ExtraBold; running text uses the system face. */
+  max-width: 68ch;
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.72);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
-  font-size: max(15px, calc(17 * var(--ux)));
+  font-size: clamp(15px, calc(21 * var(--ux)), 19px);
   font-weight: 400;
-  line-height: 1.45;
+  line-height: 1.42;
   letter-spacing: -0.005em;
 }
 
 .what__cta {
-  margin-top: max(20px, calc(28 * var(--ux)));
-  font-size: max(18px, calc(32 * var(--ux)));
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  margin-left: calc(var(--svc-icon-size) + var(--svc-gap));
+  font-size: clamp(22px, calc(36 * var(--ux)), 28px);
+  transition: transform 140ms ease-out;
 }
 
-/* The statement and the rows rise in one after another. */
+.what__cta:active {
+  transform: scale(0.97);
+}
+
 .what__lead,
 .svc,
 .what__cta {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(14px);
 }
 
 .view-what .what__lead,
@@ -117,44 +208,79 @@
 .view-what .what__cta {
   opacity: 1;
   transform: none;
-  transition: opacity 0.6s ease, transform 0.8s var(--ease-out);
+  transition: opacity 0.45s ease, transform 0.55s var(--ease-out);
 }
 
-.view-what .what__lead { transition-delay: 0.1s; }
-.view-what .svc:nth-child(1) { transition-delay: 0.18s; }
-.view-what .svc:nth-child(2) { transition-delay: 0.25s; }
-.view-what .svc:nth-child(3) { transition-delay: 0.32s; }
-.view-what .svc:nth-child(4) { transition-delay: 0.39s; }
-.view-what .svc:nth-child(5) { transition-delay: 0.46s; }
-.view-what .svc:nth-child(6) { transition-delay: 0.53s; }
-.view-what .what__cta { transition-delay: 0.62s; }
+.view-what .what__lead { transition-delay: 0.08s; }
+.view-what .svc:nth-child(1) { transition-delay: 0.12s; }
+.view-what .svc:nth-child(2) { transition-delay: 0.17s; }
+.view-what .svc:nth-child(3) { transition-delay: 0.22s; }
+.view-what .svc:nth-child(4) { transition-delay: 0.27s; }
+.view-what .svc:nth-child(5) { transition-delay: 0.32s; }
+.view-what .svc:nth-child(6) { transition-delay: 0.37s; }
+.view-what .what__cta { transition-delay: 0.43s; }
 
-/* Two columns: the statement stays put while the list scrolls past it. */
-@media (min-width: 901px) {
-  .what__lead {
+@media (min-width: 761px) and (min-height: 700px) {
+  .what__visual {
     position: sticky;
-    top: 0; /* measured from the padded edge of the scrolling page */
+    top: 0;
   }
 }
 
-@media (max-width: 900px) {
-  .what__inner {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
-  }
-
+@media (max-width: 760px) {
   .what {
     align-content: start;
+    padding-top: max(100px, calc(150 * var(--ux)));
+    padding-right: max(20px, env(safe-area-inset-right));
+    padding-bottom: max(118px, calc(130 * var(--ux)));
+    padding-left: max(20px, env(safe-area-inset-left));
   }
-}
 
-@media (max-width: 620px) {
-  .what {
-    padding-top: 100px;
+  .what__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
   }
 
   .what__lead {
-    font-size: clamp(32px, 9.6vw, 44px);
+    max-width: 18ch;
+    font-size: clamp(36px, 9.6vw, 48px);
+  }
+
+  .what__art {
+    width: calc(100% + 40px);
+    height: clamp(320px, 98vw, 740px);
+    margin: 34px -20px 0;
+    aspect-ratio: auto;
+  }
+
+  .what__art::before {
+    right: 0;
+    left: 0;
+  }
+
+  .what__character {
+    left: 0;
+  }
+
+  .what__services {
+    --svc-icon-size: clamp(54px, 14vw, 64px);
+    --svc-gap: clamp(12px, 3vw, 18px);
+  }
+
+  .svc {
+    padding: 10px 0;
+  }
+
+  .svc__title {
+    font-size: clamp(19px, 5.2vw, 22px);
+  }
+
+  .svc__text {
+    font-size: 15px;
+  }
+
+  .what__cta {
+    margin-top: 16px;
   }
 }
 
@@ -173,4 +299,5 @@
     transform: none;
     transition: none;
   }
+
 }
