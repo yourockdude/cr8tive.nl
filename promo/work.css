@@ -1,0 +1,125 @@
+/* Work — a grid of projects. The images are drawn by the same WebGL reel
+   shader as the home page; the boxes here only reserve their place. */
+
+.work {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  align-content: safe center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding:
+    max(88px, calc(160 * var(--ux)))
+    max(20px, calc(80 * var(--ux)), env(safe-area-inset-right))
+    max(72px, calc(110 * var(--ux)))
+    max(20px, calc(80 * var(--ux)), env(safe-area-inset-left));
+  touch-action: pan-y;
+  cursor: default;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+  scrollbar-width: none;
+}
+
+.work::-webkit-scrollbar {
+  display: none;
+}
+
+.view-work .work {
+  opacity: 1;
+  visibility: visible;
+}
+
+.view-work .stage {
+  visibility: hidden;
+}
+
+.view-work body {
+  cursor: default;
+}
+
+/* Page change and language switch share one fade. */
+.is-ready.is-switching .work {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.work__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: max(12px, calc(24 * var(--ux)));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  min-width: 0;
+  text-align: center;
+}
+
+.card__media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+/* Only without WebGL: plain images stand in for the canvas. */
+.card__media img {
+  display: none;
+  position: absolute;
+  inset: 8%;
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+}
+
+html:not(.has-webgl) .card__media img {
+  display: block;
+}
+
+.card__title {
+  margin: max(4px, calc(8 * var(--ux))) 0 0;
+  font-size: max(14px, calc(24 * var(--ux)));
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.card__sub {
+  margin: max(4px, calc(8 * var(--ux))) 0 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: max(12px, calc(17 * var(--ux)));
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+/* Current page in the header. */
+.touch.is-current::after {
+  transform: scaleX(1);
+}
+
+@media (max-width: 1100px) {
+  .work__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 28px;
+  }
+}
+
+@media (max-width: 620px) {
+  .work {
+    padding-top: 84px;
+  }
+
+  .work__grid {
+    row-gap: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work,
+  .is-ready.is-switching .work {
+    transition-duration: 0.01s;
+  }
+}

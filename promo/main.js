@@ -39,6 +39,7 @@
   // ---------------------------------------------------------------- state
   const state = {
     pos: -0.49,      // continuous slide position; integer = slide at rest
+    view: 'home',    // 'home' | 'work'
     intro: false,    // true while the two words still sit together in the centre
     solo: null,      // { index, target } while a roll-in draws only the current project
     target: 0,
@@ -312,6 +313,7 @@
   let wheelTimer = 0;
   let wheelDir = 0;
   window.addEventListener('wheel', (e) => {
+    if (state.view !== 'home') return; // the Work page scrolls normally
     if (e.target.closest && e.target.closest('.glass, .contact')) return; // let the sheets scroll
     e.preventDefault();
     const raw = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
@@ -329,6 +331,7 @@
   const axisValue = (e) => (state.layout.horizontal ? e.clientX : e.clientY);
 
   window.addEventListener('pointerdown', (e) => {
+    if (state.view !== 'home') return;
     if (e.button !== 0 || e.target.closest('a, button, .glass, .contact, .nav')) return;
     drag.id = e.pointerId;
     drag.start = drag.last = axisValue(e);
@@ -375,9 +378,94 @@
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.target.closest && e.target.closest('.glass, .contact')) return;
     if (document.querySelector('.contact.is-open') || root.classList.contains('menu-open')) return;
+    if (state.view !== 'home') return;
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') { go(1); e.preventDefault(); }
     else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') { go(-1); e.preventDefault(); }
     else if (e.key === ' ' && !e.target.closest('a, button')) { go(1); e.preventDefault(); }
+  });
+
+  // ---------------------------------------------------------------- work page
+  // Every card owns a tiny reel with a single picture on it: it rolls in when
+  // the page opens and takes one more turn when the card is hovered or tapped.
+  const workView = document.getElementById('work-view');
+  const workItems = Array.from(document.querySelectorAll('.card')).map((el) => ({
+    el,
+    media: el.querySelector('.card__media'),
+    slide: Number(el.dataset.slide),
+    pos: 0,
+    target: 0,
+    vel: 0,
+    solo: false,
+    startAt: 0,
+  }));
+  const work = { scrollTop: 0, scrollVel: 0 };
+
+  function enterWork() {
+    const now = performance.now();
+    workItems.forEach((it, i) => {
+      it.target = 0;
+      it.vel = 0;
+      it.pos = reducedMotion.matches ? 0 : -0.49;
+      it.solo = !reducedMotion.matches;
+      it.startAt = now + 140 + i * 90;
+    });
+  }
+
+  workItems.forEach((it) => {
+    it.el.addEventListener('pointerenter', () => {
+      if (reducedMotion.matches || state.view !== 'work') return;
+      if (it.target - it.pos > 0.6) return; // already turning
+      it.target = Math.round(it.target) + 1;
+      it.solo = false;
+    });
+  });
+
+  // ---------------------------------------------------------------- pages
+  const viewFromHash = () => (location.hash === '#work' ? 'work' : 'home');
+  let viewTimer = 0;
+
+  function applyView(view) {
+    state.view = view;
+    root.classList.toggle('view-work', view === 'work');
+    if (workButton) {
+      workButton.classList.toggle('is-current', view === 'work');
+      if (view === 'work') workButton.setAttribute('aria-current', 'page');
+      else workButton.removeAttribute('aria-current');
+    }
+    if (view === 'work') {
+      workView.scrollTop = 0;
+      work.scrollTop = 0;
+      enterWork();
+    } else {
+      state.lastInteraction = performance.now();
+      measure();
+    }
+  }
+
+  // Fade the current page out, swap, fade the next one in.
+  function showView(view, animate = true) {
+    if (view === state.view) return;
+    clearTimeout(viewTimer);
+    if (!animate || reducedMotion.matches) { applyView(view); return; }
+    root.classList.add('is-switching');
+    viewTimer = setTimeout(() => {
+      applyView(view);
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('is-switching')));
+    }, 320);
+  }
+
+  window.addEventListener('hashchange', () => showView(viewFromHash()));
+  window.addEventListener('popstate', () => showView(viewFromHash()));
+
+  document.getElementById('work').addEventListener('click', () => {
+    if (location.hash !== '#work') location.hash = 'work';
+  });
+
+  document.querySelector('.logo').addEventListener('click', (e) => {
+    if (state.view === 'home' && !location.hash) return; // plain reload of the home page
+    e.preventDefault();
+    history.pushState(null, '', location.pathname + location.search);
+    showView('home');
   });
 
   // ---------------------------------------------------------------- language
@@ -386,14 +474,17 @@
     en: {
       pill: 'Eng', name: 'English', make: 'We Make', work: 'Work', what: 'What We Do',
       captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP'],
+      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding'],
     },
     es: {
       pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
       captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI'],
+      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding'],
     },
     ru: {
       pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
       captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ'],
+      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг'],
     },
   };
   const LANGS = Object.keys(I18N);
@@ -435,8 +526,13 @@
     lang = code;
     root.lang = code;
     makeWord.textContent = t.make;
-    // Work and What We Do are labels for now; their sections are still to come.
+    // What We Do is a label for now; its section is still to come.
     if (workButton) workButton.textContent = t.work;
+    workItems.forEach((it) => {
+      it.el.querySelector('.card__title').textContent = t.captions[it.slide];
+      it.el.querySelector('.card__sub').textContent = t.subs[it.slide];
+    });
+    workView.setAttribute('aria-label', t.work);
     if (whatButton) whatButton.textContent = t.what;
     hero.setAttribute('aria-label', `${t.make} DIGITAL`);
     captions.forEach((el, i) => { el.textContent = t.captions[i]; });
@@ -456,8 +552,9 @@
     langTimer = setTimeout(() => {
       // Hidden now: put the words back together, swap the texts, then fade in
       // and replay the intro in the new language.
-      playIntro(INTRO_HOLD_LANG_MS);
+      if (state.view === 'home') playIntro(INTRO_HOLD_LANG_MS);
       applyLang(next);
+      if (state.view === 'work') enterWork();
       requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('is-switching')));
     }, 320);
   }
@@ -508,8 +605,16 @@
     const still = reducedMotion.matches;
 
     gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.disable(gl.SCISSOR_TEST);
     gl.clear(gl.COLOR_BUFFER_BIT);
     if (!textures) return;
+    gl.enable(gl.SCISSOR_TEST);
+
+    gl.uniform2f(U.uRes, canvas.width, canvas.height);
+    gl.uniform1f(U.uRadius, RADIUS);
+    gl.uniform1f(U.uTime, time);
+
+    if (state.view === 'work') { drawWork(time, still); return; }
 
     // Idle float + a little parallax towards the cursor.
     let cx = l.cx;
@@ -528,16 +633,7 @@
     const bend = clamp(frac / 0.22, 0, 1);
     const bendEased = bend * bend * (3 - 2 * bend);
 
-    gl.uniform2f(U.uRes, canvas.width, canvas.height);
-    gl.uniform2f(U.uCenter, cx * dpr, cy * dpr);
-    gl.uniform1f(U.uU, l.u * dpr);
-    gl.uniform1f(U.uRadius, RADIUS);
-    gl.uniform1f(U.uBend, bendEased);
-    gl.uniform1f(U.uVel, still ? 0 : state.vel);
-    gl.uniform1f(U.uAxis, l.horizontal ? 1 : 0);
-    gl.uniform1f(U.uTime, time);
-    gl.uniform2f(U.uMouse, (state.mouse[0] - cx) / l.u, (state.mouse[1] - cy) / l.u);
-    gl.uniform2f(U.uMouseVel, still ? 0 : state.mouseVel[0], still ? 0 : state.mouseVel[1]);
+    setReel(cx, cy, l.u, bendEased, still ? 0 : state.vel, l.horizontal, still);
 
     for (let i = 0; i < N; i++) {
       // Shortest signed distance on the loop → the reel is endless both ways.
@@ -546,14 +642,70 @@
       if (Math.cos(theta) < 0.4) continue;
       if (state.solo && i !== state.solo.index) continue;
 
-      const s = SLIDES[i];
-      gl.bindTexture(gl.TEXTURE_2D, textures[i]);
-      gl.uniform2f(U.uSize, s.size[0], s.size[1]);
-      gl.uniform2f(U.uOffset, 0, l.horizontal ? 0 : s.dy);
-      gl.uniform1f(U.uRot, (s.rot * Math.PI) / 180);
-      gl.uniform1f(U.uTheta, theta);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      drawSlide(i, theta, l.horizontal ? 0 : SLIDES[i].dy);
     }
+  }
+
+  // Uniforms shared by everything drawn on one reel, plus a scissor box so the
+  // full-screen quad only shades the pixels that reel can reach.
+  function setReel(cx, cy, u, bend, vel, horizontal, still) {
+    const { gl, uniforms: U } = glCtx;
+    gl.uniform2f(U.uCenter, cx * dpr, cy * dpr);
+    gl.uniform1f(U.uU, u * dpr);
+    gl.uniform1f(U.uBend, bend);
+    gl.uniform1f(U.uVel, vel);
+    gl.uniform1f(U.uAxis, horizontal ? 1 : 0);
+    gl.uniform2f(U.uMouse, (state.mouse[0] - cx) / u, (state.mouse[1] - cy) / u);
+    gl.uniform2f(U.uMouseVel, still ? 0 : state.mouseVel[0], still ? 0 : state.mouseVel[1]);
+
+    const along = (RADIUS + 120) * u;
+    const across = 450 * u;
+    const hx = (horizontal ? along : across) * dpr;
+    const hy = (horizontal ? across : along) * dpr;
+    const x0 = Math.max(0, Math.floor(cx * dpr - hx));
+    const y0 = Math.max(0, Math.floor(canvas.height - cy * dpr - hy));
+    const x1 = Math.min(canvas.width, Math.ceil(cx * dpr + hx));
+    const y1 = Math.min(canvas.height, Math.ceil(canvas.height - cy * dpr + hy));
+    gl.scissor(x0, y0, Math.max(0, x1 - x0), Math.max(0, y1 - y0));
+  }
+
+  function drawSlide(i, theta, dy) {
+    const { gl, uniforms: U } = glCtx;
+    const s = SLIDES[i];
+    gl.bindTexture(gl.TEXTURE_2D, textures[i]);
+    gl.uniform2f(U.uSize, s.size[0], s.size[1]);
+    gl.uniform2f(U.uOffset, 0, dy);
+    gl.uniform1f(U.uRot, (s.rot * Math.PI) / 180);
+    gl.uniform1f(U.uTheta, theta);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+
+  function drawWork(time, still) {
+    const vh = window.innerHeight;
+    workItems.forEach((it, index) => {
+      const r = it.media.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200 || r.width === 0) return;
+
+      const u = r.width / 460; // the widest picture (428) fits the box with air
+      let cx = r.left + r.width / 2;
+      let cy = r.top + r.height / 2;
+      if (!still) {
+        cy += Math.sin(time * 1.1 + index * 1.7) * 5 * u;
+        cx += Math.cos(time * 0.8 + index * 1.3) * 2.5 * u;
+      }
+
+      const f = it.pos - Math.round(it.pos); // -0.5 … 0.5 around the resting spot
+      const bend = clamp(Math.abs(f) / 0.22, 0, 1);
+      const vel = still ? 0 : it.vel + work.scrollVel;
+      setReel(cx, cy, u, bend * bend * (3 - 2 * bend), vel, false, still);
+
+      drawSlide(it.slide, -f * STEP, 0);
+      // While it turns, the same picture follows from the other side.
+      if (!it.solo && Math.abs(f) > 0.02) {
+        const theta = (-f + (f > 0 ? 1 : -1)) * STEP;
+        if (Math.cos(theta) >= 0.4) drawSlide(it.slide, theta, 0);
+      }
+    });
   }
 
   let lastTime = 0;
@@ -563,7 +715,7 @@
     lastTime = nowMs;
 
     // Autoplay.
-    if (!state.intro && !state.dragging && !reducedMotion.matches && !document.hidden &&
+    if (state.view === 'home' && !state.intro && !state.dragging && !reducedMotion.matches && !document.hidden &&
         nowMs - state.lastInteraction > AUTOPLAY_MS) {
       state.target = Math.round(state.target) + 1;
       state.lastInteraction = nowMs;
@@ -586,6 +738,23 @@
     state.mouseRaw[0] = state.mouseRaw[1] = 0;
 
     if (state.solo && (Math.abs(state.pos - state.target) < 0.03 || state.target !== state.solo.target)) state.solo = null;
+
+    if (state.view === 'work') {
+      // Scrolling smears the pictures the same way the reel's own speed does.
+      const st = workView.scrollTop;
+      const sv = clamp((st - work.scrollTop) / dt / 700, -4, 4);
+      work.scrollTop = st;
+      work.scrollVel += (sv - work.scrollVel) * 0.25;
+
+      workItems.forEach((it) => {
+        if (nowMs < it.startAt) return;
+        for (let i = 0; i < 4; i++) {
+          it.vel += ((it.target - it.pos) * SPRING - it.vel * DAMPING) * h;
+          it.pos += it.vel * h;
+        }
+        if (it.solo && Math.abs(it.pos - it.target) < 0.03) it.solo = false;
+      });
+    }
 
     setActive(mod(Math.round(state.pos), N));
 
@@ -618,8 +787,14 @@
 
   function start() {
     measure();
-    playIntro(INTRO_HOLD_MS);
-    if (!state.intro) state.pos = state.target; // reduced motion: no roll-in
+    if (viewFromHash() === 'work') {
+      // Opened straight on the Work page: no home intro.
+      state.pos = state.target;
+      applyView('work');
+    } else {
+      playIntro(INTRO_HOLD_MS);
+      if (!state.intro) state.pos = state.target; // reduced motion: no roll-in
+    }
     state.lastInteraction = performance.now();
     root.classList.add('is-ready');
     // Once the first intro has played, the canvas uses the quicker language-switch fade.
