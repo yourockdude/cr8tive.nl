@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://cr8tive.nl/sitemap.xml
-Host: cr8tive.nl
-
-# Language variants
-Allow: /nl/
-Allow: /ru/
