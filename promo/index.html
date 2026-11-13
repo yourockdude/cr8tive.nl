@@ -3,9 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>CR8TIVE — We Make Digital</title>
-  <meta name="description" content="CR8TIVE is a design studio. We make digital: food delivery services, beauty services, drone control apps, taxi apps.">
+  <title>CR8TIVE — Product Design Studio for Digital Products</title>
+  <meta name="description" content="CR8TIVE is a product design studio creating digital brands, mobile apps, design systems, AI experiences, and user-first products for startups and growing businesses.">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="author" content="CR8TIVE">
+  <meta name="keywords" content="product design studio, UX design, UI design, mobile app design, digital product design, branding, design systems, AI product design, startup design, iOS app design">
   <meta name="theme-color" content="#0e0e0f">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CR8TIVE">
+  <meta property="og:title" content="CR8TIVE — Product Design Studio for Digital Products">
+  <meta property="og:description" content="CR8TIVE creates digital products, app experiences, brand systems, and AI-driven interfaces for companies that want clarity, speed, and momentum.">
+  <meta property="og:url" content="https://cr8tive.nl/">
+  <meta property="og:image" content="https://cr8tive.nl/favicon.ico">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CR8TIVE — Product Design Studio for Digital Products">
+  <meta name="twitter:description" content="Designing digital products, brands, UI systems and AI experiences for companies that want to grow.">
+  <link rel="canonical" href="https://cr8tive.nl/">
+  <link rel="alternate" hreflang="en" href="https://cr8tive.nl/">
+  <link rel="alternate" hreflang="nl" href="https://cr8tive.nl/nl/">
+  <link rel="alternate" hreflang="ru" href="https://cr8tive.nl/ru/">
+  <link rel="alternate" hreflang="x-default" href="https://cr8tive.nl/">
+  <script>
+    if (location.pathname === '/' && !location.search && !location.hash) {
+      const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
+      const preferred = languages.map((language) => language.toLowerCase());
+      const language = preferred.find((value) => value.startsWith('nl') || value.startsWith('ru'));
+      if (language) location.replace(language.startsWith('nl') ? '/nl/' : '/ru/');
+    }
+  </script>
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="preload" href="assets/fonts/albert-sans-800-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
@@ -13,6 +39,40 @@
   <link rel="stylesheet" href="contact.css">
   <link rel="stylesheet" href="work.css">
   <link rel="stylesheet" href="what.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "CR8TIVE",
+      "url": "https://cr8tive.nl/",
+      "logo": "https://cr8tive.nl/favicon.ico",
+      "description": "CR8TIVE is a product design studio helping startups and businesses design digital products, brand systems, mobile apps, and AI experiences.",
+      "areaServed": "Worldwide",
+      "knowsAbout": [
+        "Product strategy",
+        "UX design",
+        "UI design",
+        "Mobile app design",
+        "Branding",
+        "Design systems",
+        "AI product design"
+      ]
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "CR8TIVE",
+      "url": "https://cr8tive.nl/",
+      "description": "Digital product design studio building brands, experiences, and products for companies ready to move fast.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://cr8tive.nl/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
 </head>
 <body>
   <canvas class="gl" id="gl" aria-hidden="true"></canvas>
@@ -41,6 +101,7 @@
           <img src="assets/projects/beauty.png" alt="" data-slide="1" decoding="async">
           <img src="assets/projects/drone.png" alt="" data-slide="2" decoding="async">
           <img src="assets/projects/taxi.png" alt="" data-slide="3" decoding="async">
+          <img src="assets/projects/zubareva-academy.png" alt="" data-slide="4" decoding="async">
         </span>
       </span>
 
@@ -54,6 +115,10 @@
       <span aria-hidden="true">TAXI APP</span>
     </p>
   </main>
+
+  <p class="seo-copy">
+    CR8TIVE is a product design studio that helps startups and growing companies build digital products, mobile apps, brand systems, and AI experiences with clear strategy, strong UX, and measurable business impact.
+  </p>
 
   <section class="work" id="work-view" aria-label="Work">
     <ul class="work__grid">
@@ -76,6 +141,11 @@
         <div class="card__media"><img src="assets/projects/taxi.png" alt="" loading="lazy" decoding="async"></div>
         <h2 class="card__title">Taxi App</h2>
         <p class="card__sub">Mobile app · Branding</p>
+      </li>
+      <li class="card" data-slide="4">
+        <div class="card__media"><img src="assets/projects/zubareva-academy.png" alt="" loading="lazy" decoding="async"></div>
+        <h2 class="card__title">Dr. Zubareva Online Academy</h2>
+        <p class="card__sub">Website · Mobile app</p>
       </li>
     </ul>
   </section>

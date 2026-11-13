@@ -12,6 +12,7 @@
     { src: 'assets/projects/beauty.png', size: [323.703, 323.703], dy: 0,   rot: -4.15 },
     { src: 'assets/projects/drone.png',  size: [378, 189],         dy: 0,   rot: 0 },
     { src: 'assets/projects/taxi.png',   size: [428, 285],         dy: 0,   rot: 0 },
+    { src: 'assets/projects/zubareva-academy.png', size: [371, 339.2], dy: 0, rot: 0 },
   ];
   const N = SLIDES.length;
 
@@ -488,8 +489,8 @@
   const I18N = {
     en: {
       pill: 'Eng', name: 'English', make: 'We Make', work: 'Work', what: 'What We Do',
-      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP'],
-      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding'],
+      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'DR. ZUBAREVA ONLINE ACADEMY'],
+      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Website · Mobile app'],
       whatLead: 'We turn ideas into digital things people open every day.',
       whatCta: 'Start a project',
       services: [
@@ -503,8 +504,8 @@
     },
     es: {
       pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
-      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI'],
-      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding'],
+      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'ACADEMIA ONLINE DE LA DRA. ZUBAREVA'],
+      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'Sitio web · App móvil'],
       whatLead: 'Convertimos ideas en productos digitales que la gente abre cada día.',
       whatCta: 'Empezar un proyecto',
       services: [
@@ -518,8 +519,8 @@
     },
     ru: {
       pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
-      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ'],
-      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг'],
+      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'ОНЛАЙН-АКАДЕМИЯ ДОКТОРА ЗУБАРЕВОЙ'],
+      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Сайт · Приложение'],
       whatLead: 'Превращаем идеи в цифровые продукты, которые открывают каждый день.',
       whatCta: 'Начать проект',
       services: [
