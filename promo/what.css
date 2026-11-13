@@ -1,0 +1,176 @@
+/* What We Do — a typographic page: one statement and six services. */
+
+.what {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  align-content: safe center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding:
+    max(100px, calc(184 * var(--ux)))
+    max(20px, calc(80 * var(--ux)), env(safe-area-inset-right))
+    max(96px, calc(100 * var(--ux)))
+    max(20px, calc(80 * var(--ux)), env(safe-area-inset-left));
+  touch-action: pan-y;
+  cursor: default;
+  user-select: text;
+  -webkit-user-select: text;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+  scrollbar-width: none;
+  /* Scrolled content fades out under the header and above the privacy link. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent max(52px, calc(128 * var(--ux))), #000 max(92px, calc(176 * var(--ux))), #000 calc(100% - 88px), transparent calc(100% - 46px));
+  mask-image: linear-gradient(to bottom, transparent max(52px, calc(128 * var(--ux))), #000 max(92px, calc(176 * var(--ux))), #000 calc(100% - 88px), transparent calc(100% - 46px));
+}
+
+.what::-webkit-scrollbar {
+  display: none;
+}
+
+.view-what .what {
+  opacity: 1;
+  visibility: visible;
+}
+
+.view-what .stage {
+  visibility: hidden;
+}
+
+.view-what body {
+  cursor: default;
+}
+
+.is-ready.is-switching .what {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.what__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: max(32px, calc(96 * var(--ux)));
+  align-items: start;
+}
+
+.what__lead {
+  margin: 0;
+  font-size: clamp(34px, calc(76 * var(--ux)), 96px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.what__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.svc {
+  padding: max(14px, calc(15 * var(--ux))) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.svc:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.svc__title {
+  margin: 0;
+  font-size: max(22px, calc(31 * var(--ux)));
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.svc__text {
+  max-width: 52ch;
+  margin: max(6px, calc(8 * var(--ux))) 0 0;
+  color: rgba(255, 255, 255, 0.66);
+  /* Albert Sans ships here only in ExtraBold; running text uses the system face. */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  font-size: max(15px, calc(17 * var(--ux)));
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+}
+
+.what__cta {
+  margin-top: max(20px, calc(28 * var(--ux)));
+  font-size: max(18px, calc(32 * var(--ux)));
+}
+
+/* The statement and the rows rise in one after another. */
+.what__lead,
+.svc,
+.what__cta {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.view-what .what__lead,
+.view-what .svc,
+.view-what .what__cta {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s ease, transform 0.8s var(--ease-out);
+}
+
+.view-what .what__lead { transition-delay: 0.1s; }
+.view-what .svc:nth-child(1) { transition-delay: 0.18s; }
+.view-what .svc:nth-child(2) { transition-delay: 0.25s; }
+.view-what .svc:nth-child(3) { transition-delay: 0.32s; }
+.view-what .svc:nth-child(4) { transition-delay: 0.39s; }
+.view-what .svc:nth-child(5) { transition-delay: 0.46s; }
+.view-what .svc:nth-child(6) { transition-delay: 0.53s; }
+.view-what .what__cta { transition-delay: 0.62s; }
+
+/* Two columns: the statement stays put while the list scrolls past it. */
+@media (min-width: 901px) {
+  .what__lead {
+    position: sticky;
+    top: 0; /* measured from the padded edge of the scrolling page */
+  }
+}
+
+@media (max-width: 900px) {
+  .what__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .what {
+    align-content: start;
+  }
+}
+
+@media (max-width: 620px) {
+  .what {
+    padding-top: 100px;
+  }
+
+  .what__lead {
+    font-size: clamp(32px, 9.6vw, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .what,
+  .is-ready.is-switching .what {
+    transition-duration: 0.01s;
+  }
+
+  .what__lead,
+  .svc,
+  .what__cta,
+  .view-what .what__lead,
+  .view-what .svc,
+  .view-what .what__cta {
+    transform: none;
+    transition: none;
+  }
+}

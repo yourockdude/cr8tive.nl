@@ -39,7 +39,7 @@
   // ---------------------------------------------------------------- state
   const state = {
     pos: -0.49,      // continuous slide position; integer = slide at rest
-    view: 'home',    // 'home' | 'work'
+    view: 'home',    // 'home' | 'work' | 'what'
     intro: false,    // true while the two words still sit together in the centre
     solo: null,      // { index, target } while a roll-in draws only the current project
     target: 0,
@@ -421,18 +421,24 @@
   });
 
   // ---------------------------------------------------------------- pages
-  const viewFromHash = () => (location.hash === '#work' ? 'work' : 'home');
+  const VIEWS = { '#work': 'work', '#what': 'what' };
+  const viewFromHash = () => VIEWS[location.hash] || 'home';
+  const whatView = document.getElementById('what-view');
   let viewTimer = 0;
 
   function applyView(view) {
     state.view = view;
     root.classList.toggle('view-work', view === 'work');
-    if (workButton) {
-      workButton.classList.toggle('is-current', view === 'work');
-      if (view === 'work') workButton.setAttribute('aria-current', 'page');
-      else workButton.removeAttribute('aria-current');
-    }
-    if (view === 'work') {
+    root.classList.toggle('view-what', view === 'what');
+    [[workButton, 'work'], [whatButton, 'what']].forEach(([button, name]) => {
+      if (!button) return;
+      button.classList.toggle('is-current', view === name);
+      if (view === name) button.setAttribute('aria-current', 'page');
+      else button.removeAttribute('aria-current');
+    });
+    if (view === 'what') {
+      whatView.scrollTop = 0;
+    } else if (view === 'work') {
       workView.scrollTop = 0;
       work.scrollTop = 0;
       enterWork();
@@ -461,6 +467,15 @@
     if (location.hash !== '#work') location.hash = 'work';
   });
 
+  document.getElementById('what').addEventListener('click', () => {
+    if (location.hash !== '#what') location.hash = 'what';
+  });
+
+  // "Start a project" at the end of What We Do opens the brief form.
+  document.getElementById('what-cta').addEventListener('click', () => {
+    document.getElementById('touch').click();
+  });
+
   document.querySelector('.logo').addEventListener('click', (e) => {
     if (state.view === 'home' && !location.hash) return; // plain reload of the home page
     e.preventDefault();
@@ -475,16 +490,46 @@
       pill: 'Eng', name: 'English', make: 'We Make', work: 'Work', what: 'What We Do',
       captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP'],
       subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding'],
+      whatLead: 'We turn ideas into digital things people open every day.',
+      whatCta: 'Start a project',
+      services: [
+        ['Research & audits', 'Before we draw anything, we look. We study your users, market and product, and audit what already exists to find what holds it back.'],
+        ['Web & mobile apps', 'We build products that work on day one and still work on day one thousand: web platforms and mobile apps, from the first prototype to release.'],
+        ['Interface design', 'Screens that explain themselves. We design flows where the next step is always obvious and nothing gets in the way.'],
+        ['Branding', 'A name, a voice, a face. We give a product a character people recognise before they read a word.'],
+        ['Graphic design', 'Everything a brand shows the world: identity, packaging, illustration, motion and campaign visuals.'],
+        ['Support', 'Launch is the beginning. We stay: updates, new features, fixes and a team that answers.'],
+      ],
     },
     es: {
       pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
       captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI'],
       subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding'],
+      whatLead: 'Convertimos ideas en productos digitales que la gente abre cada día.',
+      whatCta: 'Empezar un proyecto',
+      services: [
+        ['Investigación y auditoría', 'Antes de dibujar, miramos. Estudiamos a tus usuarios, tu mercado y tu producto, y auditamos lo que ya existe para encontrar qué lo frena.'],
+        ['Apps web y móviles', 'Construimos productos que funcionan el primer día y el día mil: plataformas web y apps móviles, del primer prototipo al lanzamiento.'],
+        ['Diseño de interfaces', 'Pantallas que se explican solas. Diseñamos flujos donde el siguiente paso siempre es evidente y nada estorba.'],
+        ['Branding', 'Un nombre, una voz, un rostro. Damos al producto un carácter que se reconoce antes de leer una sola palabra.'],
+        ['Diseño gráfico', 'Todo lo que una marca muestra al mundo: identidad, packaging, ilustración, motion y visuales de campaña.'],
+        ['Soporte', 'El lanzamiento es el comienzo. Nos quedamos: actualizaciones, nuevas funciones, correcciones y un equipo que responde.'],
+      ],
     },
     ru: {
       pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
       captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ'],
       subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг'],
+      whatLead: 'Превращаем идеи в цифровые продукты, которые открывают каждый день.',
+      whatCta: 'Начать проект',
+      services: [
+        ['Исследования и аудит проектов', 'Прежде чем рисовать, смотрим. Изучаем ваших пользователей, рынок и продукт и проводим аудит того, что уже есть, чтобы найти, что его тормозит.'],
+        ['Веб- и мобильные приложения', 'Строим продукты, которые работают в первый день и в тысячный: веб-платформы и мобильные приложения — от первого прототипа до релиза.'],
+        ['Дизайн интерфейсов', 'Экраны, которые объясняют себя сами. Проектируем сценарии, где следующий шаг всегда очевиден и ничто не мешает.'],
+        ['Брендинг', 'Имя, голос, лицо. Даём продукту характер, который узнают раньше, чем прочитают хоть слово.'],
+        ['Графический дизайн', 'Всё, что бренд показывает миру: айдентика, упаковка, иллюстрации, моушн и визуалы для кампаний.'],
+        ['Поддержка', 'Запуск — это начало. Мы остаёмся: обновления, новые функции, исправления и команда, которая отвечает.'],
+      ],
     },
   };
   const LANGS = Object.keys(I18N);
@@ -526,13 +571,21 @@
     lang = code;
     root.lang = code;
     makeWord.textContent = t.make;
-    // What We Do is a label for now; its section is still to come.
     if (workButton) workButton.textContent = t.work;
     workItems.forEach((it) => {
       it.el.querySelector('.card__title').textContent = t.captions[it.slide];
       it.el.querySelector('.card__sub').textContent = t.subs[it.slide];
     });
     workView.setAttribute('aria-label', t.work);
+
+    const what = document.getElementById('what-view');
+    what.setAttribute('aria-label', t.what);
+    document.getElementById('what-lead').textContent = t.whatLead;
+    document.getElementById('what-cta').textContent = t.whatCta;
+    what.querySelectorAll('.svc').forEach((row, i) => {
+      row.querySelector('.svc__title').textContent = t.services[i][0];
+      row.querySelector('.svc__text').textContent = t.services[i][1];
+    });
     if (whatButton) whatButton.textContent = t.what;
     hero.setAttribute('aria-label', `${t.make} DIGITAL`);
     captions.forEach((el, i) => { el.textContent = t.captions[i]; });
@@ -614,6 +667,7 @@
     gl.uniform1f(U.uRadius, RADIUS);
     gl.uniform1f(U.uTime, time);
 
+    if (state.view === 'what') return; // a text page: the canvas stays empty
     if (state.view === 'work') { drawWork(time, still); return; }
 
     // Idle float + a little parallax towards the cursor.
@@ -787,10 +841,10 @@
 
   function start() {
     measure();
-    if (viewFromHash() === 'work') {
-      // Opened straight on the Work page: no home intro.
+    if (viewFromHash() !== 'home') {
+      // Opened straight on an inner page: no home intro.
       state.pos = state.target;
-      applyView('work');
+      applyView(viewFromHash());
     } else {
       playIntro(INTRO_HOLD_MS);
       if (!state.intro) state.pos = state.target; // reduced motion: no roll-in
