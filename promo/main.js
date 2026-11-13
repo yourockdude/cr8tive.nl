@@ -329,7 +329,7 @@
   const axisValue = (e) => (state.layout.horizontal ? e.clientX : e.clientY);
 
   window.addEventListener('pointerdown', (e) => {
-    if (e.button !== 0 || e.target.closest('a, button, .glass, .contact')) return;
+    if (e.button !== 0 || e.target.closest('a, button, .glass, .contact, .nav')) return;
     drag.id = e.pointerId;
     drag.start = drag.last = axisValue(e);
     drag.lastT = performance.now();
@@ -374,7 +374,7 @@
   window.addEventListener('keydown', (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.target.closest && e.target.closest('.glass, .contact')) return;
-    if (document.querySelector('.contact.is-open')) return;
+    if (document.querySelector('.contact.is-open') || root.classList.contains('menu-open')) return;
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') { go(1); e.preventDefault(); }
     else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') { go(-1); e.preventDefault(); }
     else if (e.key === ' ' && !e.target.closest('a, button')) { go(1); e.preventDefault(); }
@@ -467,6 +467,35 @@
   let savedLang = null;
   try { savedLang = localStorage.getItem('cr8tive-lang'); } catch (e) { /* private mode */ }
   if (savedLang && I18N[savedLang] && savedLang !== 'en') applyLang(savedLang);
+
+  // ---------------------------------------------------------------- mobile menu
+  const burger = document.getElementById('burger');
+  const nav = document.getElementById('nav');
+  const phone = window.matchMedia('(max-width: 620px)');
+
+  function setMenu(open) {
+    root.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      const first = nav.querySelector('button, a');
+      if (first) first.focus({ preventScroll: true });
+    }
+  }
+
+  if (burger && nav) {
+    burger.addEventListener('click', () => setMenu(!root.classList.contains('menu-open')));
+    // Any link closes the menu; "Get in touch" then opens its form as usual.
+    nav.addEventListener('click', (e) => {
+      if (e.target.closest('button, a')) setMenu(false);
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && root.classList.contains('menu-open')) {
+        setMenu(false);
+        burger.focus({ preventScroll: true });
+      }
+    });
+    phone.addEventListener('change', () => setMenu(false));
+  }
 
   // ---------------------------------------------------------------- render
   const glCtx = createGL();

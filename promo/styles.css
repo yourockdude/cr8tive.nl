@@ -331,7 +331,7 @@ body.is-dragging {
 @media (max-aspect-ratio: 1/1) {
   :root {
     /* Height term leaves room for the header above and the privacy link below. */
-    --u: min(calc(100vw / 600), calc((100vh - 190px) / 950));
+    --u: min(calc(100vw / 600), calc((100vh - 150px) / 950));
     --caption-offset: calc(420 * var(--u));
   }
 
