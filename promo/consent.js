@@ -24,7 +24,7 @@
     address: '',          // registered address
     registration: '',     // trade register number, e.g. "KVK 12345678"
     vat: '',              // VAT number
-    email: '',            // contact address for privacy requests
+    email: 'hello@cr8tive.nl', // contact address for privacy requests
   };
 
   const STORAGE_KEY = 'cr8tive-consent';
@@ -51,7 +51,7 @@
       whoHead: 'Who is responsible',
       who: 'The controller of your data is {company}.',
       dataHead: 'What data we process',
-      data: 'This page has no forms and no accounts, and does not load third-party trackers, fonts or embeds. As with any website, our hosting provider processes your IP address and browser details in server logs to deliver the page and keep it secure (legitimate interest, Art. 6(1)(f) GDPR).',
+      data: 'This page has no accounts and does not load third-party trackers, fonts or embeds. If you send the contact form, we use what you enter there (type of work, budget, task description and your contact details) only to reply to your request and prepare an offer (steps prior to a contract, Art. 6(1)(b) GDPR), and keep it no longer than that requires. As with any website, our hosting provider processes your IP address and browser details in server logs to deliver the page and keep it secure (legitimate interest, Art. 6(1)(f) GDPR).',
       rightsHead: 'Your rights',
       rights: 'You can ask for access to your data, its correction or deletion, restriction of or objection to processing, and data portability. You can withdraw consent at any time in this window; it is as easy as giving it. You may also complain to your data protection authority.',
       contact: 'Write to us: {email}.',
@@ -76,7 +76,7 @@
       whoHead: 'Quién es el responsable',
       who: 'El responsable del tratamiento de tus datos es {company}.',
       dataHead: 'Qué datos tratamos',
-      data: 'Esta página no tiene formularios ni cuentas y no carga rastreadores, fuentes ni contenidos de terceros. Como en cualquier sitio web, nuestro proveedor de alojamiento trata tu dirección IP y los datos del navegador en los registros del servidor para mostrar la página y mantenerla segura (interés legítimo, art. 6.1.f del RGPD).',
+      data: 'Esta página no tiene cuentas y no carga rastreadores, fuentes ni contenidos de terceros. Si envías el formulario de contacto, usamos lo que escribes en él (tipo de trabajo, presupuesto, descripción de la tarea y tus datos de contacto) solo para responder a tu solicitud y preparar una propuesta (medidas precontractuales, art. 6.1.b del RGPD), y no lo conservamos más tiempo del necesario para ello. Como en cualquier sitio web, nuestro proveedor de alojamiento trata tu dirección IP y los datos del navegador en los registros del servidor para mostrar la página y mantenerla segura (interés legítimo, art. 6.1.f del RGPD).',
       rightsHead: 'Tus derechos',
       rights: 'Puedes solicitar el acceso a tus datos, su rectificación o supresión, la limitación u oposición al tratamiento y la portabilidad. Puedes retirar tu consentimiento en cualquier momento en esta ventana, con la misma facilidad con la que lo diste. También puedes reclamar ante tu autoridad de protección de datos.',
       contact: 'Escríbenos: {email}.',
@@ -101,7 +101,7 @@
       whoHead: 'Кто отвечает за данные',
       who: 'Оператор ваших данных — {company}.',
       dataHead: 'Какие данные мы обрабатываем',
-      data: 'На странице нет форм и учётных записей, она не загружает сторонние трекеры, шрифты и встраиваемые блоки. Как и на любом сайте, хостинг-провайдер обрабатывает ваш IP-адрес и сведения о браузере в журналах сервера, чтобы показать страницу и защитить её (законный интерес, ст. 6(1)(f) GDPR).',
+      data: 'На странице нет учётных записей, она не загружает сторонние трекеры, шрифты и встраиваемые блоки. Если вы отправляете форму заявки, мы используем введённые в ней данные (вид работ, бюджет, описание задачи и ваши контакты) только чтобы ответить на заявку и подготовить предложение (преддоговорные действия, ст. 6(1)(b) GDPR), и храним их не дольше, чем это требуется. Как и на любом сайте, хостинг-провайдер обрабатывает ваш IP-адрес и сведения о браузере в журналах сервера, чтобы показать страницу и защитить её (законный интерес, ст. 6(1)(f) GDPR).',
       rightsHead: 'Ваши права',
       rights: 'Вы можете запросить доступ к своим данным, их исправление или удаление, ограничить обработку или возразить против неё, а также получить данные в переносимом виде. Согласие можно отозвать в любой момент в этом окне — так же просто, как дать. Вы также вправе обратиться в надзорный орган по защите данных.',
       contact: 'Напишите нам: {email}.',
@@ -262,9 +262,13 @@
     if (e.target.id === 'consent-analytics') analyticsDraft = e.target.checked;
   });
   reopen.addEventListener('click', openSheet);
+  window.cr8tivePrivacy = { open: openSheet };
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && sheet.classList.contains('is-open')) closeSheet();
+    if (e.key === 'Escape' && sheet.classList.contains('is-open')) {
+      closeSheet();
+      e.stopImmediatePropagation(); // do not also close the form underneath
+    }
   });
 
   // Follow the page language.

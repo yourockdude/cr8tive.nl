@@ -1,0 +1,466 @@
+/* "Get in touch" — header text button and the project brief form (glass sheet). */
+
+/* ---------- Header button ---------- */
+
+.top__right {
+  display: flex;
+  align-items: center;
+  gap: max(14px, calc(36 * var(--ux)));
+}
+
+.touch {
+  position: relative;
+  appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0.3125em 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.touch::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.22em;
+  height: max(2px, 0.07em);
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 100% 50%;
+  transition: transform 0.45s var(--ease-out);
+}
+
+.touch:hover::after,
+.touch:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: 0 50%;
+}
+
+.touch:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 6px;
+  border-radius: 6px;
+}
+
+/* ---------- Overlay ---------- */
+
+.contact {
+  --c-text: rgba(255, 255, 255, 0.96);
+  --c-dim: rgba(255, 255, 255, 0.62);
+  --c-field: rgba(255, 255, 255, 0.09);
+  --c-field-hover: rgba(255, 255, 255, 0.13);
+  --c-line: rgba(255, 255, 255, 0.14);
+  --c-error: #ff6961;
+
+  position: fixed;
+  inset: 0;
+  z-index: 8; /* under the cookie notice and privacy sheet (10) */
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.45);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--c-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  cursor: default;
+  user-select: text;
+  -webkit-user-select: text;
+  touch-action: pan-y;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.45s;
+}
+
+.contact.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.contact__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(560px, 100%);
+  max-height: 100%;
+  overflow: hidden;
+  border-radius: 32px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 28%, rgba(255, 255, 255, 0.06) 100%),
+    rgba(30, 30, 34, 0.74);
+  -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.08);
+  backdrop-filter: blur(30px) saturate(1.9) brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 32px 80px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(32px) scale(0.96);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact.is-open .contact__panel {
+  transform: none;
+}
+
+.contact__bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 20px 14px 26px;
+}
+
+.contact__bar h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.contact__bar p {
+  margin: 6px 0 0;
+  color: var(--c-dim);
+  font-size: 15px;
+}
+
+.contact__close {
+  appearance: none;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  color: var(--c-text);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.contact__close:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.contact__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2px 26px 26px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+/* ---------- Form ---------- */
+
+.contact fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.contact .group + .group {
+  margin-top: 20px;
+}
+
+.contact legend,
+.contact .label {
+  display: block;
+  margin: 0 0 8px;
+  padding: 0;
+  color: var(--c-dim);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  position: relative;
+}
+
+.chip input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.chip span {
+  display: block;
+  padding: 10px 16px;
+  border-radius: 100px;
+  background: var(--c-field);
+  box-shadow: inset 0 0 0 1px var(--c-line);
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chip input:hover + span {
+  background: var(--c-field-hover);
+}
+
+.chip input:checked + span {
+  background: #fff;
+  box-shadow: none;
+  color: #0e0e0f;
+}
+
+.chip input:focus-visible + span {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.field {
+  position: relative;
+  display: block;
+}
+
+.contact input[type="text"],
+.contact input[type="email"],
+.contact input[type="tel"],
+.contact textarea {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 13px 16px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--c-field);
+  box-shadow: inset 0 0 0 1px var(--c-line);
+  color: var(--c-text);
+  font: inherit;
+  letter-spacing: inherit;
+  outline: none;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+
+.contact ::placeholder {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.contact input:hover,
+.contact textarea:hover {
+  background: var(--c-field-hover);
+}
+
+.contact input[type="text"]:focus-visible,
+.contact input[type="email"]:focus-visible,
+.contact input[type="tel"]:focus-visible,
+.contact textarea:focus-visible {
+  background: var(--c-field-hover);
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.contact input[aria-invalid="true"] {
+  box-shadow: inset 0 0 0 2px var(--c-error);
+}
+
+.field--budget input {
+  padding-right: 44px;
+  font-variant-numeric: tabular-nums;
+}
+
+.field--budget::after {
+  content: "€";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--c-dim);
+  pointer-events: none;
+}
+
+.contacts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.contacts .field:last-child {
+  grid-column: 1 / -1;
+}
+
+/* Honeypot: real people never see or fill it. */
+.contact .hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.contact__error {
+  margin: 12px 0 0;
+  color: var(--c-error);
+  font-size: 14px;
+}
+
+.contact__error:empty {
+  display: none;
+}
+
+.contact__submit {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 22px;
+  border: 0;
+  padding: 12px 20px;
+  border-radius: 100px;
+  background: #fff;
+  color: #0e0e0f;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact__submit:hover {
+  opacity: 0.88;
+}
+
+.contact__submit:active {
+  transform: scale(0.98);
+}
+
+.contact__submit:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.contact__note {
+  margin: 12px 0 0;
+  color: var(--c-dim);
+  font-size: 13px;
+  text-align: center;
+}
+
+.contact__note button,
+.contact__done a {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--c-text);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.contact :is(button, a):focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ---------- Result ---------- */
+
+.contact__done {
+  padding: 18px 0 6px;
+  text-align: center;
+}
+
+.contact__done svg {
+  display: block;
+  margin: 0 auto 16px;
+}
+
+.contact__done h3 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.contact__done p {
+  max-width: 36ch;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ---------- Phones: bottom sheet ---------- */
+
+@media (max-width: 560px) {
+  .contact {
+    place-items: end center;
+    padding: 12px;
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .contact__panel {
+    border-radius: 28px;
+    transform: translateY(48px);
+  }
+
+  .contact__bar {
+    padding: 18px 14px 12px 20px;
+  }
+
+  .contact__bar h2 {
+    font-size: 21px;
+  }
+
+  .contact__body {
+    padding: 2px 20px 20px;
+  }
+
+  .contacts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact__panel,
+  .touch::after {
+    transform: none;
+    transition: none;
+  }
+
+  .touch:hover::after,
+  .touch:focus-visible::after {
+    transform: none;
+  }
+
+  .touch::after {
+    opacity: 0;
+  }
+
+  .touch:hover::after,
+  .touch:focus-visible::after {
+    opacity: 1;
+  }
+}

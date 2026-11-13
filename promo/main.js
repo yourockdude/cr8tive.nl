@@ -287,7 +287,7 @@
   let wheelTimer = 0;
   let wheelDir = 0;
   window.addEventListener('wheel', (e) => {
-    if (e.target.closest && e.target.closest('.glass')) return; // let the privacy sheet scroll
+    if (e.target.closest && e.target.closest('.glass, .contact')) return; // let the sheets scroll
     e.preventDefault();
     const raw = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
     const px = e.deltaMode === 1 ? raw * 32 : raw;
@@ -304,7 +304,7 @@
   const axisValue = (e) => (state.layout.horizontal ? e.clientX : e.clientY);
 
   window.addEventListener('pointerdown', (e) => {
-    if (e.button !== 0 || e.target.closest('a, button, .glass')) return;
+    if (e.button !== 0 || e.target.closest('a, button, .glass, .contact')) return;
     drag.id = e.pointerId;
     drag.start = drag.last = axisValue(e);
     drag.lastT = performance.now();
@@ -348,7 +348,8 @@
 
   window.addEventListener('keydown', (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.target.closest && e.target.closest('.glass')) return;
+    if (e.target.closest && e.target.closest('.glass, .contact')) return;
+    if (document.querySelector('.contact.is-open')) return;
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') { go(1); e.preventDefault(); }
     else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') { go(-1); e.preventDefault(); }
     else if (e.key === ' ' && !e.target.closest('a, button')) { go(1); e.preventDefault(); }
