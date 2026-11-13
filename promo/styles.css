@@ -312,12 +312,15 @@ body.is-dragging {
 
 @media (max-aspect-ratio: 1/1) {
   :root {
-    --u: min(calc(100vw / 600), calc(100vh / 1100));
+    /* Height term leaves room for the header above and the privacy link below. */
+    --u: min(calc(100vw / 600), calc((100vh - 150px) / 950));
     --caption-offset: calc(420 * var(--u));
   }
 
   .stage {
     padding-top: 0;
+    /* Lift the composition so the caption clears the privacy link below it. */
+    padding-bottom: clamp(40px, 9vh, 84px);
   }
 
   .hero {
