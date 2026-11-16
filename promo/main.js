@@ -19,7 +19,7 @@
   const RADIUS = 360;         // drum radius, design px
   const STEP = 1.2;           // angle between neighbouring slides, radians
   const BEYONCE_SLIDE = 6;
-  const NO_LIQUID_WORK_SLIDES = new Set([0, 1, 3, 4]);
+  const NO_LIQUID_WORK_SLIDES = new Set([0, 1, 2, 3, 4]);
   const AUTOPLAY_MS = 3200;
   const INTRO_HOLD_MS = 1100; // how long the two words stay together before parting (400 ms)
   const INTRO_HOLD_LANG_MS = 800; // the same hold when the intro replays after a language switch
