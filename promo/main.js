@@ -13,9 +13,12 @@
     { src: 'assets/projects/drone.png',  size: [378, 189],         dy: 0,   rot: 0 },
     { src: 'assets/projects/taxi-fasten.png', size: [460, 306.667], dy: 0, rot: 0 },
     { src: 'assets/projects/trump-concierge.png', size: [371, 371], dy: 0, rot: 0 },
+    { src: 'assets/projects/jack-daniels-fire.png', size: [371, 371], dy: 0, rot: 0 },
   ];
 
   const SLOT_SIZE = 371;      // design px, width of the .slot element
+  const JACK_DANIELS_SLIDE = 5;
+  const SPARK_FADE_MS = 200;
   const RADIUS = 360;         // drum radius, design px
   const STEP = 1.2;           // angle between neighbouring slides, radians
   const AUTOPLAY_MS = 3200;
@@ -78,6 +81,7 @@
     uniform vec2  uMouse;     // design px relative to centre
     uniform vec2  uMouseVel;  // design px
     uniform float uTime;
+    uniform float uSparks;
 
     const int TAPS = 16;
 
@@ -94,6 +98,26 @@
     void main() {
       vec2 p = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y) - uCenter;
       p /= uU;
+
+      if (uSparks > 0.001) {
+        vec2 sparkSpace = p / 220.0;
+        float alpha = 0.0;
+        for (int i = 0; i < 16; i++) {
+          float seed = float(i);
+          float phase = fract(uTime * (0.32 + hash(vec2(seed, 2.1)) * 0.3) + hash(vec2(seed, 7.3)));
+          float x = (hash(vec2(seed, 1.7)) - 0.5) * 1.7 + sin(uTime * 2.0 + seed) * 0.04;
+          float y = 0.72 - phase * 1.44;
+          float radius = 0.014 + hash(vec2(seed, 4.2)) * 0.016;
+          float distanceToSpark = length(sparkSpace - vec2(x, y));
+          float spark = 1.0 - smoothstep(radius * 0.25, radius, distanceToSpark);
+          float flicker = 0.65 + 0.35 * sin(uTime * 9.0 + seed * 13.0);
+          float life = smoothstep(0.0, 0.18, phase) * (1.0 - smoothstep(0.82, 1.0, phase));
+          alpha += spark * flicker * life;
+        }
+        alpha = clamp(alpha * uSparks * 0.28, 0.0, 0.28);
+        gl_FragColor = vec4(vec3(1.0, 0.36, 0.06) * alpha, alpha);
+        return;
+      }
 
       // Liquid drag under the cursor.
       vec2 dm = p - uMouse;
@@ -192,7 +216,7 @@
 
     const uniforms = {};
     ['uTex', 'uRes', 'uCenter', 'uU', 'uSize', 'uOffset', 'uRot', 'uTheta', 'uRadius',
-      'uBend', 'uVel', 'uAxis', 'uMouse', 'uMouseVel', 'uTime'].forEach((name) => {
+      'uBend', 'uVel', 'uAxis', 'uMouse', 'uMouseVel', 'uTime', 'uSparks'].forEach((name) => {
       uniforms[name] = gl.getUniformLocation(program, name);
     });
 
@@ -220,6 +244,7 @@
         ctx.drawImage(img, 0, 0, pot, pot);
 
         const tex = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, tex);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
@@ -392,6 +417,24 @@
     media: el.querySelector('.card__media'),
     slide: Number(el.dataset.slide),
   }));
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  let sparkMix = 0;
+  let sparkFrom = 0;
+  let sparkTarget = 0;
+  let sparkStartedAt = 0;
+
+  function setSparkTarget(target) {
+    if (target === sparkTarget) return;
+    sparkFrom = sparkMix;
+    sparkTarget = target;
+    sparkStartedAt = performance.now();
+  }
+
+  const jackDaniels = workItems.find((item) => item.slide === JACK_DANIELS_SLIDE);
+  jackDaniels.media.addEventListener('pointerenter', () => {
+    if (finePointer.matches) setSparkTarget(1);
+  });
+  jackDaniels.media.addEventListener('pointerleave', () => setSparkTarget(0));
 
   // ---------------------------------------------------------------- pages
   const VIEWS = { '#work': 'work', '#what': 'what', '#food-delivery': 'food' };
@@ -402,6 +445,7 @@
 
   function applyView(view) {
     state.view = view;
+    if (view !== 'work') setSparkTarget(0);
     root.classList.toggle('view-work', view === 'work');
     root.classList.toggle('view-what', view === 'what');
     root.classList.toggle('view-food-delivery', view === 'food');
@@ -421,6 +465,8 @@
       state.lastInteraction = performance.now();
       measure();
     }
+    // Replace the previous view's canvas frame before the fade-in.
+    if (glCtx) draw(performance.now() / 1000);
   }
 
   // Fade the current page out, swap, fade the next one in.
@@ -469,8 +515,8 @@
   const I18N = {
     en: {
       pill: 'Eng', name: 'English', make: 'We Make', work: 'Work', what: 'What We Do',
-      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'TRUMP INC.'],
-      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app'],
+      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'TRUMP INC.', 'JACK DANIEL\'S'],
+      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app', 'Mobile promo app'],
       whatLead: 'We turn ideas into digital things people open every day.',
       whatCta: 'Start a project',
       services: [
@@ -523,8 +569,8 @@
     },
     es: {
       pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
-      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'TRUMP INC.'],
-      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería'],
+      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'TRUMP INC.', 'JACK DANIEL\'S'],
+      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería', 'App móvil promocional'],
       whatLead: 'Convertimos ideas en productos digitales que la gente abre cada día.',
       whatCta: 'Empezar un proyecto',
       services: [
@@ -577,8 +623,8 @@
     },
     ru: {
       pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
-      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.'],
-      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа'],
+      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.', 'JACK DANIEL\'S'],
+      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа', 'Мобильное промо-приложение'],
       whatLead: 'Превращаем идеи в цифровые продукты, которые открывают каждый день.',
       whatCta: 'Начать проект',
       services: [
@@ -844,10 +890,23 @@
     gl.scissor(x0, y0, Math.max(0, x1 - x0), Math.max(0, y1 - y0));
   }
 
+  function setSparkScissor(cx, cy, u) {
+    const { gl } = glCtx;
+    const hx = 210 * u * dpr;
+    const hy = 180 * u * dpr;
+    const x0 = Math.max(0, Math.floor(cx * dpr - hx));
+    const y0 = Math.max(0, Math.floor(canvas.height - cy * dpr - hy));
+    const x1 = Math.min(canvas.width, Math.ceil(cx * dpr + hx));
+    const y1 = Math.min(canvas.height, Math.ceil(canvas.height - cy * dpr + hy));
+    gl.scissor(x0, y0, Math.max(0, x1 - x0), Math.max(0, y1 - y0));
+  }
+
   function drawSlide(i, theta, dy) {
     const { gl, uniforms: U } = glCtx;
     const s = SLIDES[i];
+    gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, textures[i]);
+    gl.uniform1f(U.uSparks, 0);
     gl.uniform2f(U.uSize, s.size[0], s.size[1]);
     gl.uniform2f(U.uOffset, 0, dy);
     gl.uniform1f(U.uRot, (s.rot * Math.PI) / 180);
@@ -870,6 +929,12 @@
       }
 
       setReel(cx, cy, u, 0, 0, false, still);
+      if (it.slide === JACK_DANIELS_SLIDE && sparkMix > 0) {
+        setSparkScissor(cx, cy, u);
+        glCtx.gl.uniform1f(glCtx.uniforms.uSparks, reducedMotion.matches ? 0 : sparkMix);
+        if (!reducedMotion.matches) glCtx.gl.drawArrays(glCtx.gl.TRIANGLE_STRIP, 0, 4);
+        setReel(cx, cy, u, 0, 0, false, still);
+      }
       drawSlide(it.slide, 0, 0);
     });
   }
@@ -879,6 +944,12 @@
     requestAnimationFrame(frame);
     const dt = Math.min(0.05, (nowMs - lastTime) / 1000 || 0.016);
     lastTime = nowMs;
+
+    if (sparkMix !== sparkTarget) {
+      const progress = clamp((nowMs - sparkStartedAt) / SPARK_FADE_MS, 0, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      sparkMix = sparkFrom + (sparkTarget - sparkFrom) * easeOut;
+    }
 
     // Autoplay.
     if (state.view === 'home' && !state.intro && !state.dragging && !reducedMotion.matches && !document.hidden &&

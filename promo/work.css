@@ -144,4 +144,5 @@ html:not(.has-webgl) .card__media img {
   .is-ready.is-switching .work {
     transition-duration: 0.01s;
   }
+
 }
