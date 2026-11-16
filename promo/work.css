@@ -64,8 +64,15 @@
 
 .card__link {
   display: block;
-  color: inherit;
+  color: var(--fg);
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card__link:visited,
+.card__link:hover,
+.card__link:active {
+  color: var(--fg);
 }
 
 .card__link:focus-visible {
