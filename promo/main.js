@@ -8,7 +8,7 @@
   // size: rendered size in the mockup; dy: vertical offset of the image centre
   // from the headline centre; rot: rotation in degrees (CSS direction).
   const SLIDES = [
-    { src: 'assets/projects/food.png',   size: [371, 371],         dy: 0,   rot: 0 },
+    { src: 'assets/projects/tapas.png',  size: [371, 371],         dy: 0,   rot: 0 },
     { src: 'assets/projects/beauty.png', size: [323.703, 323.703], dy: 0,   rot: -4.15 },
     { src: 'assets/projects/drone.png',  size: [378, 189],         dy: 0,   rot: 0 },
     { src: 'assets/projects/taxi.png',   size: [460, 306],         dy: 0,   rot: 0 },
