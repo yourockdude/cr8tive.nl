@@ -19,6 +19,7 @@
   const RADIUS = 360;         // drum radius, design px
   const STEP = 1.2;           // angle between neighbouring slides, radians
   const BEYONCE_SLIDE = 6;
+  const NO_LIQUID_WORK_SLIDES = new Set([0, 1, 3, 4]);
   const AUTOPLAY_MS = 3200;
   const INTRO_HOLD_MS = 1100; // how long the two words stay together before parting (400 ms)
   const INTRO_HOLD_LANG_MS = 800; // the same hold when the intro replays after a language switch
@@ -872,7 +873,7 @@
 
   // Uniforms shared by everything drawn on one reel, plus a scissor box so the
   // full-screen quad only shades the pixels that reel can reach.
-  function setReel(cx, cy, u, bend, vel, horizontal, still) {
+  function setReel(cx, cy, u, bend, vel, horizontal, still, liquid = true) {
     const { gl, uniforms: U } = glCtx;
     gl.uniform2f(U.uCenter, cx * dpr, cy * dpr);
     gl.uniform1f(U.uU, u * dpr);
@@ -880,7 +881,8 @@
     gl.uniform1f(U.uVel, vel);
     gl.uniform1f(U.uAxis, horizontal ? 1 : 0);
     gl.uniform2f(U.uMouse, (state.mouse[0] - cx) / u, (state.mouse[1] - cy) / u);
-    gl.uniform2f(U.uMouseVel, still ? 0 : state.mouseVel[0], still ? 0 : state.mouseVel[1]);
+    const mouseVelocity = !still && liquid ? state.mouseVel : [0, 0];
+    gl.uniform2f(U.uMouseVel, mouseVelocity[0], mouseVelocity[1]);
 
     const along = (RADIUS + 120) * u;
     const across = 450 * u;
@@ -945,7 +947,7 @@
         cx += Math.cos(time * 0.8 + index * 1.3) * 2.5 * u;
       }
 
-      setReel(cx, cy, u, 0, 0, false, still);
+      setReel(cx, cy, u, 0, 0, false, still, !NO_LIQUID_WORK_SLIDES.has(it.slide));
       drawSlide(it.slide, 0, 0);
     });
   }
