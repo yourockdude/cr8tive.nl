@@ -11,9 +11,9 @@
     { src: 'assets/projects/tapas.png',  size: [371, 371],         dy: 0,   rot: 0 },
     { src: 'assets/projects/beauty.png', size: [323.703, 323.703], dy: 0,   rot: -4.15 },
     { src: 'assets/projects/drone.png',  size: [378, 189],         dy: 0,   rot: 0 },
-    { src: 'assets/projects/taxi.png',   size: [460, 306],         dy: 0,   rot: 0 },
+    { src: 'assets/projects/taxi-fasten.png', size: [460, 306.667], dy: 0, rot: 0 },
+    { src: 'assets/projects/trump-concierge.png', size: [371, 371], dy: 0, rot: 0 },
   ];
-  const N = SLIDES.length;
 
   const SLOT_SIZE = 371;      // design px, width of the .slot element
   const RADIUS = 360;         // drum radius, design px
@@ -29,6 +29,7 @@
   const slot = document.getElementById('slot');
   const captions = Array.from(document.querySelectorAll('#caption > span'));
   const fallbackImgs = Array.from(document.querySelectorAll('.fallback img'));
+  const HOME_SLIDE_COUNT = fallbackImgs.length;
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const portrait = window.matchMedia('(max-aspect-ratio: 1/1)');
@@ -498,8 +499,8 @@
   const I18N = {
     en: {
       pill: 'Eng', name: 'English', make: 'We Make', work: 'Work', what: 'What We Do',
-      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP'],
-      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding'],
+      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'TRUMP INC.'],
+      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app'],
       whatLead: 'We turn ideas into digital things people open every day.',
       whatCta: 'Start a project',
       services: [
@@ -552,8 +553,8 @@
     },
     es: {
       pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
-      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI'],
-      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding'],
+      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'TRUMP INC.'],
+      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería'],
       whatLead: 'Convertimos ideas en productos digitales que la gente abre cada día.',
       whatCta: 'Empezar un proyecto',
       services: [
@@ -606,8 +607,8 @@
     },
     ru: {
       pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
-      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ'],
-      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг'],
+      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.'],
+      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа'],
       whatLead: 'Превращаем идеи в цифровые продукты, которые открывают каждый день.',
       whatCta: 'Начать проект',
       services: [
@@ -839,9 +840,9 @@
 
     setReel(cx, cy, l.u, bendEased, still ? 0 : state.vel, l.horizontal, still);
 
-    for (let i = 0; i < N; i++) {
+    for (let i = 0; i < HOME_SLIDE_COUNT; i++) {
       // Shortest signed distance on the loop → the reel is endless both ways.
-      let d = mod(i - state.pos + N / 2, N) - N / 2;
+      let d = mod(i - state.pos + HOME_SLIDE_COUNT / 2, HOME_SLIDE_COUNT) - HOME_SLIDE_COUNT / 2;
       const theta = d * STEP;
       if (Math.cos(theta) < 0.4) continue;
       if (state.solo && i !== state.solo.index) continue;
@@ -960,7 +961,7 @@
       });
     }
 
-    setActive(mod(Math.round(state.pos), N));
+    setActive(mod(Math.round(state.pos), HOME_SLIDE_COUNT));
 
     if (glCtx) draw(nowMs / 1000);
   }
@@ -978,7 +979,7 @@
     state.target = current;
     state.pos = current - 0.49;
     state.vel = 0;
-    state.solo = { index: mod(current, N), target: current };
+    state.solo = { index: mod(current, HOME_SLIDE_COUNT), target: current };
     root.classList.add('is-intro');
     measure();
 
