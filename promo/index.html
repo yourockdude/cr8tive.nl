@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="consent.css">
   <link rel="stylesheet" href="contact.css">
   <link rel="stylesheet" href="work.css">
+  <link rel="stylesheet" href="project.css">
   <link rel="stylesheet" href="what.css">
   <script type="application/ld+json">
     {
@@ -88,9 +89,11 @@
   <section class="work" id="work-view" aria-label="Work">
     <ul class="work__grid">
       <li class="card" data-slide="0">
-        <div class="card__media"><img src="assets/projects/food.png" alt="" loading="lazy" decoding="async"></div>
-        <h2 class="card__title">Food Delivery Service</h2>
-        <p class="card__sub">Mobile app · Website</p>
+        <a class="card__link" href="#food-delivery">
+          <div class="card__media"><img src="assets/projects/food.png" alt="" loading="lazy" decoding="async"></div>
+          <h2 class="card__title">Food Delivery Service</h2>
+          <p class="card__sub">Mobile app · Website</p>
+        </a>
       </li>
       <li class="card" data-slide="1">
         <div class="card__media"><img src="assets/projects/beauty.png" alt="" loading="lazy" decoding="async"></div>
@@ -108,6 +111,138 @@
         <p class="card__sub">Mobile app · Branding</p>
       </li>
     </ul>
+  </section>
+
+  <section class="project" id="food-view" aria-label="Food Delivery Service project">
+    <div class="project__inner">
+      <nav class="project__topline" aria-label="Project navigation">
+        <a class="project__back" href="#work">
+          <span aria-hidden="true">←</span>
+          <span data-food-back>Back to Work</span>
+        </a>
+        <p class="project__topline-label" id="food-project-label">Food delivery · Spain</p>
+      </nav>
+
+      <header class="project__hero">
+        <div class="project__hero-copy">
+          <p class="project__eyebrow" id="food-project-eyebrow">Brand identity · Mobile app · Campaign</p>
+          <h1 class="project__title" id="food-project-title">Cocina de tu barrio</h1>
+          <p class="project__lead" id="food-project-lead">Good food from around the corner.</p>
+          <p class="project__summary" id="food-project-intro">A neighborhood-first food delivery concept that brings independent kitchens together in one simple mobile experience. The work spans market research, brand identity, app design, packaging, and a campaign that takes the brand into the street.</p>
+
+          <dl class="project__meta">
+            <div>
+              <dt id="food-project-scope-label">Scope</dt>
+              <dd id="food-project-scope">Research · Identity · Mobile app · Packaging</dd>
+            </div>
+            <div>
+              <dt id="food-project-category-label">Category</dt>
+              <dd id="food-project-category">Food delivery</dd>
+            </div>
+          </dl>
+        </div>
+
+        <figure class="project__figure project__figure--hero">
+          <img src="assets/projects/food-delivery/02-app-home.png" alt="" width="1188" height="768" fetchpriority="high" decoding="async">
+          <figcaption data-food-caption>App home screen and brand identity</figcaption>
+        </figure>
+      </header>
+
+      <figure class="project__figure project__figure--lockup">
+        <img src="assets/projects/food-delivery/01-brand-lockup.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+        <figcaption data-food-caption>Brand identity and app icon</figcaption>
+      </figure>
+
+      <section class="project__chapter" aria-labelledby="food-opportunity-title">
+        <header class="project__chapter-heading">
+          <p class="project__chapter-kicker" id="food-opportunity-kicker">01 / The opportunity</p>
+          <div>
+            <h2 class="project__chapter-title" id="food-opportunity-title">Built around the neighborhood.</h2>
+            <p class="project__chapter-copy" id="food-opportunity-copy">We started with the idea of bringing trusted local kitchens closer to their neighbors. Research helped shape a clear proposition for discovering, ordering, and growing beyond a single district.</p>
+          </div>
+        </header>
+        <figure class="project__figure project__figure--wide">
+          <img src="assets/projects/food-delivery/14-market-research.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+          <figcaption data-food-caption>Market opportunity across Spain</figcaption>
+        </figure>
+      </section>
+
+      <section class="project__chapter" aria-labelledby="food-app-title">
+        <header class="project__chapter-heading">
+          <p class="project__chapter-kicker" id="food-app-kicker">02 / The app</p>
+          <div>
+            <h2 class="project__chapter-title" id="food-app-title">From discovery to doorstep.</h2>
+            <p class="project__chapter-copy" id="food-app-copy">A direct path through restaurant discovery, dish search, checkout, and live order updates. Clear steps keep the experience easy to follow before and after the order.</p>
+          </div>
+        </header>
+        <div class="project__gallery">
+          <figure class="project__figure project__figure--wide">
+            <img src="assets/projects/food-delivery/06-search-and-account.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>Search and account screens</figcaption>
+          </figure>
+          <figure class="project__figure">
+            <img src="assets/projects/food-delivery/03-cart.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>Basket and checkout</figcaption>
+          </figure>
+          <figure class="project__figure">
+            <img src="assets/projects/food-delivery/04-order-tracking.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>Live order tracking</figcaption>
+          </figure>
+          <figure class="project__figure">
+            <img src="assets/projects/food-delivery/07-gifting-flow.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>A shareable gifting experience</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="project__chapter" aria-labelledby="food-brand-title">
+        <header class="project__chapter-heading">
+          <p class="project__chapter-kicker" id="food-brand-kicker">03 / The brand</p>
+          <div>
+            <h2 class="project__chapter-title" id="food-brand-title">Made to live beyond the screen.</h2>
+            <p class="project__chapter-copy" id="food-brand-copy">A bright, confident identity extends from the app to packaging, shopfronts, delivery concepts, and transit campaigns—meeting people where their neighborhood already is.</p>
+          </div>
+        </header>
+        <div class="project__gallery">
+          <figure class="project__figure project__figure--wide">
+            <img src="assets/projects/food-delivery/13-brand-world.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>A flexible brand system across touchpoints</figcaption>
+          </figure>
+          <figure class="project__figure">
+            <img src="assets/projects/food-delivery/08-tram-campaign.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>Transit campaign in Alicante</figcaption>
+          </figure>
+          <figure class="project__figure">
+            <img src="assets/projects/food-delivery/12-storefront.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>A neighborhood storefront</figcaption>
+          </figure>
+          <figure class="project__figure">
+            <img src="assets/projects/food-delivery/05-delivery-robot.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>A branded delivery robot concept</figcaption>
+          </figure>
+          <figure class="project__figure">
+            <img src="assets/projects/food-delivery/09-fish-meal-packaging.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>Prepared fish meal packaging</figcaption>
+          </figure>
+          <figure class="project__figure">
+            <img src="assets/projects/food-delivery/10-drinks-packaging.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>Drinks packaging</figcaption>
+          </figure>
+          <figure class="project__figure">
+            <img src="assets/projects/food-delivery/11-beef-meal-packaging.png" alt="" width="1188" height="768" loading="lazy" decoding="async">
+            <figcaption data-food-caption>Ready-to-heat meal packaging</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <footer class="project__footer">
+        <p id="food-project-outro">A connected brand and product experience for local food, from the first browse to the final handoff.</p>
+        <a class="project__back project__back--bottom" href="#work">
+          <span aria-hidden="true">←</span>
+          <span data-food-back>Back to Work</span>
+        </a>
+      </footer>
+    </div>
   </section>
 
   <section class="what" id="what-view" aria-label="What We Do">

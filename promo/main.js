@@ -421,19 +421,21 @@
   });
 
   // ---------------------------------------------------------------- pages
-  const VIEWS = { '#work': 'work', '#what': 'what' };
+  const VIEWS = { '#work': 'work', '#what': 'what', '#food-delivery': 'food' };
   const viewFromHash = () => VIEWS[location.hash] || 'home';
   const whatView = document.getElementById('what-view');
+  const foodView = document.getElementById('food-view');
   let viewTimer = 0;
 
   function applyView(view) {
     state.view = view;
     root.classList.toggle('view-work', view === 'work');
     root.classList.toggle('view-what', view === 'what');
-    [[workButton, 'work'], [whatButton, 'what']].forEach(([button, name]) => {
+    root.classList.toggle('view-food-delivery', view === 'food');
+    [[workButton, view === 'work' || view === 'food'], [whatButton, view === 'what']].forEach(([button, isCurrent]) => {
       if (!button) return;
-      button.classList.toggle('is-current', view === name);
-      if (view === name) button.setAttribute('aria-current', 'page');
+      button.classList.toggle('is-current', isCurrent);
+      if (isCurrent) button.setAttribute('aria-current', 'page');
       else button.removeAttribute('aria-current');
     });
     if (view === 'what') {
@@ -442,6 +444,8 @@
       workView.scrollTop = 0;
       work.scrollTop = 0;
       enterWork();
+    } else if (view === 'food') {
+      foodView.scrollTop = 0;
     } else {
       state.lastInteraction = performance.now();
       measure();
@@ -506,6 +510,45 @@
         ['Graphic design', 'Everything a brand shows the world: identity, packaging, illustration, motion and campaign visuals.'],
         ['Support', 'Launch is the beginning. We stay: updates, new features, fixes and a team that answers.'],
       ],
+      project: {
+        ariaLabel: 'Food Delivery Service case study',
+        label: 'Food delivery · Spain',
+        back: 'Back to Work',
+        eyebrow: 'Brand identity · Mobile app · Campaign',
+        title: 'Cocina de tu barrio',
+        lead: 'Good food from around the corner.',
+        intro: 'A neighborhood-first food delivery concept that brings independent kitchens together in one simple mobile experience. The work spans market research, brand identity, app design, packaging, and a campaign that takes the brand into the street.',
+        scopeLabel: 'Scope',
+        scope: 'Research · Identity · Mobile app · Packaging',
+        categoryLabel: 'Category',
+        category: 'Food delivery',
+        opportunityKicker: '01 / The opportunity',
+        opportunityTitle: 'Built around the neighborhood.',
+        opportunityBody: 'We started with the idea of bringing trusted local kitchens closer to their neighbors. Research helped shape a clear proposition for discovering, ordering, and growing beyond a single district.',
+        appKicker: '02 / The app',
+        appTitle: 'From discovery to doorstep.',
+        appBody: 'A direct path through restaurant discovery, dish search, checkout, and live order updates. Clear steps keep the experience easy to follow before and after the order.',
+        brandKicker: '03 / The brand',
+        brandTitle: 'Made to live beyond the screen.',
+        brandBody: 'A bright, confident identity extends from the app to packaging, shopfronts, delivery concepts, and transit campaigns—meeting people where their neighborhood already is.',
+        outro: 'A connected brand and product experience for local food, from the first browse to the final handoff.',
+        captions: [
+          'App home screen and brand identity',
+          'Brand identity and app icon',
+          'Market opportunity across Spain',
+          'Search and account screens',
+          'Basket and checkout',
+          'Live order tracking',
+          'A shareable gifting experience',
+          'A flexible brand system across touchpoints',
+          'Transit campaign in Alicante',
+          'A neighborhood storefront',
+          'A branded delivery robot concept',
+          'Prepared fish meal packaging',
+          'Drinks packaging',
+          'Ready-to-heat meal packaging',
+        ],
+      },
     },
     es: {
       pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
@@ -521,6 +564,45 @@
         ['Diseño gráfico', 'Todo lo que una marca muestra al mundo: identidad, packaging, ilustración, motion y visuales de campaña.'],
         ['Soporte', 'El lanzamiento es el comienzo. Nos quedamos: actualizaciones, nuevas funciones, correcciones y un equipo que responde.'],
       ],
+      project: {
+        ariaLabel: 'Caso de estudio de Food Delivery Service',
+        label: 'Reparto de comida · España',
+        back: 'Volver a Proyectos',
+        eyebrow: 'Identidad · App móvil · Campaña',
+        title: 'Cocina de tu barrio',
+        lead: 'Buen comer, a la vuelta de la esquina.',
+        intro: 'Un concepto de delivery pensado para el barrio que reúne cocinas independientes en una experiencia móvil sencilla. El proyecto abarca investigación de mercado, identidad de marca, diseño de la app, packaging y una campaña que lleva la marca a la calle.',
+        scopeLabel: 'Alcance',
+        scope: 'Investigación · Identidad · App móvil · Packaging',
+        categoryLabel: 'Categoría',
+        category: 'Reparto de comida',
+        opportunityKicker: '01 / La oportunidad',
+        opportunityTitle: 'Pensado para el barrio.',
+        opportunityBody: 'Partimos de la idea de acercar las cocinas locales de confianza a sus vecinos. La investigación ayudó a definir una propuesta clara para descubrir, pedir y crecer más allá de un solo barrio.',
+        appKicker: '02 / La app',
+        appTitle: 'De descubrir a recibir.',
+        appBody: 'Un recorrido directo por restaurantes, búsqueda de platos, pago y seguimiento del pedido. Cada paso ayuda a entender qué ocurre antes y después de pedir.',
+        brandKicker: '03 / La marca',
+        brandTitle: 'Una marca que sale a la calle.',
+        brandBody: 'Una identidad llena de energía conecta la app con los envases, los locales, los conceptos de reparto y las campañas de transporte, allí donde ya está el barrio.',
+        outro: 'Una experiencia de marca y producto conectada, desde el primer vistazo al menú hasta la entrega.',
+        captions: [
+          'Inicio de la app e identidad de marca',
+          'Identidad de marca e icono de la app',
+          'Oportunidad de mercado en España',
+          'Búsqueda y perfil',
+          'Cesta y pago',
+          'Seguimiento del pedido',
+          'Una experiencia para regalar',
+          'Sistema de marca aplicado a distintos soportes',
+          'Campaña en el tranvía de Alicante',
+          'Un local de barrio',
+          'Concepto de robot de reparto de marca',
+          'Envase para platos preparados de pescado',
+          'Envases para bebidas',
+          'Envase para platos listos para calentar',
+        ],
+      },
     },
     ru: {
       pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
@@ -536,6 +618,45 @@
         ['Графический дизайн', 'Всё, что бренд показывает миру: айдентика, упаковка, иллюстрации, моушн и визуалы для кампаний.'],
         ['Поддержка', 'Запуск — это начало. Мы остаёмся: обновления, новые функции, исправления и команда, которая отвечает.'],
       ],
+      project: {
+        ariaLabel: 'Кейс Food Delivery Service',
+        label: 'Доставка еды · Испания',
+        back: 'Назад к проектам',
+        eyebrow: 'Айдентика · Мобильное приложение · Кампания',
+        title: 'Cocina de tu barrio',
+        lead: 'Любимая еда совсем рядом.',
+        intro: 'Концепция сервиса доставки, который объединяет независимые кухни района в простом мобильном приложении. В проект вошли исследование рынка, айдентика, дизайн приложения, упаковка и городская кампания.',
+        scopeLabel: 'Задачи',
+        scope: 'Исследование · Айдентика · Приложение · Упаковка',
+        categoryLabel: 'Категория',
+        category: 'Доставка еды',
+        opportunityKicker: '01 / Возможность',
+        opportunityTitle: 'С опорой на местное сообщество.',
+        opportunityBody: 'В основе — идея познакомить жителей с проверенными местными заведениями. Исследование помогло сформировать понятный сервис для поиска, заказа и дальнейшего развития.',
+        appKicker: '02 / Приложение',
+        appTitle: 'От поиска до двери.',
+        appBody: 'Простой путь от выбора ресторана и поиска блюда до оплаты и отслеживания заказа. Каждый этап понятен до и после оформления.',
+        brandKicker: '03 / Бренд',
+        brandTitle: 'Бренд за пределами экрана.',
+        brandBody: 'Яркая айдентика объединяет приложение, упаковку, витрины, концепции доставки и рекламу в городском транспорте — всё, что встречает жителей района.',
+        outro: 'Цельный опыт бренда и продукта — от выбора еды до момента доставки.',
+        captions: [
+          'Главный экран приложения и айдентика',
+          'Айдентика и иконка приложения',
+          'Исследование рынка Испании',
+          'Поиск и профиль пользователя',
+          'Корзина и оформление заказа',
+          'Отслеживание заказа',
+          'Сценарий подарка и обмена',
+          'Система бренда на разных носителях',
+          'Реклама в трамвае Аликанте',
+          'Витрина районного кафе',
+          'Концепт фирменного робота-доставщика',
+          'Упаковка готового блюда из рыбы',
+          'Упаковка напитков',
+          'Упаковка готового блюда с говядиной',
+        ],
+      },
     },
   };
   const LANGS = Object.keys(I18N);
@@ -592,6 +713,29 @@
       row.querySelector('.svc__title').textContent = t.services[i][0];
       row.querySelector('.svc__text').textContent = t.services[i][1];
     });
+    const project = t.project;
+    foodView.setAttribute('aria-label', project.ariaLabel);
+    document.getElementById('food-project-label').textContent = project.label;
+    document.getElementById('food-project-eyebrow').textContent = project.eyebrow;
+    document.getElementById('food-project-title').textContent = project.title;
+    document.getElementById('food-project-lead').textContent = project.lead;
+    document.getElementById('food-project-intro').textContent = project.intro;
+    document.getElementById('food-project-scope-label').textContent = project.scopeLabel;
+    document.getElementById('food-project-scope').textContent = project.scope;
+    document.getElementById('food-project-category-label').textContent = project.categoryLabel;
+    document.getElementById('food-project-category').textContent = project.category;
+    document.getElementById('food-opportunity-kicker').textContent = project.opportunityKicker;
+    document.getElementById('food-opportunity-title').textContent = project.opportunityTitle;
+    document.getElementById('food-opportunity-copy').textContent = project.opportunityBody;
+    document.getElementById('food-app-kicker').textContent = project.appKicker;
+    document.getElementById('food-app-title').textContent = project.appTitle;
+    document.getElementById('food-app-copy').textContent = project.appBody;
+    document.getElementById('food-brand-kicker').textContent = project.brandKicker;
+    document.getElementById('food-brand-title').textContent = project.brandTitle;
+    document.getElementById('food-brand-copy').textContent = project.brandBody;
+    document.getElementById('food-project-outro').textContent = project.outro;
+    foodView.querySelectorAll('[data-food-back]').forEach((label) => { label.textContent = project.back; });
+    foodView.querySelectorAll('[data-food-caption]').forEach((caption, i) => { caption.textContent = project.captions[i]; });
     if (whatButton) whatButton.textContent = t.what;
     hero.setAttribute('aria-label', `${t.make} DIGITAL`);
     captions.forEach((el, i) => { el.textContent = t.captions[i]; });
@@ -673,7 +817,7 @@
     gl.uniform1f(U.uRadius, RADIUS);
     gl.uniform1f(U.uTime, time);
 
-    if (state.view === 'what') return;
+    if (state.view === 'what' || state.view === 'food') return;
     if (state.view === 'work') { drawWork(time, still); return; }
 
     // Idle float + a little parallax towards the cursor.
