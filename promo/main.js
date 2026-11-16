@@ -386,40 +386,12 @@
   });
 
   // ---------------------------------------------------------------- work page
-  // Every card owns a tiny reel with a single picture on it: it rolls in when
-  // the page opens and takes one more turn when the card is hovered or tapped.
   const workView = document.getElementById('work-view');
   const workItems = Array.from(document.querySelectorAll('.card')).map((el) => ({
     el,
     media: el.querySelector('.card__media'),
     slide: Number(el.dataset.slide),
-    pos: 0,
-    target: 0,
-    vel: 0,
-    solo: false,
-    startAt: 0,
   }));
-  const work = { scrollTop: 0, scrollVel: 0 };
-
-  function enterWork() {
-    const now = performance.now();
-    workItems.forEach((it, i) => {
-      it.target = 0;
-      it.vel = 0;
-      it.pos = reducedMotion.matches ? 0 : -0.49;
-      it.solo = !reducedMotion.matches;
-      it.startAt = now + 140 + i * 90;
-    });
-  }
-
-  workItems.forEach((it) => {
-    it.el.addEventListener('pointerenter', () => {
-      if (reducedMotion.matches || state.view !== 'work') return;
-      if (it.target - it.pos > 0.6) return; // already turning
-      it.target = Math.round(it.target) + 1;
-      it.solo = false;
-    });
-  });
 
   // ---------------------------------------------------------------- pages
   const VIEWS = { '#work': 'work', '#what': 'what', '#food-delivery': 'food' };
@@ -443,8 +415,6 @@
       whatView.scrollTop = 0;
     } else if (view === 'work') {
       workView.scrollTop = 0;
-      work.scrollTop = 0;
-      enterWork();
     } else if (view === 'food') {
       foodView.scrollTop = 0;
     } else {
@@ -899,17 +869,8 @@
         cx += Math.cos(time * 0.8 + index * 1.3) * 2.5 * u;
       }
 
-      const f = it.pos - Math.round(it.pos); // -0.5 … 0.5 around the resting spot
-      const bend = clamp(Math.abs(f) / 0.22, 0, 1);
-      const vel = still ? 0 : it.vel + work.scrollVel;
-      setReel(cx, cy, u, bend * bend * (3 - 2 * bend), vel, false, still);
-
-      drawSlide(it.slide, -f * STEP, 0);
-      // While it turns, the same picture follows from the other side.
-      if (!it.solo && Math.abs(f) > 0.02) {
-        const theta = (-f + (f > 0 ? 1 : -1)) * STEP;
-        if (Math.cos(theta) >= 0.4) drawSlide(it.slide, theta, 0);
-      }
+      setReel(cx, cy, u, 0, 0, false, still);
+      drawSlide(it.slide, 0, 0);
     });
   }
 
@@ -943,23 +904,6 @@
     state.mouseRaw[0] = state.mouseRaw[1] = 0;
 
     if (state.solo && (Math.abs(state.pos - state.target) < 0.03 || state.target !== state.solo.target)) state.solo = null;
-
-    if (state.view === 'work') {
-      // Scrolling smears the pictures the same way the reel's own speed does.
-      const st = workView.scrollTop;
-      const sv = clamp((st - work.scrollTop) / dt / 700, -4, 4);
-      work.scrollTop = st;
-      work.scrollVel += (sv - work.scrollVel) * 0.25;
-
-      workItems.forEach((it) => {
-        if (nowMs < it.startAt) return;
-        for (let i = 0; i < 4; i++) {
-          it.vel += ((it.target - it.pos) * SPRING - it.vel * DAMPING) * h;
-          it.pos += it.vel * h;
-        }
-        if (it.solo && Math.abs(it.pos - it.target) < 0.03) it.solo = false;
-      });
-    }
 
     setActive(mod(Math.round(state.pos), HOME_SLIDE_COUNT));
 
