@@ -18,6 +18,7 @@
   const SLOT_SIZE = 371;      // design px, width of the .slot element
   const RADIUS = 360;         // drum radius, design px
   const STEP = 1.2;           // angle between neighbouring slides, radians
+  const BEYONCE_SLIDE = 6;
   const AUTOPLAY_MS = 3200;
   const INTRO_HOLD_MS = 1100; // how long the two words stay together before parting (400 ms)
   const INTRO_HOLD_LANG_MS = 800; // the same hold when the intro replays after a language switch
@@ -51,6 +52,7 @@
     mouse: [-9999, -9999],     // css px
     mouseVel: [0, 0],          // design px per frame, smoothed
     mouseRaw: [0, 0],
+    beyonceHover: false,
     layout: { cx: 0, cy: 0, u: 1, horizontal: false },
   };
 
@@ -78,6 +80,7 @@
     uniform vec2  uMouse;     // design px relative to centre
     uniform vec2  uMouseVel;  // design px
     uniform float uTime;
+    uniform float uGlitter;
 
     const int TAPS = 16;
 
@@ -94,6 +97,37 @@
     void main() {
       vec2 p = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y) - uCenter;
       p /= uU;
+
+      if (uGlitter > 0.5) {
+        vec2 uv = p / uSize + 0.5;
+        float alphaSum = 0.0;
+        vec3 colorSum = vec3(0.0);
+        for (int i = 0; i < 24; i++) {
+          float seed = float(i);
+          float burst = floor(seed / 12.0);
+          float spark = mod(seed, 12.0);
+          float phase = fract(uTime * 0.38 + burst * 0.5 + hash(vec2(seed, 7.3)) * 0.015);
+          float angle = spark * 0.523599 + (hash(vec2(seed, 1.7)) - 0.5) * 0.12;
+          vec2 direction = vec2(cos(angle), sin(angle));
+          vec2 origin = vec2(0.5, 0.5) + vec2(burst * 0.035, burst * -0.025);
+          vec2 position = origin + direction * phase * 0.44;
+          vec2 delta = uv - position;
+          float core = 1.0 - smoothstep(0.003, 0.012, length(delta));
+          float behind = -dot(delta, direction);
+          float side = abs(delta.x * direction.y - delta.y * direction.x);
+          float trail = (1.0 - smoothstep(0.001, 0.004, side)) *
+            smoothstep(0.005, 0.02, behind) * (1.0 - smoothstep(0.045, 0.07, behind));
+          float life = smoothstep(0.0, 0.07, phase) * (1.0 - smoothstep(0.78, 1.0, phase));
+          float intensity = (core + trail * 0.55) * life * (0.75 + 0.25 * sin(uTime * 9.0 + seed));
+          vec3 sparkColor = mix(vec3(1.0, 0.38, 0.04), vec3(1.0, 0.9, 0.54), hash(vec2(seed, 4.2)));
+          alphaSum += intensity;
+          colorSum += sparkColor * intensity;
+        }
+        float alpha = clamp(alphaSum * 0.82, 0.0, 0.82);
+        vec3 color = colorSum / max(alphaSum, 0.001);
+        gl_FragColor = vec4(color * alpha, alpha);
+        return;
+      }
 
       // Liquid drag under the cursor.
       vec2 dm = p - uMouse;
@@ -192,7 +226,7 @@
 
     const uniforms = {};
     ['uTex', 'uRes', 'uCenter', 'uU', 'uSize', 'uOffset', 'uRot', 'uTheta', 'uRadius',
-      'uBend', 'uVel', 'uAxis', 'uMouse', 'uMouseVel', 'uTime'].forEach((name) => {
+      'uBend', 'uVel', 'uAxis', 'uMouse', 'uMouseVel', 'uTime', 'uGlitter'].forEach((name) => {
       uniforms[name] = gl.getUniformLocation(program, name);
     });
 
@@ -394,6 +428,16 @@
     slide: Number(el.dataset.slide),
     staticMedia: el.classList.contains('card--static-media'),
   }));
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const beyonceItem = workItems.find((item) => item.slide === BEYONCE_SLIDE);
+  if (beyonceItem) {
+    beyonceItem.media.addEventListener('pointerenter', () => {
+      state.beyonceHover = finePointer.matches && !reducedMotion.matches;
+    });
+    beyonceItem.media.addEventListener('pointerleave', () => {
+      state.beyonceHover = false;
+    });
+  }
 
   // ---------------------------------------------------------------- pages
   const VIEWS = { '#work': 'work', '#what': 'what', '#food-delivery': 'food' };
@@ -404,6 +448,7 @@
 
   function applyView(view) {
     state.view = view;
+    if (view !== 'work') state.beyonceHover = false;
     root.classList.toggle('view-work', view === 'work');
     root.classList.toggle('view-what', view === 'what');
     root.classList.toggle('view-food-delivery', view === 'food');
@@ -473,8 +518,8 @@
   const I18N = {
     en: {
       pill: 'Eng', name: 'English', make: 'We Make', work: 'Work', what: 'What We Do',
-      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR'],
-      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app', 'Mobile promo app', 'Promotional website · World tour'],
+      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE'],
+      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app', 'Mobile promo app', 'Promotional website · World tour', 'Promotional website'],
       whatLead: 'We turn ideas into digital things people open every day.',
       whatCta: 'Start a project',
       services: [
@@ -527,8 +572,8 @@
     },
     es: {
       pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
-      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR'],
-      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería', 'App móvil promocional', 'Sitio web promocional · Gira mundial'],
+      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE'],
+      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería', 'App móvil promocional', 'Sitio web promocional · Gira mundial', 'Sitio web promocional'],
       whatLead: 'Convertimos ideas en productos digitales que la gente abre cada día.',
       whatCta: 'Empezar un proyecto',
       services: [
@@ -581,8 +626,8 @@
     },
     ru: {
       pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
-      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.', 'JACK DANIEL\'S', 'МИРОВОЙ ТУР БЕЙОНСЕ'],
-      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа', 'Мобильное промо-приложение', 'Промосайт мирового тура'],
+      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.', 'JACK DANIEL\'S', 'МИРОВОЙ ТУР БЕЙОНСЕ', 'KASPERSKY PROMO SITE'],
+      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа', 'Мобильное промо-приложение', 'Промосайт мирового тура', 'Промосайт'],
       whatLead: 'Превращаем идеи в цифровые продукты, которые открывают каждый день.',
       whatCta: 'Начать проект',
       services: [
@@ -853,6 +898,7 @@
     const s = SLIDES[i];
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, textures[i]);
+    gl.uniform1f(U.uGlitter, 0);
     gl.uniform2f(U.uSize, s.size[0], s.size[1]);
     gl.uniform2f(U.uOffset, 0, dy);
     gl.uniform1f(U.uRot, (s.rot * Math.PI) / 180);
@@ -860,12 +906,36 @@
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
+  function drawBeyonceGlitter(mediaRect, still) {
+    const { gl, uniforms: U } = glCtx;
+    const u = mediaRect.width / 460;
+    const cx = mediaRect.left + mediaRect.width / 2;
+    const cy = mediaRect.top + mediaRect.height / 2;
+    setReel(cx, cy, u, 0, 0, false, still);
+    gl.uniform2f(U.uSize, 460, 460);
+    gl.uniform1f(U.uGlitter, 1);
+
+    const x0 = Math.max(0, Math.floor(mediaRect.left * dpr));
+    const y0 = Math.max(0, Math.floor(canvas.height - mediaRect.bottom * dpr));
+    const x1 = Math.min(canvas.width, Math.ceil(mediaRect.right * dpr));
+    const y1 = Math.min(canvas.height, Math.ceil(canvas.height - mediaRect.top * dpr));
+    gl.scissor(x0, y0, Math.max(0, x1 - x0), Math.max(0, y1 - y0));
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.uniform1f(U.uGlitter, 0);
+  }
+
   function drawWork(time, still) {
     const vh = window.innerHeight;
     workItems.forEach((it, index) => {
-      if (it.staticMedia) return;
       const r = it.media.getBoundingClientRect();
       if (r.bottom < -200 || r.top > vh + 200 || r.width === 0) return;
+
+      if (it.staticMedia) {
+        if (it.slide === BEYONCE_SLIDE && state.beyonceHover && !still) {
+          drawBeyonceGlitter(r, still);
+        }
+        return;
+      }
 
       const u = r.width / 460; // the widest picture (428) fits the box with air
       let cx = r.left + r.width / 2;
