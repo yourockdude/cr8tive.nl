@@ -1,0 +1,371 @@
+/* Studio — a compact introduction to the people and experience behind CR8TIVE. */
+
+.studio {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding:
+    max(100px, calc(184 * var(--ux)))
+    max(20px, calc(80 * var(--ux)), env(safe-area-inset-right))
+    max(110px, calc(130 * var(--ux)))
+    max(20px, calc(80 * var(--ux)), env(safe-area-inset-left));
+  touch-action: pan-y;
+  user-select: text;
+  -webkit-user-select: text;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent max(52px, calc(128 * var(--ux))), #000 max(92px, calc(176 * var(--ux))), #000 calc(100% - 88px), transparent calc(100% - 46px));
+  mask-image: linear-gradient(to bottom, transparent max(52px, calc(128 * var(--ux))), #000 max(92px, calc(176 * var(--ux))), #000 calc(100% - 88px), transparent calc(100% - 46px));
+}
+
+.studio::-webkit-scrollbar {
+  display: none;
+}
+
+.view-studio .studio {
+  opacity: 1;
+  visibility: visible;
+}
+
+.view-studio .stage {
+  visibility: hidden;
+}
+
+.view-studio body {
+  cursor: default;
+}
+
+.is-ready.is-switching .studio {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.studio__inner {
+  width: 100%;
+  margin-inline: auto;
+}
+
+.studio__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
+  gap: clamp(40px, 7vw, 120px);
+  align-items: start;
+}
+
+.studio__intro,
+.studio__facts,
+.studio__section-heading,
+.studio__person {
+  min-width: 0;
+}
+
+.studio__facts {
+  margin-top: 40px;
+}
+
+.studio__eyebrow,
+.studio__person-role {
+  margin: 0;
+  color: #f5cb42;
+  font-size: clamp(13px, calc(17 * var(--ux)), 16px);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.studio__title {
+  max-width: 13ch;
+  margin: 18px 0 22px;
+  font-size: clamp(48px, calc(92 * var(--ux)), 88px);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.studio__lead,
+.studio__copy {
+  color: rgba(255, 255, 255, 0.72);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(16px, calc(22 * var(--ux)), 20px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+
+.studio__lead {
+  max-width: 66ch;
+  margin: 0;
+}
+
+.studio__cta {
+  display: inline-flex;
+  margin-top: 24px;
+  font-size: clamp(22px, calc(34 * var(--ux)), 28px);
+}
+
+.studio__fact {
+  display: grid;
+  grid-template-columns: minmax(72px, auto) minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 18px 0;
+}
+
+.studio__fact strong {
+  font-size: clamp(36px, calc(54 * var(--ux)), 50px);
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.studio__fact span {
+  color: rgba(255, 255, 255, 0.72);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(14px, calc(18 * var(--ux)), 16px);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.studio__section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: start;
+  margin-top: clamp(80px, 10vw, 150px);
+  padding-top: clamp(28px, 4vw, 54px);
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.studio__section-title {
+  max-width: 18ch;
+  margin: 12px 0 0;
+  font-size: clamp(34px, calc(58 * var(--ux)), 54px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.studio__section-heading .studio__copy {
+  max-width: 60ch;
+  margin: 18px 0 0;
+}
+
+.studio__name-list,
+.studio__award-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(16px, 2.2vw, 32px);
+  align-content: start;
+  margin: 0;
+  padding: 4px 0 0;
+  list-style: none;
+}
+
+.studio__name-list {
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  gap: clamp(8px, 1vw, 16px);
+  overflow-x: auto;
+  padding: 0;
+  scrollbar-width: thin;
+}
+
+.studio__clients {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.studio__name-list li {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 72px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+}
+
+.studio__client-logo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: clamp(36px, 4vw, 52px);
+  object-fit: contain;
+}
+
+.studio__client-logo--compact {
+  height: clamp(14px, 1.57vw, 20px);
+}
+
+.studio__client-name {
+  font-size: clamp(12px, 1.3vw, 18px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.studio__client-logo-pair {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.studio__client-logo-pair .studio__client-logo {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+}
+
+.studio__client-logo-pair > span {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 20px;
+}
+
+.studio__team {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.studio__team .studio__section-heading {
+  max-width: 850px;
+}
+
+.studio__people {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 5vw, 76px);
+}
+
+.studio__person {
+  padding-top: 0;
+}
+
+.studio__person h3 {
+  margin: 14px 0 0;
+  font-size: clamp(28px, calc(42 * var(--ux)), 38px);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.studio__person .studio__copy {
+  max-width: 58ch;
+  margin: 12px 0 0;
+}
+
+.studio__award-list li {
+  padding: 11px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: clamp(16px, calc(21 * var(--ux)), 19px);
+  line-height: 1.2;
+}
+
+.studio__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 28px;
+  margin-top: clamp(80px, 10vw, 150px);
+  padding-top: clamp(28px, 4vw, 54px);
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.studio__footer-content {
+  max-width: 62ch;
+}
+
+.studio__footer-content > p {
+  margin: 0;
+}
+
+.studio__footer-content > p:first-child {
+  max-width: 20ch;
+  font-size: clamp(32px, calc(54 * var(--ux)), 50px);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.studio__footer-content > .studio__footer-agency {
+  margin-top: 18px;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(16px, calc(22 * var(--ux)), 20px);
+  line-height: 1.5;
+}
+
+.studio__footer .studio__cta {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 760px) {
+  .studio {
+    align-content: start;
+    padding-top: max(100px, calc(150 * var(--ux)));
+    padding-right: max(20px, env(safe-area-inset-right));
+    padding-bottom: max(120px, calc(140 * var(--ux)));
+    padding-left: max(20px, env(safe-area-inset-left));
+  }
+
+  .studio__hero,
+  .studio__section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .studio__hero {
+    gap: 42px;
+  }
+
+  .studio__facts {
+    margin-top: 0;
+  }
+
+  .studio__title {
+    max-width: 12ch;
+    font-size: clamp(42px, 11vw, 70px);
+  }
+
+  .studio__section {
+    gap: 28px;
+    margin-top: 76px;
+  }
+
+  .studio__people {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .studio__name-list {
+    gap: 12px;
+  }
+
+  .studio__name-list li {
+    flex: 0 0 84px;
+    min-height: 56px;
+  }
+
+  .studio__client-logo-pair {
+    gap: 20px;
+  }
+
+  .studio__footer {
+    align-items: start;
+    flex-direction: column;
+    margin-top: 76px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio,
+  .is-ready.is-switching .studio {
+    transition-duration: 0.01ms;
+  }
+}

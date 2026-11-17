@@ -29,6 +29,17 @@
   display: none;
 }
 
+.view-work .top::before,
+.view-studio .top::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 auto;
+  height: max(180px, calc(260 * var(--ux)));
+  background: linear-gradient(to bottom, var(--bg) 0%, var(--bg) 48%, transparent 100%);
+  pointer-events: none;
+}
+
 .view-work .work {
   opacity: 1;
   visibility: visible;

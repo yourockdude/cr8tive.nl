@@ -42,7 +42,7 @@
   // ---------------------------------------------------------------- state
   const state = {
     pos: -0.49,      // continuous slide position; integer = slide at rest
-    view: 'home',    // 'home' | 'work' | 'what'
+    view: 'home',    // 'home' | 'work' | 'what' | 'food' | 'studio'
     intro: false,    // true while the two words still sit together in the centre
     solo: null,      // { index, target } while a roll-in draws only the current project
     target: 0,
@@ -441,10 +441,11 @@
   }
 
   // ---------------------------------------------------------------- pages
-  const VIEWS = { '#work': 'work', '#what': 'what', '#food-delivery': 'food' };
+  const VIEWS = { '#work': 'work', '#what': 'what', '#food-delivery': 'food', '#studio': 'studio' };
   const viewFromHash = () => VIEWS[location.hash] || 'home';
   const whatView = document.getElementById('what-view');
   const foodView = document.getElementById('food-view');
+  const studioView = document.getElementById('studio-view');
   let viewTimer = 0;
 
   function applyView(view) {
@@ -453,7 +454,8 @@
     root.classList.toggle('view-work', view === 'work');
     root.classList.toggle('view-what', view === 'what');
     root.classList.toggle('view-food-delivery', view === 'food');
-    [[workButton, view === 'work' || view === 'food'], [whatButton, view === 'what']].forEach(([button, isCurrent]) => {
+    root.classList.toggle('view-studio', view === 'studio');
+    [[workButton, view === 'work' || view === 'food'], [whatButton, view === 'what'], [studioButton, view === 'studio']].forEach(([button, isCurrent]) => {
       if (!button) return;
       button.classList.toggle('is-current', isCurrent);
       if (isCurrent) button.setAttribute('aria-current', 'page');
@@ -465,6 +467,8 @@
       workView.scrollTop = 0;
     } else if (view === 'food') {
       foodView.scrollTop = 0;
+    } else if (view === 'studio') {
+      studioView.scrollTop = 0;
     } else {
       state.lastInteraction = performance.now();
       measure();
@@ -502,9 +506,17 @@
     if (location.hash !== '#what') location.hash = 'what';
   });
 
+  document.getElementById('studio').addEventListener('click', () => {
+    if (location.hash !== '#studio') location.hash = 'studio';
+  });
+
   // "Start a project" at the end of What We Do opens the brief form.
   document.getElementById('what-cta').addEventListener('click', () => {
     document.getElementById('touch').click();
+  });
+
+  document.querySelectorAll('[data-open-brief]').forEach((button) => {
+    button.addEventListener('click', () => document.getElementById('touch').click());
   });
 
   document.querySelector('.logo').addEventListener('click', (e) => {
@@ -519,6 +531,39 @@
   const I18N = {
     en: {
       pill: 'Eng', name: 'English', make: 'We Make', work: 'Work', what: 'What We Do',
+      studio: {
+        nav: 'About Us',
+        ariaLabel: 'About Us',
+        eyebrow: 'Digital boutique agency · Based in Spain',
+        title: 'Experience-led. Built by experts.',
+        lead: 'CR8TIVE is a digital boutique agency based in Spain, led by Yuriy Yurchenko, a product designer with more than 25 years of experience. He has helped create digital products used by millions, with experience at Pleo and Sber.',
+        experience: 'years of professional experience',
+        engineering: 'years in software development',
+        ios: 'years as a lead iOS developer',
+        clientsEyebrow: 'Selected client experience',
+        clientsTitle: 'From established companies to ambitious startups.',
+        clientsCopy: 'We work with established companies, startups, and small and medium-sized businesses. Selected client experience includes:',
+        clientsLabel: 'Selected clients',
+        teamEyebrow: 'Design and engineering',
+        teamTitle: 'Senior product thinking. Expert technical delivery.',
+        teamCopy: 'Co-founders Yuriy Yurchenko and Denis Kashin lead product design and technical delivery. Marina Omelchenko leads projects and client relationships. Denis works with senior engineers and has 20 years in software development, including 12 years as a lead iOS developer in large corporations.',
+        founderName: 'Yuriy Yurchenko',
+        founderRole: 'Co-founder · Product designer',
+        founderCopy: 'More than 25 years of professional experience. Previously at Pleo and Sber.',
+        cofounderName: 'Denis Kashin',
+        cofounderRole: 'Co-founder · Engineering',
+        cofounderCopy: '20 years in software development, including 12 years as a lead iOS developer in large corporations.',
+        projectLeadName: 'Marina Omelchenko',
+        projectLeadRole: 'Project & client lead',
+        projectLeadCopy: 'Leads projects and client relationships.',
+        awardsEyebrow: 'Recognition',
+        awardsTitle: 'Work recognized by the design community.',
+        awardsCopy: 'Projects have received recognition from Awwwards, CSS Design Awards, Behance Selected, Tappawards, and others.',
+        awardsLabel: 'Awards and recognition',
+        footer: 'Building a new product or evolving an existing one? Tell us about it.',
+        footerAgency: 'We also collaborate with agencies on digital projects, including under NDA.',
+        cta: 'Discuss a project',
+      },
       captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
       subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app', 'Mobile promo app', 'Promotional website · World tour', 'Promotional website', 'Online store · Mobile app'],
       whatLead: 'We turn ideas into digital things people open every day.',
@@ -573,6 +618,39 @@
     },
     es: {
       pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
+      studio: {
+        nav: 'Sobre nosotros',
+        ariaLabel: 'Sobre nosotros',
+        eyebrow: 'Estudio boutique digital · En España',
+        title: 'Experiencia que da forma a mejores productos.',
+        lead: 'CR8TIVE es un estudio boutique digital con sede en España, dirigido por Yuriy Yurchenko, diseñador de producto con más de 25 años de experiencia. Ha contribuido a crear productos digitales que utilizan millones de personas. Anteriormente trabajó en Pleo y Sber.',
+        experience: 'años de experiencia profesional',
+        engineering: 'años en desarrollo de software',
+        ios: 'años como desarrollador líder de iOS',
+        clientsEyebrow: 'Experiencia con clientes',
+        clientsTitle: 'De grandes empresas a startups ambiciosas.',
+        clientsCopy: 'Trabajamos con empresas consolidadas, startups y pequeñas y medianas empresas. Entre nuestra experiencia con clientes:',
+        clientsLabel: 'Clientes seleccionados',
+        teamEyebrow: 'Diseño e ingeniería',
+        teamTitle: 'Criterio de producto senior. Ejecución técnica experta.',
+        teamCopy: 'Los cofundadores Yuriy Yurchenko y Denis Kashin lideran el diseño de producto y la ejecución técnica. Marina Omelchenko lidera los proyectos y la relación con los clientes. Denis trabaja con ingenieros senior y cuenta con 20 años de experiencia en desarrollo de software, incluidos 12 como desarrollador líder de iOS en grandes corporaciones.',
+        founderName: 'Yuriy Yurchenko',
+        founderRole: 'Cofundador · Diseñador de producto',
+        founderCopy: 'Más de 25 años de experiencia profesional. Anteriormente trabajó en Pleo y Sber.',
+        cofounderName: 'Denis Kashin',
+        cofounderRole: 'Cofundador · Ingeniería',
+        cofounderCopy: '20 años de experiencia en desarrollo de software, incluidos 12 como desarrollador líder de iOS en grandes corporaciones.',
+        projectLeadName: 'Marina Omelchenko',
+        projectLeadRole: 'Responsable de proyectos y clientes',
+        projectLeadCopy: 'Lidera los proyectos y la relación con los clientes.',
+        awardsEyebrow: 'Reconocimientos',
+        awardsTitle: 'Trabajo reconocido por la comunidad del diseño.',
+        awardsCopy: 'Proyectos reconocidos por Awwwards, CSS Design Awards, Behance Selected, Tappawards y otros.',
+        awardsLabel: 'Premios y reconocimientos',
+        footer: '¿Estás creando un producto o haciendo evolucionar uno existente? Cuéntanoslo.',
+        footerAgency: 'También colaboramos con agencias en proyectos digitales, incluso bajo NDA.',
+        cta: 'Hablemos de tu proyecto',
+      },
       captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
       subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería', 'App móvil promocional', 'Sitio web promocional · Gira mundial', 'Sitio web promocional', 'Tienda online · App móvil'],
       whatLead: 'Convertimos ideas en productos digitales que la gente abre cada día.',
@@ -627,6 +705,39 @@
     },
     ru: {
       pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
+      studio: {
+        nav: 'О нас',
+        ariaLabel: 'О нас',
+        eyebrow: 'Бутик-агентство · Испания',
+        title: 'Создаём продукты, за которыми стоит опыт.',
+        lead: 'CR8TIVE — цифровое бутик-агентство в Испании под руководством Юрия Юрченко, продуктового дизайнера с опытом более 25 лет. Он участвовал в создании цифровых продуктов, которыми пользуются миллионы. Ранее работал в Pleo и Sber.',
+        experience: 'лет профессионального опыта',
+        engineering: 'лет в разработке программного обеспечения',
+        ios: 'лет ведущим iOS-разработчиком',
+        clientsEyebrow: 'Клиентский опыт',
+        clientsTitle: 'От крупных компаний до амбициозных стартапов.',
+        clientsCopy: 'Мы работаем с крупным бизнесом, стартапами, малым и средним бизнесом. Среди клиентов:',
+        clientsLabel: 'Клиенты',
+        teamEyebrow: 'Дизайн и инженерная экспертиза',
+        teamTitle: 'Сильная продуктовая экспертиза. Техническая реализация высокого уровня.',
+        teamCopy: 'Сооснователи Юрий Юрченко и Денис Кашин отвечают за продуктовый дизайн и техническую реализацию. Марина Омельченко ведёт проекты и работу с клиентами. Денис работает с командой опытных инженеров; у него 20 лет опыта в разработке, включая 12 лет работы ведущим iOS-разработчиком в крупных корпорациях.',
+        founderName: 'Юрий Юрченко',
+        founderRole: 'Сооснователь · Продуктовый дизайнер',
+        founderCopy: 'Более 25 лет профессионального опыта. Ранее работал в Pleo и Sber.',
+        cofounderName: 'Денис Кашин',
+        cofounderRole: 'Сооснователь · Инженерия',
+        cofounderCopy: '20 лет в разработке программного обеспечения, включая 12 лет работы ведущим iOS-разработчиком в крупных корпорациях.',
+        projectLeadName: 'Марина Омельченко',
+        projectLeadRole: 'Руководитель проектов и работы с клиентами',
+        projectLeadCopy: 'Ведёт проекты и коммуникацию с клиентами.',
+        awardsEyebrow: 'Признание',
+        awardsTitle: 'Работы, отмеченные дизайн-сообществом.',
+        awardsCopy: 'Проекты получали признание Awwwards, CSS Design Awards, Behance Selected, Tappawards и других площадок.',
+        awardsLabel: 'Награды и признание',
+        footer: 'Запускаете новый продукт или развиваете существующий? Расскажите нам о задаче.',
+        footerAgency: 'Также сотрудничаем с агентствами в цифровых проектах, в том числе по NDA.',
+        cta: 'Обсудить проект',
+      },
       captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.', 'JACK DANIEL\'S', 'МИРОВОЙ ТУР БЕЙОНСЕ', 'KASPERSKY PROMO SITE', 'MYFRESH'],
       subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа', 'Мобильное промо-приложение', 'Промосайт мирового тура', 'Промосайт', 'Интернет-магазин · Мобильное приложение'],
       whatLead: 'Превращаем идеи в цифровые продукты, которые открывают каждый день.',
@@ -685,6 +796,7 @@
   const makeWord = document.getElementById('make');
   const workButton = document.getElementById('work');
   const whatButton = document.getElementById('what');
+  const studioButton = document.getElementById('studio');
   const hero = document.getElementById('hero');
   let lang = 'en';
   let langTimer = 0;
@@ -758,6 +870,44 @@
     foodView.querySelectorAll('[data-food-back]').forEach((label) => { label.textContent = project.back; });
     foodView.querySelectorAll('[data-food-caption]').forEach((caption, i) => { caption.textContent = project.captions[i]; });
     if (whatButton) whatButton.textContent = t.what;
+    if (studioButton) studioButton.textContent = t.studio.nav;
+    const studio = t.studio;
+    studioView.setAttribute('aria-label', studio.ariaLabel);
+    document.querySelector('.studio__name-list').setAttribute('aria-label', studio.clientsLabel);
+    document.querySelector('.studio__award-list').setAttribute('aria-label', studio.awardsLabel);
+    Object.entries({
+      'studio-eyebrow': 'eyebrow',
+      'studio-title': 'title',
+      'studio-lead': 'lead',
+      'studio-experience': 'experience',
+      'studio-engineering': 'engineering',
+      'studio-ios': 'ios',
+      'studio-clients-eyebrow': 'clientsEyebrow',
+      'studio-clients-title': 'clientsTitle',
+      'studio-clients-copy': 'clientsCopy',
+      'studio-team-eyebrow': 'teamEyebrow',
+      'studio-team-title': 'teamTitle',
+      'studio-team-copy': 'teamCopy',
+      'studio-founder-name': 'founderName',
+      'studio-founder-role': 'founderRole',
+      'studio-founder-copy': 'founderCopy',
+      'studio-cofounder-name': 'cofounderName',
+      'studio-cofounder-role': 'cofounderRole',
+      'studio-cofounder-copy': 'cofounderCopy',
+      'studio-project-lead-name': 'projectLeadName',
+      'studio-project-lead-role': 'projectLeadRole',
+      'studio-project-lead-copy': 'projectLeadCopy',
+      'studio-awards-eyebrow': 'awardsEyebrow',
+      'studio-awards-title': 'awardsTitle',
+      'studio-awards-copy': 'awardsCopy',
+      'studio-footer-copy': 'footer',
+      'studio-footer-agency': 'footerAgency',
+    }).forEach(([id, key]) => {
+      document.getElementById(id).textContent = studio[key];
+    });
+    studioView.querySelectorAll('[data-studio-cta]').forEach((label) => {
+      label.textContent = studio.cta;
+    });
     hero.setAttribute('aria-label', `${t.make} DIGITAL`);
     captions.forEach((el, i) => { el.textContent = t.captions[i]; });
     setPill(t.pill, false);
@@ -838,7 +988,7 @@
     gl.uniform1f(U.uRadius, RADIUS);
     gl.uniform1f(U.uTime, time);
 
-    if (state.view === 'what' || state.view === 'food') return;
+    if (state.view === 'what' || state.view === 'food' || state.view === 'studio') return;
     if (state.view === 'work') { drawWork(time, still); return; }
 
     // Idle float + a little parallax towards the cursor.

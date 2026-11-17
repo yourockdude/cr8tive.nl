@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <defs>
+    <clipPath id="clip-path">
+      <rect fill="none" height="74" width="74" data-name="Rectangle 2" id="Rectangle_2" />
+    </clipPath>
+  </defs>
+  <g transform="translate(-0.203 5.617)" id="PP-ICON">
+    <g transform="translate(4.203 -2.617)" id="P">
+      <g clip-path="url(#clip-path)" transform="translate(0 0)" data-name="Group 1" id="Group_1">
+        <path fill="#fff" transform="translate(-42.629 -35.572)" d="M100.81,60.356A10.055,10.055,0,0,1,90.753,70.412H70.638a14.352,14.352,0,0,0-10.06,4.11V60.356A10.061,10.061,0,0,1,70.638,50.3H90.753a10.058,10.058,0,0,1,10.056,10.06" data-name="Path 1" id="Path_1" />
+        <path fill="#fff" transform="translate(-42.629 -93.096)" d="M70.639,132.28H80.695v10.06a10.058,10.058,0,1,1-10.056-10.06" data-name="Path 2" id="Path_2" />
+      </g>
+    </g>
+  </g>
+</svg>
