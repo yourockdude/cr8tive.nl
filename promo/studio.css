@@ -242,9 +242,11 @@
   gap: clamp(8px, 1vw, 16px);
   overflow-x: auto;
   overscroll-behavior-x: contain;
-  padding: 0;
+  padding: 0 24px;
   scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
 }
 
 .studio__clients {
