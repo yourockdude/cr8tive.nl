@@ -84,14 +84,6 @@
 .card__media {
   position: relative;
   aspect-ratio: 1 / 1;
-  transition: transform 180ms var(--ease-out);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .card:hover .card__media {
-    z-index: 1;
-    transform: scale(1.02);
-  }
 }
 
 /* Only without WebGL: plain images stand in for the canvas. */
@@ -220,14 +212,6 @@ html:not(.has-webgl) .card__media img {
   .work,
   .is-ready.is-switching .work {
     transition-duration: 0.01s;
-  }
-
-  .card__media {
-    transition: none;
-  }
-
-  .card:hover .card__media {
-    transform: none;
   }
 
   .card__sparks {
