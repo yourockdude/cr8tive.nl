@@ -519,8 +519,8 @@
   const I18N = {
     en: {
       pill: 'Eng', name: 'English', make: 'We Make', work: 'Work', what: 'What We Do',
-      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE'],
-      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app', 'Mobile promo app', 'Promotional website · World tour', 'Promotional website'],
+      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
+      subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app', 'Mobile promo app', 'Promotional website · World tour', 'Promotional website', 'Online store · Mobile app'],
       whatLead: 'We turn ideas into digital things people open every day.',
       whatCta: 'Start a project',
       services: [
@@ -573,8 +573,8 @@
     },
     es: {
       pill: 'Esp', name: 'Español', make: 'Hacemos', work: 'Proyectos', what: 'Qué hacemos',
-      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE'],
-      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería', 'App móvil promocional', 'Sitio web promocional · Gira mundial', 'Sitio web promocional'],
+      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
+      subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería', 'App móvil promocional', 'Sitio web promocional · Gira mundial', 'Sitio web promocional', 'Tienda online · App móvil'],
       whatLead: 'Convertimos ideas en productos digitales que la gente abre cada día.',
       whatCta: 'Empezar un proyecto',
       services: [
@@ -627,8 +627,8 @@
     },
     ru: {
       pill: 'Рус', name: 'Русский', make: 'Делаем', work: 'Работы', what: 'Что мы делаем',
-      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.', 'JACK DANIEL\'S', 'МИРОВОЙ ТУР БЕЙОНСЕ', 'KASPERSKY PROMO SITE'],
-      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа', 'Мобильное промо-приложение', 'Промосайт мирового тура', 'Промосайт'],
+      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.', 'JACK DANIEL\'S', 'МИРОВОЙ ТУР БЕЙОНСЕ', 'KASPERSKY PROMO SITE', 'MYFRESH'],
+      subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа', 'Мобильное промо-приложение', 'Промосайт мирового тура', 'Промосайт', 'Интернет-магазин · Мобильное приложение'],
       whatLead: 'Превращаем идеи в цифровые продукты, которые открывают каждый день.',
       whatCta: 'Начать проект',
       services: [
