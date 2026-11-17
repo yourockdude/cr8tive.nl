@@ -282,26 +282,6 @@
   white-space: nowrap;
 }
 
-.studio__client-logo-pair {
-  display: flex;
-  width: 100%;
-  min-width: 0;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.studio__client-logo-pair .studio__client-logo {
-  flex: 1 1 0;
-  width: 0;
-  min-width: 0;
-}
-
-.studio__client-logo-pair > span {
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 20px;
-}
-
 .studio__team {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -424,10 +404,6 @@
   .studio__name-list li {
     flex: 0 0 84px;
     min-height: 56px;
-  }
-
-  .studio__client-logo-pair {
-    gap: 20px;
   }
 
   .studio__footer {
