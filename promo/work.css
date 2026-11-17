@@ -14,7 +14,7 @@
     max(20px, calc(80 * var(--ux)), env(safe-area-inset-right))
     max(96px, calc(110 * var(--ux)))
     max(20px, calc(80 * var(--ux)), env(safe-area-inset-left));
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
   cursor: default;
   opacity: 0;
   visibility: hidden;
@@ -112,8 +112,10 @@
   z-index: 1;
 }
 
-html.view-work .card[data-slide="7"] .card__media img {
-  animation: kaspersky-float 5.7s ease-in-out infinite;
+@media (hover: hover) and (pointer: fine) {
+  html.view-work .card[data-slide="7"] .card__media img {
+    animation: kaspersky-float 5.7s ease-in-out infinite;
+  }
 }
 
 @keyframes kaspersky-float {
@@ -216,6 +218,22 @@ html:not(.has-webgl) .card__media img {
 
   .work__grid {
     row-gap: 22px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .work,
+  .is-ready.is-switching .work {
+    transition: none;
+  }
+
+  .card__sparks {
+    transition: none;
+  }
+
+  .card__spark,
+  .card[data-slide="7"] .card__media img {
+    animation: none;
   }
 }
 

@@ -446,6 +446,24 @@
   const whatView = document.getElementById('what-view');
   const foodView = document.getElementById('food-view');
   const studioView = document.getElementById('studio-view');
+  const stories = window.CR8TIVE_STORIES;
+  if (!Array.isArray(stories)) {
+    throw new TypeError('Stories data is missing: expected an array in stories.js.');
+  }
+  const storySection = document.querySelector('.studio__stories');
+  const storyList = document.getElementById('studio-stories-list');
+  const storyDialog = document.getElementById('story-viewer');
+  const storyTitle = document.getElementById('story-viewer-title');
+  const storyProgress = document.getElementById('story-viewer-progress');
+  const storyStage = document.getElementById('story-viewer-stage');
+  const storyCaption = document.getElementById('story-viewer-caption');
+  const storyCloseButton = document.getElementById('story-viewer-close');
+  const storyPreviousButton = document.getElementById('story-viewer-previous');
+  const storyNextButton = document.getElementById('story-viewer-next');
+  let activeStoryIndex = -1;
+  let storyTrigger = null;
+  let storyTimer = 0;
+  let storySwipeStart = null;
   let viewTimer = 0;
 
   function applyView(view) {
@@ -544,6 +562,14 @@
         clientsTitle: 'From established companies to ambitious startups.',
         clientsCopy: 'We work with established companies, startups, and small and medium-sized businesses. Selected client experience includes:',
         clientsLabel: 'Selected clients',
+        storiesTitle: 'Studio stories',
+        storiesLabel: 'Studio stories',
+        storyCategories: { 'work-in-progress': 'Work in progress', 'live-moments': 'Live moments' },
+        storyNumber: 'Story {number}',
+        storyClose: 'Close stories',
+        storyPrevious: 'Previous story',
+        storyNext: 'Next story',
+        storyMediaError: 'This story could not be loaded.',
         teamEyebrow: 'Design and engineering',
         teamTitle: 'Senior product thinking. Expert technical delivery.',
         teamCopy: 'Co-founders Yuriy Yurchenko and Denis Kashin lead product design and technical delivery. Marina Omelchenko leads projects and client relationships. Denis works with senior engineers and has 20 years in software development, including 12 years as a lead iOS developer in large corporations.',
@@ -554,7 +580,7 @@
         cofounderRole: 'Co-founder · Engineering',
         cofounderCopy: '20 years in software development, including 12 years as a lead iOS developer in large corporations.',
         projectLeadName: 'Marina Omelchenko',
-        projectLeadRole: 'Project & client lead',
+        projectLeadRole: 'Co-founder · Project & client lead',
         projectLeadCopy: 'Leads projects and client relationships.',
         awardsEyebrow: 'Recognition',
         awardsTitle: 'Work recognized by the design community.',
@@ -631,6 +657,14 @@
         clientsTitle: 'De grandes empresas a startups ambiciosas.',
         clientsCopy: 'Trabajamos con empresas consolidadas, startups y pequeñas y medianas empresas. Entre nuestra experiencia con clientes:',
         clientsLabel: 'Clientes seleccionados',
+        storiesTitle: 'Historias del estudio',
+        storiesLabel: 'Historias del estudio',
+        storyCategories: { 'work-in-progress': 'En proceso', 'live-moments': 'Momentos en directo' },
+        storyNumber: 'Historia {number}',
+        storyClose: 'Cerrar historias',
+        storyPrevious: 'Historia anterior',
+        storyNext: 'Siguiente historia',
+        storyMediaError: 'No se pudo cargar esta historia.',
         teamEyebrow: 'Diseño e ingeniería',
         teamTitle: 'Criterio de producto senior. Ejecución técnica experta.',
         teamCopy: 'Los cofundadores Yuriy Yurchenko y Denis Kashin lideran el diseño de producto y la ejecución técnica. Marina Omelchenko lidera los proyectos y la relación con los clientes. Denis trabaja con ingenieros senior y cuenta con 20 años de experiencia en desarrollo de software, incluidos 12 como desarrollador líder de iOS en grandes corporaciones.',
@@ -641,7 +675,7 @@
         cofounderRole: 'Cofundador · Ingeniería',
         cofounderCopy: '20 años de experiencia en desarrollo de software, incluidos 12 como desarrollador líder de iOS en grandes corporaciones.',
         projectLeadName: 'Marina Omelchenko',
-        projectLeadRole: 'Responsable de proyectos y clientes',
+        projectLeadRole: 'Cofundadora · Responsable de proyectos y clientes',
         projectLeadCopy: 'Lidera los proyectos y la relación con los clientes.',
         awardsEyebrow: 'Reconocimientos',
         awardsTitle: 'Trabajo reconocido por la comunidad del diseño.',
@@ -718,6 +752,14 @@
         clientsTitle: 'От крупных компаний до амбициозных стартапов.',
         clientsCopy: 'Мы работаем с крупным бизнесом, стартапами, малым и средним бизнесом. Среди клиентов:',
         clientsLabel: 'Клиенты',
+        storiesTitle: 'Истории студии',
+        storiesLabel: 'Истории студии',
+        storyCategories: { 'work-in-progress': 'В процессе', 'live-moments': 'Живые моменты' },
+        storyNumber: 'История {number}',
+        storyClose: 'Закрыть истории',
+        storyPrevious: 'Предыдущая история',
+        storyNext: 'Следующая история',
+        storyMediaError: 'Не удалось загрузить эту историю.',
         teamEyebrow: 'Дизайн и инженерная экспертиза',
         teamTitle: 'Сильная продуктовая экспертиза. Техническая реализация высокого уровня.',
         teamCopy: 'Сооснователи Юрий Юрченко и Денис Кашин отвечают за продуктовый дизайн и техническую реализацию. Марина Омельченко ведёт проекты и работу с клиентами. Денис работает с командой опытных инженеров; у него 20 лет опыта в разработке, включая 12 лет работы ведущим iOS-разработчиком в крупных корпорациях.',
@@ -728,7 +770,7 @@
         cofounderRole: 'Сооснователь · Инженерия',
         cofounderCopy: '20 лет в разработке программного обеспечения, включая 12 лет работы ведущим iOS-разработчиком в крупных корпорациях.',
         projectLeadName: 'Марина Омельченко',
-        projectLeadRole: 'Руководитель проектов и работы с клиентами',
+        projectLeadRole: 'Сооснователь · Руководитель проектов и работы с клиентами',
         projectLeadCopy: 'Ведёт проекты и коммуникацию с клиентами.',
         awardsEyebrow: 'Признание',
         awardsTitle: 'Работы, отмеченные дизайн-сообществом.',
@@ -875,6 +917,14 @@
     studioView.setAttribute('aria-label', studio.ariaLabel);
     document.querySelector('.studio__name-list').setAttribute('aria-label', studio.clientsLabel);
     document.querySelector('.studio__award-list').setAttribute('aria-label', studio.awardsLabel);
+    document.getElementById('studio-stories-title').textContent = studio.storiesTitle;
+    storyList.setAttribute('aria-label', studio.storiesLabel);
+    storyDialog.setAttribute('aria-label', studio.storiesTitle);
+    storyCloseButton.setAttribute('aria-label', studio.storyClose);
+    storyPreviousButton.setAttribute('aria-label', studio.storyPrevious);
+    storyNextButton.setAttribute('aria-label', studio.storyNext);
+    renderStories();
+    if (storyDialog.open && activeStoryIndex >= 0) renderStory();
     Object.entries({
       'studio-eyebrow': 'eyebrow',
       'studio-title': 'title',
@@ -915,6 +965,221 @@
     try { localStorage.setItem('cr8tive-lang', code); } catch (e) { /* private mode */ }
     measure(); // the translated word has another width, so the slot moves
   }
+
+  function storyCategoryLabel(story) {
+    return I18N[lang].studio.storyCategories[story.category] || story.category;
+  }
+
+  function renderStories() {
+    storyList.replaceChildren();
+    storySection.hidden = stories.length === 0;
+    stories.forEach((story, index) => {
+      if (!story.id || !story.category || !story.src || (story.type !== 'image' && story.type !== 'video')) {
+        throw new TypeError(`Story at index ${index} is missing a valid id, category, type, or src.`);
+      }
+
+      const label = storyCategoryLabel(story);
+      const listItem = document.createElement('li');
+      const button = document.createElement('button');
+      const cover = document.createElement('span');
+      const badge = document.createElement('span');
+      const imageSource = story.cover || story.poster || (story.type === 'image' ? story.src : '');
+
+      button.className = 'studio__story';
+      button.type = 'button';
+      button.setAttribute('aria-label', story.alt || story.caption ||
+        `${label}, ${I18N[lang].studio.storyNumber.replace('{number}', String(index + 1))}`);
+      cover.className = 'studio__story-cover';
+      if (!imageSource) {
+        badge.className = 'studio__story-badge';
+        badge.textContent = label.slice(0, 3).toUpperCase();
+        cover.append(badge);
+      }
+      if (imageSource) {
+        const image = document.createElement('img');
+        image.src = imageSource;
+        image.alt = '';
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        image.addEventListener('error', () => image.remove(), { once: true });
+        cover.append(image);
+      }
+      button.append(cover);
+      button.addEventListener('click', () => openStory(index, button));
+      listItem.append(button);
+      storyList.append(listItem);
+    });
+  }
+
+  function clearStoryMedia() {
+    clearTimeout(storyTimer);
+    storyTimer = 0;
+    storyStage.querySelectorAll('img, video, .story-viewer__empty').forEach((media) => {
+      if (media instanceof HTMLVideoElement) media.pause();
+      media.remove();
+    });
+  }
+
+  function showStoryNotice(message) {
+    const notice = document.createElement('p');
+    notice.className = 'story-viewer__empty';
+    notice.setAttribute('role', 'status');
+    notice.textContent = message;
+    storyStage.insertBefore(notice, storyPreviousButton);
+  }
+
+  function startStoryTimer(duration) {
+    clearTimeout(storyTimer);
+    if (reducedMotion.matches || !storyDialog.open) return;
+    const requestedDuration = Number(duration);
+    const boundedDuration = Math.max(1000, Number.isFinite(requestedDuration) && requestedDuration > 0 ? requestedDuration : 5000);
+    const fill = storyProgress.querySelector('.story-viewer__progress-segment.is-active .story-viewer__progress-fill');
+    if (!fill) return;
+    fill.style.transition = `width ${boundedDuration}ms linear`;
+    requestAnimationFrame(() => {
+      if (storyDialog.open) fill.style.width = '100%';
+    });
+    storyTimer = window.setTimeout(nextStory, boundedDuration);
+  }
+
+  function renderStory() {
+    clearStoryMedia();
+    storyProgress.replaceChildren();
+    const story = stories[activeStoryIndex];
+    if (!story) return;
+    const label = storyCategoryLabel(story);
+    storyTitle.textContent = label;
+    storyCaption.textContent = '';
+    storyCaption.hidden = true;
+    storyPreviousButton.disabled = activeStoryIndex === 0;
+    storyNextButton.disabled = stories.length === 0;
+
+    stories.forEach((_, index) => {
+      const segment = document.createElement('span');
+      const fill = document.createElement('span');
+      segment.className = 'story-viewer__progress-segment';
+      if (index < activeStoryIndex) segment.classList.add('is-complete');
+      if (index === activeStoryIndex) segment.classList.add('is-active');
+      fill.className = 'story-viewer__progress-fill';
+      segment.append(fill);
+      storyProgress.append(segment);
+    });
+
+    storyCaption.textContent = story.caption || '';
+    storyCaption.hidden = !story.caption;
+
+    if (story.type === 'image') {
+      const image = document.createElement('img');
+      image.alt = story.alt || story.caption || label;
+      image.decoding = 'async';
+      image.addEventListener('load', () => startStoryTimer(story.duration), { once: true });
+      image.addEventListener('error', () => {
+        if (storyDialog.open) showStoryNotice(I18N[lang].studio.storyMediaError);
+      }, { once: true });
+      image.src = story.src;
+      storyStage.insertBefore(image, storyPreviousButton);
+      if (image.complete) {
+        if (image.naturalWidth > 0) startStoryTimer(story.duration);
+        else showStoryNotice(I18N[lang].studio.storyMediaError);
+      }
+      return;
+    }
+
+    const video = document.createElement('video');
+    video.autoplay = !reducedMotion.matches;
+    video.controls = reducedMotion.matches;
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'metadata';
+    if (story.poster) video.poster = story.poster;
+    video.setAttribute('aria-label', story.alt || story.caption || label);
+    video.addEventListener('loadedmetadata', () => {
+      const duration = story.duration || (Number.isFinite(video.duration) ? video.duration * 1000 : 15000);
+      startStoryTimer(duration);
+    }, { once: true });
+    if (!reducedMotion.matches) video.addEventListener('ended', nextStory, { once: true });
+    video.addEventListener('error', () => {
+      if (storyDialog.open) showStoryNotice(I18N[lang].studio.storyMediaError);
+    }, { once: true });
+    video.src = story.src;
+    storyStage.insertBefore(video, storyPreviousButton);
+    if (!reducedMotion.matches) {
+      video.play().catch(() => {
+        video.controls = true;
+        clearTimeout(storyTimer);
+        storyTimer = 0;
+        const fill = storyProgress.querySelector('.story-viewer__progress-segment.is-active .story-viewer__progress-fill');
+        if (fill) {
+          fill.style.transition = 'none';
+          fill.style.width = '0';
+        }
+      });
+    }
+  }
+
+  function openStory(index, trigger) {
+    if (index < 0 || index >= stories.length) return;
+    activeStoryIndex = index;
+    storyTrigger = trigger;
+    if (!storyDialog.open) storyDialog.showModal();
+    renderStory();
+  }
+
+  function nextStory() {
+    if (activeStoryIndex < 0) return;
+    if (activeStoryIndex + 1 < stories.length) {
+      activeStoryIndex += 1;
+      renderStory();
+      return;
+    }
+    if (storyDialog.open) storyDialog.close();
+  }
+
+  function previousStory() {
+    if (activeStoryIndex <= 0) return;
+    activeStoryIndex -= 1;
+    renderStory();
+  }
+
+  storyCloseButton.addEventListener('click', () => storyDialog.close());
+  storyPreviousButton.addEventListener('click', previousStory);
+  storyNextButton.addEventListener('click', nextStory);
+  storyDialog.addEventListener('click', (event) => {
+    if (event.target === storyDialog) storyDialog.close();
+  });
+  storyDialog.addEventListener('close', () => {
+    clearStoryMedia();
+    storyProgress.replaceChildren();
+    storyCaption.textContent = '';
+    activeStoryIndex = -1;
+    if (storyTrigger && storyTrigger.isConnected) storyTrigger.focus({ preventScroll: true });
+    storyTrigger = null;
+  });
+  storyStage.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' || event.target.closest('button, video')) return;
+    storySwipeStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+  });
+  storyStage.addEventListener('pointerup', (event) => {
+    if (!storySwipeStart || storySwipeStart.id !== event.pointerId) return;
+    const deltaX = event.clientX - storySwipeStart.x;
+    const deltaY = event.clientY - storySwipeStart.y;
+    storySwipeStart = null;
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
+    if (deltaX < 0) nextStory();
+    else previousStory();
+  });
+  storyStage.addEventListener('pointercancel', () => { storySwipeStart = null; });
+  document.addEventListener('keydown', (event) => {
+    if (!storyDialog.open) return;
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      nextStory();
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      previousStory();
+    }
+  });
+  renderStories();
 
   function switchLang() {
     const next = LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length];
@@ -1078,6 +1343,7 @@
 
   function drawWork(time, still) {
     const vh = window.innerHeight;
+    const effectsEnabled = finePointer.matches && !reducedMotion.matches;
     workItems.forEach((it, index) => {
       const r = it.media.getBoundingClientRect();
       if (r.bottom < -200 || r.top > vh + 200 || r.width === 0) return;
@@ -1092,12 +1358,12 @@
       const u = r.width / 460; // the widest picture (428) fits the box with air
       let cx = r.left + r.width / 2;
       let cy = r.top + r.height / 2;
-      if (!still) {
+      if (effectsEnabled && !still) {
         cy += Math.sin(time * 1.1 + index * 1.7) * 5 * u;
         cx += Math.cos(time * 0.8 + index * 1.3) * 2.5 * u;
       }
 
-      setReel(cx, cy, u, 0, 0, false, still, !NO_LIQUID_WORK_SLIDES.has(it.slide));
+      setReel(cx, cy, u, 0, 0, false, still, effectsEnabled && !NO_LIQUID_WORK_SLIDES.has(it.slide));
       drawSlide(it.slide, 0, 0);
     });
   }
