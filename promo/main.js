@@ -13,6 +13,14 @@
     { src: 'assets/projects/drone.webp',  size: [378, 189],         dy: 0,   rot: 0 },
     { src: 'assets/projects/taxi-fasten.webp', size: [460, 306.667], dy: 0, rot: 0 },
     { src: 'assets/projects/trump-concierge.webp', size: [371, 371], dy: 0, rot: 0 },
+    { src: 'assets/projects/kaspersky-promo-site.webp', size: [428, 428], dy: 0, rot: 0 },
+  ];
+
+  const HOME_SLIDES = [
+    { image: 0, caption: 0 },
+    { image: 1, caption: 1 },
+    { image: 2, caption: 2 },
+    { image: 5, caption: 7 },
   ];
 
   const SLOT_SIZE = 371;      // design px, width of the .slot element
@@ -31,7 +39,7 @@
   const slot = document.getElementById('slot');
   const captions = Array.from(document.querySelectorAll('#caption > span'));
   const fallbackImgs = Array.from(document.querySelectorAll('.fallback img'));
-  const HOME_SLIDE_COUNT = fallbackImgs.length;
+  const HOME_SLIDE_COUNT = HOME_SLIDES.length;
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const portrait = window.matchMedia('(max-aspect-ratio: 1/1)');
@@ -987,7 +995,7 @@
       label.textContent = studio.cta;
     });
     hero.setAttribute('aria-label', `${t.make} DIGITAL`);
-    captions.forEach((el, i) => { el.textContent = t.captions[i]; });
+    captions.forEach((el, i) => { el.textContent = t.captions[HOME_SLIDES[i].caption]; });
     setPill(t.pill, false);
     langButton.setAttribute('aria-label', `Language: ${t.name}. Switch language`);
     try { localStorage.setItem('cr8tive-lang', code); } catch (e) { /* private mode */ }
@@ -1310,7 +1318,8 @@
       if (Math.cos(theta) < 0.4) continue;
       if (state.solo && i !== state.solo.index) continue;
 
-      drawSlide(i, theta, l.horizontal ? 0 : SLIDES[i].dy);
+      const slide = HOME_SLIDES[i].image;
+      drawSlide(slide, theta, l.horizontal ? 0 : SLIDES[slide].dy);
     }
   }
 
