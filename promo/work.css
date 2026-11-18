@@ -98,7 +98,8 @@
 }
 
 /* Only without WebGL: plain images stand in for the canvas. */
-.card__media img {
+.card__media img,
+.card__media video {
   display: none;
   position: absolute;
   inset: 8%;
@@ -110,6 +111,21 @@
 .card--static-media .card__media img {
   display: block;
   z-index: 1;
+}
+
+.card--static-media .card__media video {
+  display: block;
+  z-index: 2;
+}
+
+.card--static-media .card__media--video-failed video {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card--static-media .card__media video {
+    display: none;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

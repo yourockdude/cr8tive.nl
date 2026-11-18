@@ -8,11 +8,11 @@
   // size: rendered size in the mockup; dy: vertical offset of the image centre
   // from the headline centre; rot: rotation in degrees (CSS direction).
   const SLIDES = [
-    { src: 'assets/projects/tapas.png',  size: [371, 371],         dy: 0,   rot: 0 },
-    { src: 'assets/projects/beauty.png', size: [323.703, 323.703], dy: 0,   rot: -4.15 },
-    { src: 'assets/projects/drone.png',  size: [378, 189],         dy: 0,   rot: 0 },
-    { src: 'assets/projects/taxi-fasten.png', size: [460, 306.667], dy: 0, rot: 0 },
-    { src: 'assets/projects/trump-concierge.png', size: [371, 371], dy: 0, rot: 0 },
+    { src: 'assets/projects/tapas.webp',  size: [371, 371],         dy: 0,   rot: 0 },
+    { src: 'assets/projects/beauty.webp', size: [323.703, 323.703], dy: 0,   rot: -4.15 },
+    { src: 'assets/projects/drone.webp',  size: [378, 189],         dy: 0,   rot: 0 },
+    { src: 'assets/projects/taxi-fasten.webp', size: [460, 306.667], dy: 0, rot: 0 },
+    { src: 'assets/projects/trump-concierge.webp', size: [371, 371], dy: 0, rot: 0 },
   ];
 
   const SLOT_SIZE = 371;      // design px, width of the .slot element
@@ -430,6 +430,33 @@
     staticMedia: el.classList.contains('card--static-media'),
   }));
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const djiPreview = document.getElementById('dji-preview');
+  let djiPreviewVisible = false;
+  let djiPreviewFailed = false;
+  function failDjiPreview(error) {
+    djiPreviewFailed = true;
+    djiPreview.pause();
+    djiPreview.parentElement.classList.add('card__media--video-failed');
+    console.warn('[cr8tive] DJI preview playback failed:', error);
+  }
+  function updateDjiPreview() {
+    if (state.view !== 'work' || !djiPreviewVisible || document.hidden || reducedMotion.matches || djiPreviewFailed) {
+      djiPreview.pause();
+      return;
+    }
+    if (!djiPreview.getAttribute('src')) djiPreview.src = djiPreview.dataset.src;
+    djiPreview.play().catch((error) => {
+      if (error.name !== 'AbortError') failDjiPreview(error);
+    });
+  }
+  const djiObserver = new IntersectionObserver(([entry]) => {
+    djiPreviewVisible = entry.isIntersecting;
+    updateDjiPreview();
+  }, { root: workView, threshold: 0.1 });
+  djiObserver.observe(djiPreview);
+  reducedMotion.addEventListener('change', updateDjiPreview);
+  document.addEventListener('visibilitychange', updateDjiPreview);
+  djiPreview.addEventListener('error', () => failDjiPreview(djiPreview.error));
   const beyonceItem = workItems.find((item) => item.slide === BEYONCE_SLIDE);
   if (beyonceItem) {
     beyonceItem.media.addEventListener('pointerenter', () => {
@@ -468,6 +495,7 @@
 
   function applyView(view) {
     state.view = view;
+    updateDjiPreview();
     if (view !== 'work') state.beyonceHover = false;
     root.classList.toggle('view-work', view === 'work');
     root.classList.toggle('view-what', view === 'what');
@@ -590,7 +618,7 @@
         footerAgency: 'We also collaborate with agencies on digital projects, including under NDA.',
         cta: 'Discuss a project',
       },
-      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DRONE CONTROL APP', 'TAXI APP', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
+      captions: ['FOOD DELIVERY SERVICE', 'BEAUTY SERVICE', 'DJI x PolarPro', 'TAXI APP', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
       subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app', 'Mobile promo app', 'Promotional website · World tour', 'Promotional website', 'Online store · Mobile app'],
       whatLead: 'We turn ideas into digital things people open every day.',
       whatCta: 'Start a project',
@@ -685,7 +713,7 @@
         footerAgency: 'También colaboramos con agencias en proyectos digitales, incluso bajo NDA.',
         cta: 'Hablemos de tu proyecto',
       },
-      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'APP DE CONTROL DE DRONES', 'APP DE TAXI', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
+      captions: ['SERVICIO DE ENTREGA DE COMIDA', 'SERVICIO DE BELLEZA', 'DJI x PolarPro', 'APP DE TAXI', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
       subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería', 'App móvil promocional', 'Sitio web promocional · Gira mundial', 'Sitio web promocional', 'Tienda online · App móvil'],
       whatLead: 'Convertimos ideas en productos digitales que la gente abre cada día.',
       whatCta: 'Empezar un proyecto',
@@ -780,7 +808,7 @@
         footerAgency: 'Также сотрудничаем с агентствами в цифровых проектах, в том числе по NDA.',
         cta: 'Обсудить проект',
       },
-      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'ПРИЛОЖЕНИЕ ДЛЯ УПРАВЛЕНИЯ ДРОНОМ', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.', 'JACK DANIEL\'S', 'МИРОВОЙ ТУР БЕЙОНСЕ', 'KASPERSKY PROMO SITE', 'MYFRESH'],
+      captions: ['СЕРВИС ДОСТАВКИ ЕДЫ', 'СЕРВИС КРАСОТЫ', 'DJI x PolarPro', 'ПРИЛОЖЕНИЕ ТАКСИ', 'TRUMP INC.', 'JACK DANIEL\'S', 'МИРОВОЙ ТУР БЕЙОНСЕ', 'KASPERSKY PROMO SITE', 'MYFRESH'],
       subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа', 'Мобильное промо-приложение', 'Промосайт мирового тура', 'Промосайт', 'Интернет-магазин · Мобильное приложение'],
       whatLead: 'Превращаем идеи в цифровые продукты, которые открывают каждый день.',
       whatCta: 'Начать проект',

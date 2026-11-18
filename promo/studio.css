@@ -249,7 +249,8 @@
   mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
 }
 
-.studio__clients {
+.studio__clients,
+.studio__recognition {
   grid-template-columns: minmax(0, 1fr);
 }
 
@@ -312,14 +313,6 @@
 .studio__person .studio__copy {
   max-width: 58ch;
   margin: 12px 0 0;
-}
-
-.studio__award-list li {
-  padding: 11px 16px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  font-size: clamp(16px, calc(21 * var(--ux)), 19px);
-  line-height: 1.2;
 }
 
 .studio__footer {

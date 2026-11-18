@@ -102,7 +102,7 @@
   display: block;
   width: 70%;
   height: 94%;
-  background: url("assets/what/character.png") left bottom / contain no-repeat;
+  background: url("assets/what/character.webp") left bottom / contain no-repeat;
 }
 
 .what__float {
