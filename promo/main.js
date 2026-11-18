@@ -1372,7 +1372,7 @@
   function drawWork(time, still) {
     const vh = window.innerHeight;
     const effectsEnabled = finePointer.matches && !reducedMotion.matches;
-    workItems.forEach((it, index) => {
+    workItems.forEach((it) => {
       const r = it.media.getBoundingClientRect();
       if (r.bottom < -200 || r.top > vh + 200 || r.width === 0) return;
 
@@ -1384,12 +1384,8 @@
       }
 
       const u = r.width / 460; // the widest picture (428) fits the box with air
-      let cx = r.left + r.width / 2;
-      let cy = r.top + r.height / 2;
-      if (effectsEnabled && !still) {
-        cy += Math.sin(time * 1.1 + index * 1.7) * 5 * u;
-        cx += Math.cos(time * 0.8 + index * 1.3) * 2.5 * u;
-      }
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
 
       setReel(cx, cy, u, 0, 0, false, still, effectsEnabled && !NO_LIQUID_WORK_SLIDES.has(it.slide));
       drawSlide(it.slide, 0, 0);
