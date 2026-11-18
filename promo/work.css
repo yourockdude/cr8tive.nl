@@ -233,6 +233,7 @@ html:not(.has-webgl) .card__media img {
   }
 
   .work__grid {
+    grid-template-columns: minmax(0, 1fr);
     row-gap: 22px;
   }
 }
