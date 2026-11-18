@@ -6,7 +6,7 @@
   <title>CR8TIVE — Digital Boutique Agency in Spain</title>
   <meta name="description" content="CR8TIVE is a digital boutique agency based in Spain, led by product designer Yuriy Yurchenko. We work with established companies, startups and small businesses on brands and digital products.">
   <meta name="author" content="CR8TIVE">
-  <meta name="theme-color" content="#0e0e0f">
+  <meta name="theme-color" content="#0b0b0b">
   <link rel="canonical" href="https://cr8tive.nl/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CR8TIVE">
@@ -19,9 +19,9 @@
   <meta name="twitter:description" content="CR8TIVE is a digital boutique agency based in Spain, led by product designer Yuriy Yurchenko. We work with established companies, startups and small businesses on brands and digital products.">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="preload" href="assets/fonts/albert-sans-800-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261118-1318">
   <link rel="stylesheet" href="consent.css">
-  <link rel="stylesheet" href="contact.css">
+  <link rel="stylesheet" href="contact.css?v=20261118-1318">
   <link rel="stylesheet" href="work.css?v=20261118-1133">
   <link rel="stylesheet" href="project.css?v=20261116-1247">
   <link rel="stylesheet" href="what.css?v=20261117-1700">
@@ -81,10 +81,10 @@
     </h1>
 
     <p class="caption" id="caption" aria-live="polite">
-      <span class="is-active">CBD</span>
+      <span class="is-active">CDB®</span>
       <span aria-hidden="true">BLOOKD</span>
       <span aria-hidden="true">DJI x PolarPro</span>
-      <span aria-hidden="true">KASPERSKY PROMO SITE</span>
+      <span aria-hidden="true">KASPERSKY</span>
     </p>
   </main>
 
@@ -93,7 +93,7 @@
       <li class="card" data-slide="0">
         <a class="card__link" href="#food-delivery">
           <div class="card__media"><img src="assets/projects/tapas.webp" alt="" loading="lazy" decoding="async"></div>
-          <h2 class="card__title">CBD</h2>
+          <h2 class="card__title">CDB®</h2>
           <p class="card__sub">Mobile app · Website</p>
         </a>
       </li>
@@ -103,17 +103,32 @@
         <p class="card__sub">Mobile app · Branding</p>
       </li>
       <li class="card card--static-media" data-slide="2">
-        <div class="card__media">
-          <img src="assets/projects/dji-polarpro-poster.webp" alt="" loading="lazy" decoding="async">
-          <video id="dji-preview" muted loop playsinline preload="none" poster="assets/projects/dji-polarpro-poster.webp" data-src="assets/projects/dji-polarpro.mp4" aria-hidden="true"></video>
-        </div>
-        <h2 class="card__title">DJI x PolarPro</h2>
-        <p class="card__sub">Mobile app</p>
+        <a class="card__link" href="https://www.polarpro.com/">
+          <div class="card__media">
+            <img src="assets/projects/dji-polarpro-poster.webp" alt="" loading="lazy" decoding="async">
+            <video id="dji-preview" muted loop playsinline preload="none" poster="assets/projects/dji-polarpro-poster.webp" data-src="assets/projects/dji-polarpro.mp4" aria-hidden="true"></video>
+          </div>
+          <h2 class="card__title">DJI x PolarPro</h2>
+          <p class="card__sub">Mobile app</p>
+        </a>
       </li>
       <li class="card" data-slide="3">
         <div class="card__media"><img src="assets/projects/taxi-fasten.webp" alt="" loading="lazy" decoding="async"></div>
         <h2 class="card__title">Fasten</h2>
         <p class="card__sub">Mobile app · Branding</p>
+      </li>
+      <li class="card card--static-media" data-slide="6">
+        <div class="card__media">
+          <img src="assets/projects/beyonce-world-tour-poster.webp" alt="" loading="lazy" decoding="async">
+          <video id="beyonce-preview" muted loop playsinline preload="none" poster="assets/projects/beyonce-world-tour-poster.webp" data-src="assets/projects/beyonce-world-tour.mp4?v=20261118-1318" aria-hidden="true"></video>
+        </div>
+        <h2 class="card__title">BEYONCÉ WORLD TOUR</h2>
+        <p class="card__sub">Promotional website · World tour</p>
+      </li>
+      <li class="card" data-slide="4">
+        <div class="card__media"><img src="assets/projects/trump-concierge.webp" alt="" loading="lazy" decoding="async"></div>
+        <h2 class="card__title">TRUMP INC.</h2>
+        <p class="card__sub">Concierge mobile app</p>
       </li>
       <li class="card card--static-media" data-slide="5">
         <div class="card__media">
@@ -134,16 +149,6 @@
         <h2 class="card__title">JACK DANIEL'S</h2>
         <p class="card__sub">Mobile promo app</p>
       </li>
-      <li class="card" data-slide="4">
-        <div class="card__media"><img src="assets/projects/trump-concierge.webp" alt="" loading="lazy" decoding="async"></div>
-        <h2 class="card__title">TRUMP INC.</h2>
-        <p class="card__sub">Concierge mobile app</p>
-      </li>
-      <li class="card card--static-media" data-slide="6">
-        <div class="card__media"><img src="assets/projects/beyonce-world-tour.webp" alt="" loading="lazy" decoding="async"></div>
-        <h2 class="card__title">BEYONCÉ WORLD TOUR</h2>
-        <p class="card__sub">Promotional website · World tour</p>
-      </li>
       <li class="card card--static-media" data-slide="7">
         <div class="card__media"><img src="assets/projects/kaspersky-promo-site.webp" alt="" loading="lazy" decoding="async"></div>
         <h2 class="card__title">KASPERSKY PROMO SITE</h2>
@@ -157,7 +162,7 @@
     </ul>
   </section>
 
-  <section class="project" id="food-view" aria-label="CBD project">
+  <section class="project" id="food-view" aria-label="CDB® project">
     <div class="project__inner">
       <nav class="project__topline" aria-label="Project navigation">
         <a class="project__back" href="#work">
@@ -473,7 +478,7 @@
   </dialog>
 
   <script src="stories.js?v=20261117-1300" defer></script>
-  <script src="main.js?v=20261118-1200" defer></script>
+  <script src="main.js?v=20261118-1431" defer></script>
   <script src="consent.js" defer></script>
   <script src="contact.js" defer></script>
 </body>

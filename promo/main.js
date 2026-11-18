@@ -20,13 +20,12 @@
     { image: 0, caption: 0 },
     { image: 1, caption: 1 },
     { image: 2, caption: 2 },
-    { image: 5, caption: 7 },
+    { image: 5, caption: 7, title: 'KASPERSKY' },
   ];
 
   const SLOT_SIZE = 371;      // design px, width of the .slot element
   const RADIUS = 360;         // drum radius, design px
   const STEP = 1.2;           // angle between neighbouring slides, radians
-  const BEYONCE_SLIDE = 6;
   const NO_LIQUID_WORK_SLIDES = new Set([0, 1, 2, 3, 4]);
   const AUTOPLAY_MS = 3200;
   const INTRO_HOLD_MS = 1100; // how long the two words stay together before parting (400 ms)
@@ -61,7 +60,6 @@
     mouse: [-9999, -9999],     // css px
     mouseVel: [0, 0],          // design px per frame, smoothed
     mouseRaw: [0, 0],
-    beyonceHover: false,
     layout: { cx: 0, cy: 0, u: 1, horizontal: false },
   };
 
@@ -89,7 +87,6 @@
     uniform vec2  uMouse;     // design px relative to centre
     uniform vec2  uMouseVel;  // design px
     uniform float uTime;
-    uniform float uGlitter;
 
     const int TAPS = 16;
 
@@ -106,37 +103,6 @@
     void main() {
       vec2 p = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y) - uCenter;
       p /= uU;
-
-      if (uGlitter > 0.5) {
-        vec2 uv = p / uSize + 0.5;
-        float alphaSum = 0.0;
-        vec3 colorSum = vec3(0.0);
-        for (int i = 0; i < 24; i++) {
-          float seed = float(i);
-          float burst = floor(seed / 12.0);
-          float spark = mod(seed, 12.0);
-          float phase = fract(uTime * 0.38 + burst * 0.5 + hash(vec2(seed, 7.3)) * 0.015);
-          float angle = spark * 0.523599 + (hash(vec2(seed, 1.7)) - 0.5) * 0.12;
-          vec2 direction = vec2(cos(angle), sin(angle));
-          vec2 origin = vec2(0.5, 0.5) + vec2(burst * 0.035, burst * -0.025);
-          vec2 position = origin + direction * phase * 0.44;
-          vec2 delta = uv - position;
-          float core = 1.0 - smoothstep(0.003, 0.012, length(delta));
-          float behind = -dot(delta, direction);
-          float side = abs(delta.x * direction.y - delta.y * direction.x);
-          float trail = (1.0 - smoothstep(0.001, 0.004, side)) *
-            smoothstep(0.005, 0.02, behind) * (1.0 - smoothstep(0.045, 0.07, behind));
-          float life = smoothstep(0.0, 0.07, phase) * (1.0 - smoothstep(0.78, 1.0, phase));
-          float intensity = (core + trail * 0.55) * life * (0.75 + 0.25 * sin(uTime * 9.0 + seed));
-          vec3 sparkColor = mix(vec3(1.0, 0.38, 0.04), vec3(1.0, 0.9, 0.54), hash(vec2(seed, 4.2)));
-          alphaSum += intensity;
-          colorSum += sparkColor * intensity;
-        }
-        float alpha = clamp(alphaSum * 0.82, 0.0, 0.82);
-        vec3 color = colorSum / max(alphaSum, 0.001);
-        gl_FragColor = vec4(color * alpha, alpha);
-        return;
-      }
 
       // Liquid drag under the cursor.
       vec2 dm = p - uMouse;
@@ -235,7 +201,7 @@
 
     const uniforms = {};
     ['uTex', 'uRes', 'uCenter', 'uU', 'uSize', 'uOffset', 'uRot', 'uTheta', 'uRadius',
-      'uBend', 'uVel', 'uAxis', 'uMouse', 'uMouseVel', 'uTime', 'uGlitter'].forEach((name) => {
+      'uBend', 'uVel', 'uAxis', 'uMouse', 'uMouseVel', 'uTime'].forEach((name) => {
       uniforms[name] = gl.getUniformLocation(program, name);
     });
 
@@ -438,43 +404,44 @@
     staticMedia: el.classList.contains('card--static-media'),
   }));
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const djiPreview = document.getElementById('dji-preview');
-  let djiPreviewVisible = false;
-  let djiPreviewFailed = false;
-  function failDjiPreview(error) {
-    djiPreviewFailed = true;
-    djiPreview.pause();
-    djiPreview.parentElement.classList.add('card__media--video-failed');
-    console.warn('[cr8tive] DJI preview playback failed:', error);
-  }
-  function updateDjiPreview() {
-    if (state.view !== 'work' || !djiPreviewVisible || document.hidden || reducedMotion.matches || djiPreviewFailed) {
-      djiPreview.pause();
-      return;
+  function createWorkPreview(video, name) {
+    let visible = false;
+    let failed = false;
+    function fail(error) {
+      if (failed) return;
+      failed = true;
+      video.pause();
+      video.parentElement.classList.add('card__media--video-failed');
+      console.warn(`[cr8tive] ${name} preview playback failed:`, error);
     }
-    if (!djiPreview.getAttribute('src')) djiPreview.src = djiPreview.dataset.src;
-    djiPreview.play().catch((error) => {
-      if (error.name !== 'AbortError') failDjiPreview(error);
-    });
+    function update() {
+      if (state.view !== 'work' || !visible || document.hidden || reducedMotion.matches || failed) {
+        video.pause();
+        return;
+      }
+      if (!video.getAttribute('src')) video.src = video.dataset.src;
+      video.play().catch((error) => {
+        if (error.name !== 'AbortError') fail(error);
+      });
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      update();
+    }, { root: workView, threshold: 0.1 });
+    observer.observe(video.parentElement);
+    video.addEventListener('error', () => fail(video.error));
+    return update;
   }
-  const djiObserver = new IntersectionObserver(([entry]) => {
-    djiPreviewVisible = entry.isIntersecting;
-    updateDjiPreview();
-  }, { root: workView, threshold: 0.1 });
-  djiObserver.observe(djiPreview);
-  reducedMotion.addEventListener('change', updateDjiPreview);
-  document.addEventListener('visibilitychange', updateDjiPreview);
-  djiPreview.addEventListener('error', () => failDjiPreview(djiPreview.error));
-  const beyonceItem = workItems.find((item) => item.slide === BEYONCE_SLIDE);
-  if (beyonceItem) {
-    beyonceItem.media.addEventListener('pointerenter', () => {
-      state.beyonceHover = finePointer.matches && !reducedMotion.matches;
-    });
-    beyonceItem.media.addEventListener('pointerleave', () => {
-      state.beyonceHover = false;
-    });
+  const workPreviewUpdates = [
+    createWorkPreview(document.getElementById('dji-preview'), 'DJI'),
+    createWorkPreview(document.getElementById('beyonce-preview'), 'Beyoncé'),
+  ];
+  function updateWorkPreviews() {
+    workPreviewUpdates.forEach((update) => update());
   }
-
+  let previewReducedMotion = reducedMotion.matches;
+  reducedMotion.addEventListener('change', updateWorkPreviews);
+  document.addEventListener('visibilitychange', updateWorkPreviews);
   // ---------------------------------------------------------------- pages
   const VIEWS = { '#work': 'work', '#what': 'what', '#food-delivery': 'food', '#studio': 'studio' };
   const viewFromHash = () => VIEWS[location.hash] || 'home';
@@ -503,8 +470,7 @@
 
   function applyView(view) {
     state.view = view;
-    updateDjiPreview();
-    if (view !== 'work') state.beyonceHover = false;
+    updateWorkPreviews();
     root.classList.toggle('view-work', view === 'work');
     root.classList.toggle('view-what', view === 'what');
     root.classList.toggle('view-food-delivery', view === 'food');
@@ -626,7 +592,7 @@
         footerAgency: 'We also collaborate with agencies on digital projects, including under NDA.',
         cta: 'Discuss a project',
       },
-      captions: ['CBD', 'BLOOKD', 'DJI x PolarPro', 'FASTEN', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
+      captions: ['CDB®', 'BLOOKD', 'DJI x PolarPro', 'FASTEN', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
       subs: ['Mobile app · Website', 'Mobile app · Branding', 'Mobile app', 'Mobile app · Branding', 'Concierge mobile app', 'Mobile promo app', 'Promotional website · World tour', 'Promotional website', 'Online store · Mobile app'],
       whatLead: 'We turn ideas into digital things people open every day.',
       whatCta: 'Start a project',
@@ -639,7 +605,7 @@
         ['Support', 'Launch is the beginning. We stay: updates, new features, fixes and a team that answers.'],
       ],
       project: {
-        ariaLabel: 'CBD case study',
+        ariaLabel: 'CDB® case study',
         label: 'Food delivery · Spain',
         back: 'Back to Work',
         eyebrow: 'Brand identity · Mobile app · Campaign',
@@ -721,7 +687,7 @@
         footerAgency: 'También colaboramos con agencias en proyectos digitales, incluso bajo NDA.',
         cta: 'Hablemos de tu proyecto',
       },
-      captions: ['CBD', 'BLOOKD', 'DJI x PolarPro', 'FASTEN', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
+      captions: ['CDB®', 'BLOOKD', 'DJI x PolarPro', 'FASTEN', 'TRUMP INC.', 'JACK DANIEL\'S', 'BEYONCÉ WORLD TOUR', 'KASPERSKY PROMO SITE', 'MYFRESH'],
       subs: ['App móvil · Sitio web', 'App móvil · Branding', 'App móvil', 'App móvil · Branding', 'App móvil de conserjería', 'App móvil promocional', 'Sitio web promocional · Gira mundial', 'Sitio web promocional', 'Tienda online · App móvil'],
       whatLead: 'Convertimos ideas en productos digitales que la gente abre cada día.',
       whatCta: 'Empezar un proyecto',
@@ -734,7 +700,7 @@
         ['Soporte', 'El lanzamiento es el comienzo. Nos quedamos: actualizaciones, nuevas funciones, correcciones y un equipo que responde.'],
       ],
       project: {
-        ariaLabel: 'Caso de estudio de CBD',
+        ariaLabel: 'Caso de estudio de CDB®',
         label: 'Reparto de comida · España',
         back: 'Volver a Proyectos',
         eyebrow: 'Identidad · App móvil · Campaña',
@@ -816,7 +782,7 @@
         footerAgency: 'Также сотрудничаем с агентствами в цифровых проектах, в том числе по NDA.',
         cta: 'Обсудить проект',
       },
-      captions: ['CBD', 'BLOOKD', 'DJI x PolarPro', 'FASTEN', 'TRUMP INC.', 'JACK DANIEL\'S', 'МИРОВОЙ ТУР БЕЙОНСЕ', 'KASPERSKY PROMO SITE', 'MYFRESH'],
+      captions: ['CDB®', 'BLOOKD', 'DJI x PolarPro', 'FASTEN', 'TRUMP INC.', 'JACK DANIEL\'S', 'МИРОВОЙ ТУР БЕЙОНСЕ', 'KASPERSKY PROMO SITE', 'MYFRESH'],
       subs: ['Мобильное приложение · Сайт', 'Мобильное приложение · Брендинг', 'Мобильное приложение', 'Мобильное приложение · Брендинг', 'Мобильное приложение консьержа', 'Мобильное промо-приложение', 'Промосайт мирового тура', 'Промосайт', 'Интернет-магазин · Мобильное приложение'],
       whatLead: 'Превращаем идеи в цифровые продукты, которые открывают каждый день.',
       whatCta: 'Начать проект',
@@ -829,7 +795,7 @@
         ['Поддержка', 'Запуск — это начало. Мы остаёмся: обновления, новые функции, исправления и команда, которая отвечает.'],
       ],
       project: {
-        ariaLabel: 'Кейс CBD',
+        ariaLabel: 'Кейс CDB®',
         label: 'Доставка еды · Испания',
         back: 'Назад к проектам',
         eyebrow: 'Айдентика · Мобильное приложение · Кампания',
@@ -995,7 +961,7 @@
       label.textContent = studio.cta;
     });
     hero.setAttribute('aria-label', `${t.make} DIGITAL`);
-    captions.forEach((el, i) => { el.textContent = t.captions[HOME_SLIDES[i].caption]; });
+    captions.forEach((el, i) => { el.textContent = HOME_SLIDES[i].title ?? t.captions[HOME_SLIDES[i].caption]; });
     setPill(t.pill, false);
     langButton.setAttribute('aria-label', `Language: ${t.name}. Switch language`);
     try { localStorage.setItem('cr8tive-lang', code); } catch (e) { /* private mode */ }
@@ -1229,7 +1195,6 @@
       // and replay the intro in the new language.
       if (state.view === 'home') playIntro(INTRO_HOLD_LANG_MS);
       applyLang(next);
-      if (state.view === 'work') enterWork();
       requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('is-switching')));
     }, 320);
   }
@@ -1290,7 +1255,7 @@
     gl.uniform1f(U.uTime, time);
 
     if (state.view === 'what' || state.view === 'food' || state.view === 'studio') return;
-    if (state.view === 'work') { drawWork(time, still); return; }
+    if (state.view === 'work') { drawWork(still); return; }
 
     // Idle float + a little parallax towards the cursor.
     let cx = l.cx;
@@ -1352,7 +1317,6 @@
     const s = SLIDES[i];
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, textures[i]);
-    gl.uniform1f(U.uGlitter, 0);
     gl.uniform2f(U.uSize, s.size[0], s.size[1]);
     gl.uniform2f(U.uOffset, 0, dy);
     gl.uniform1f(U.uRot, (s.rot * Math.PI) / 180);
@@ -1360,37 +1324,14 @@
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
-  function drawBeyonceGlitter(mediaRect, still) {
-    const { gl, uniforms: U } = glCtx;
-    const u = mediaRect.width / 460;
-    const cx = mediaRect.left + mediaRect.width / 2;
-    const cy = mediaRect.top + mediaRect.height / 2;
-    setReel(cx, cy, u, 0, 0, false, still);
-    gl.uniform2f(U.uSize, 460, 460);
-    gl.uniform1f(U.uGlitter, 1);
-
-    const x0 = Math.max(0, Math.floor(mediaRect.left * dpr));
-    const y0 = Math.max(0, Math.floor(canvas.height - mediaRect.bottom * dpr));
-    const x1 = Math.min(canvas.width, Math.ceil(mediaRect.right * dpr));
-    const y1 = Math.min(canvas.height, Math.ceil(canvas.height - mediaRect.top * dpr));
-    gl.scissor(x0, y0, Math.max(0, x1 - x0), Math.max(0, y1 - y0));
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    gl.uniform1f(U.uGlitter, 0);
-  }
-
-  function drawWork(time, still) {
+  function drawWork(still) {
     const vh = window.innerHeight;
     const effectsEnabled = finePointer.matches && !reducedMotion.matches;
     workItems.forEach((it) => {
       const r = it.media.getBoundingClientRect();
       if (r.bottom < -200 || r.top > vh + 200 || r.width === 0) return;
 
-      if (it.staticMedia) {
-        if (it.slide === BEYONCE_SLIDE && state.beyonceHover && !still) {
-          drawBeyonceGlitter(r, still);
-        }
-        return;
-      }
+      if (it.staticMedia) return;
 
       const u = r.width / 460; // the widest picture (428) fits the box with air
       const cx = r.left + r.width / 2;
@@ -1404,6 +1345,10 @@
   let lastTime = 0;
   function frame(nowMs) {
     requestAnimationFrame(frame);
+    if (previewReducedMotion !== reducedMotion.matches) {
+      previewReducedMotion = reducedMotion.matches;
+      updateWorkPreviews();
+    }
     const dt = Math.min(0.05, (nowMs - lastTime) / 1000 || 0.016);
     lastTime = nowMs;
 
