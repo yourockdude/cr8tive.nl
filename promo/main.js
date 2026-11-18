@@ -12,7 +12,6 @@
     { src: 'assets/projects/beauty.webp', size: [323.703, 323.703], dy: 0,   rot: -4.15 },
     { src: 'assets/projects/drone.webp',  size: [378, 189],         dy: 0,   rot: 0 },
     { src: 'assets/projects/taxi-fasten.webp', size: [460, 306.667], dy: 0, rot: 0 },
-    { src: 'assets/projects/trump-concierge.webp', size: [371, 371], dy: 0, rot: 0 },
     { src: 'assets/projects/kaspersky-promo-site.webp', size: [428, 428], dy: 0, rot: 0 },
   ];
 
@@ -20,13 +19,13 @@
     { image: 0, caption: 0 },
     { image: 1, caption: 1 },
     { image: 2, caption: 2 },
-    { image: 5, caption: 7, title: 'KASPERSKY' },
+    { image: 4, caption: 7, title: 'KASPERSKY' },
   ];
 
   const SLOT_SIZE = 371;      // design px, width of the .slot element
   const RADIUS = 360;         // drum radius, design px
   const STEP = 1.2;           // angle between neighbouring slides, radians
-  const NO_LIQUID_WORK_SLIDES = new Set([0, 1, 2, 3, 4]);
+  const NO_LIQUID_WORK_SLIDES = new Set([0, 1, 2, 3]);
   const AUTOPLAY_MS = 3200;
   const INTRO_HOLD_MS = 1100; // how long the two words stay together before parting (400 ms)
   const INTRO_HOLD_LANG_MS = 800; // the same hold when the intro replays after a language switch
@@ -435,6 +434,7 @@
   const workPreviewUpdates = [
     createWorkPreview(document.getElementById('dji-preview'), 'DJI'),
     createWorkPreview(document.getElementById('beyonce-preview'), 'Beyoncé'),
+    createWorkPreview(document.getElementById('trump-preview'), 'Trump Inc.'),
   ];
   function updateWorkPreviews() {
     workPreviewUpdates.forEach((update) => update());
