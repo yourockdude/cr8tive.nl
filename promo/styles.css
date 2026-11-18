@@ -19,7 +19,7 @@
 }
 
 :root {
-  --bg: #0b0b0b;
+  --bg: #0E0E0E;
   --fg: #ffffff;
   --glass: rgba(255, 255, 255, 0.1);
   --glass-hover: rgba(255, 255, 255, 0.18);
@@ -104,8 +104,17 @@ body.is-dragging {
 }
 
 .logo {
+  display: block;
   color: inherit;
+  line-height: 0;
+  transform: translateY(-0.04em);
   text-decoration: none;
+}
+
+.logo img {
+  display: block;
+  width: auto;
+  height: 1em;
 }
 
 .lang {
